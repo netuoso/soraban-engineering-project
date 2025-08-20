@@ -3,7 +3,38 @@ class Api::V1::TransactionsController < Api::V1::BaseController
 
   def index
     @transactions = current_user.transactions
-    render json: @transactions
+                              .includes(:category)
+                              .order(date: :desc)
+                              .page(params[:page])
+                              .per(params[:per_page] || 20)
+
+    if params[:status].present?
+      @transactions = @transactions.where(status: params[:status])
+    end
+
+    if params[:category_id].present?
+      @transactions = @transactions.where(category_id: params[:category_id])
+    end
+
+    if params[:start_date].present?
+      @transactions = @transactions.where('date >= ?', params[:start_date])
+    end
+
+    if params[:end_date].present?
+      @transactions = @transactions.where('date <= ?', params[:end_date])
+    end
+
+    if params[:search].present?
+      @transactions = @transactions.where('description ILIKE ?', "%#{params[:search]}%")
+    end
+
+    render json: TransactionSerializer.new(@transactions, {
+      meta: {
+        total_pages: @transactions.total_pages,
+        total_count: @transactions.total_count,
+        current_page: @transactions.current_page
+      }
+    })
   end
 
   def show

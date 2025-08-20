@@ -1,10 +1,35 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # API routes
+  namespace :api do
+    namespace :v1 do
+      resources :transactions do
+        collection do
+          post :upload
+          get :invalid
+        end
+        member do
+          patch :categorize
+        end
+      end
+      
+      resources :categories
+      resources :rules
+    end
+  end
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  devise_for :users,
+             controllers: {
+               sessions: 'users/sessions',
+               registrations: 'users/registrations'
+             },
+             defaults: { format: :json }
+
+  # Sidekiq Web UI
+  require 'sidekiq/web'
+  authenticate :user do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
+  # Health check endpoint
   get "up" => "rails/health#show", as: :rails_health_check
-
-  # Defines the root path route ("/")
-  # root "posts#index"
 end

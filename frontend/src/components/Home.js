@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <div className="container mt-5">
       <h1>Welcome to Soraban</h1>
-      <p>Hello, {user.email}!</p>
+      <p>Hello, {user?.email || 'Guest'}!</p>
       <div className="row mt-4">
         <div className="col-md-4">
           <div className="card">

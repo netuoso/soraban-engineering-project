@@ -29,9 +29,9 @@ export const login = async (email, password) => {
       }
     });
     
-    const token = response.headers.authorization;
+    const token = response.data.token || response.headers.authorization;
     return { 
-      user: response.data.data.attributes,
+      user: response.data.data,
       token: token
     };
   } catch (error) {
@@ -54,13 +54,14 @@ export const register = async (email, password) => {
       }
     });
     
-    const token = response.headers.authorization;
+    const token = response.data.token || response.headers.authorization;
     return { 
-      user: response.data.data.attributes,
+      user: response.data.data,
       token: token
     };
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Registration failed');
+    console.error('Registration error:', error.response?.data);
+    throw new Error(error.response?.data?.status?.message || 'Registration failed');
   }
 };
 

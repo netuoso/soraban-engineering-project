@@ -21,10 +21,17 @@ const Register = () => {
     }
 
     try {
-      const { user, token } = await register(email, password);
-      authLogin(user, token);
-      navigate('/');
+      const response = await register(email, password);
+      console.log('Registration response:', response);
+      if (response.user && response.token) {
+        authLogin(response.user, response.token);
+        navigate('/');
+      } else {
+        setError('Invalid response from server');
+        console.error('Invalid response structure:', response);
+      }
     } catch (err) {
+      console.error('Registration error:', err);
       setError(err.message);
     }
   };

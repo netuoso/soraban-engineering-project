@@ -1,0 +1,29 @@
+.modal-backdrop {
+  display: none;
+}
+
+.modal {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.transaction-form .input-group-text {
+  min-width: 100px;
+}
+
+/* DatePicker customizations */
+.react-datepicker-wrapper {
+  display: block;
+}
+
+.react-datepicker__input-container .form-control {
+  background-color: #fff;
+}
+
+/* Table customizations */
+.table th {
+  background-color: #f8f9fa;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}

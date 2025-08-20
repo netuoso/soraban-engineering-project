@@ -9,7 +9,10 @@ import {
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import { getTransactions } from '../services/transactions';
+import TransactionForm from './TransactionForm';
+import CsvUploadForm from './CsvUploadForm';
 import "react-datepicker/dist/react-datepicker.css";
+import "../styles/TransactionList.css";
 
 const TransactionList = () => {
   const navigate = useNavigate();
@@ -25,6 +28,8 @@ const TransactionList = () => {
     page: 1,
     perPage: 20
   });
+  const [showTransactionForm, setShowTransactionForm] = useState(false);
+  const [showUploadForm, setShowUploadForm] = useState(false);
 
   const columns = [
     {
@@ -100,11 +105,53 @@ const TransactionList = () => {
     <div className="container mt-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>Transactions</h2>
-        <button className="btn btn-primary">
-          <i className="fas fa-upload me-2"></i>
-          Upload CSV
-        </button>
+        <div>
+          <button 
+            className="btn btn-primary me-2"
+            onClick={() => setShowTransactionForm(true)}
+          >
+            <i className="fas fa-plus me-2"></i>
+            Add Transaction
+          </button>
+          <button 
+            className="btn btn-secondary"
+            onClick={() => setShowUploadForm(true)}
+          >
+            <i className="fas fa-upload me-2"></i>
+            Upload CSV
+          </button>
+        </div>
       </div>
+
+      {/* Transaction Form Modal */}
+      {showTransactionForm && (
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog">
+            <TransactionForm
+              onSuccess={() => {
+                setShowTransactionForm(false);
+                fetchTransactions();
+              }}
+              onCancel={() => setShowTransactionForm(false)}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* CSV Upload Modal */}
+      {showUploadForm && (
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog">
+            <CsvUploadForm
+              onSuccess={() => {
+                setShowUploadForm(false);
+                fetchTransactions();
+              }}
+              onCancel={() => setShowUploadForm(false)}
+            />
+          </div>
+        </div>
+      )}
 
       <div className="card mb-4">
         <div className="card-body">

@@ -93,6 +93,6 @@ class Api::V1::TransactionsController < Api::V1::BaseController
   end
 
   def transaction_params
-    params.require(:transaction).permit(:date, :amount, :description, :category_id)
+    params.require(:transaction).permit(:date, :amount, :description, :category_id, :notes)
   end
 end

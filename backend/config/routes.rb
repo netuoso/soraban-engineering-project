@@ -18,6 +18,12 @@ Rails.application.routes.draw do
   end
 
   devise_for :users,
+             path: '',
+             path_names: {
+               sign_in: 'users/sign_in',
+               sign_out: 'users/sign_out',
+               registration: 'users'
+             },
              controllers: {
                sessions: 'users/sessions',
                registrations: 'users/registrations'

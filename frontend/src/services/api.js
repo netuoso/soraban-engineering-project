@@ -22,9 +22,18 @@ export const login = async (email, password) => {
   try {
     const response = await axios.post(`${AUTH_URL}/users/sign_in`, {
       user: { email, password },
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
     });
+    
     const token = response.headers.authorization;
-    return { user: response.data.data, token };
+    return { 
+      user: response.data.data.attributes,
+      token: token
+    };
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Login failed');
   }
@@ -33,10 +42,23 @@ export const login = async (email, password) => {
 export const register = async (email, password) => {
   try {
     const response = await axios.post(`${AUTH_URL}/users`, {
-      user: { email, password },
+      user: { 
+        email, 
+        password,
+        password_confirmation: password
+      }
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
     });
+    
     const token = response.headers.authorization;
-    return { user: response.data.data, token };
+    return { 
+      user: response.data.data.attributes,
+      token: token
+    };
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Registration failed');
   }

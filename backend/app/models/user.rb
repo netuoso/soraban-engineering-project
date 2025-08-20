@@ -10,6 +10,10 @@ class User < ApplicationRecord
   has_many :rules, dependent: :destroy
 
   def jwt_payload
-    super
+    { 
+      'id' => id,
+      'email' => email,
+      'exp' => 1.day.from_now.to_i
+    }
   end
 end

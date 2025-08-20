@@ -21,7 +21,7 @@ export const getTransactions = async (filters = {}) => {
     if (status) params.append('status', status);
     if (search) params.append('search', search);
 
-    const response = await api.get(`/api/v1/transactions?${params.toString()}`);
+    const response = await api.get(`/transactions?${params.toString()}`);
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Failed to fetch transactions');
@@ -30,7 +30,7 @@ export const getTransactions = async (filters = {}) => {
 
 export const getTransaction = async (id) => {
   try {
-    const response = await api.get(`/api/v1/transactions/${id}`);
+    const response = await api.get(`/transactions/${id}`);
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Failed to fetch transaction');
@@ -39,7 +39,7 @@ export const getTransaction = async (id) => {
 
 export const createTransaction = async (data) => {
   try {
-    const response = await api.post('/api/v1/transactions', { transaction: data });
+    const response = await api.post('/transactions', { transaction: data });
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Failed to create transaction');
@@ -48,7 +48,7 @@ export const createTransaction = async (data) => {
 
 export const updateTransaction = async (id, data) => {
   try {
-    const response = await api.put(`/api/v1/transactions/${id}`, { transaction: data });
+    const response = await api.put(`/transactions/${id}`, { transaction: data });
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Failed to update transaction');
@@ -57,7 +57,7 @@ export const updateTransaction = async (id, data) => {
 
 export const deleteTransaction = async (id) => {
   try {
-    await api.delete(`/api/v1/transactions/${id}`);
+    await api.delete(`/transactions/${id}`);
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Failed to delete transaction');
   }
@@ -67,7 +67,7 @@ export const uploadTransactions = async (file) => {
   try {
     const formData = new FormData();
     formData.append('file', file);
-    const response = await api.post('/api/v1/transactions/upload', formData, {
+    const response = await api.post('/transactions/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

@@ -35,14 +35,16 @@ const TransactionList = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  // Get URL search params
+  const searchParams = new URLSearchParams(window.location.search);
   const [filters, setFilters] = useState({
     startDate: null,
     endDate: null,
-    status: '',
-    search: '',
-    category: null,
-    page: 1,
-    perPage: 20
+    status: searchParams.get('status') || '',
+    search: searchParams.get('search') || '',
+    category: searchParams.get('category') || null,
+    page: parseInt(searchParams.get('page')) || 1,
+    perPage: parseInt(searchParams.get('perPage')) || 20
   });
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -252,7 +254,16 @@ const TransactionList = () => {
   // Initial fetch when component mounts
   useEffect(() => {
     fetchCategories();
-  }, []);
+
+    // Check for focused transaction
+    const focusedId = searchParams.get('focus');
+    if (focusedId && data.length > 0) {
+      const focusedRow = data.find(row => row.id === focusedId);
+      if (focusedRow) {
+        startEditing({ original: focusedRow }, 'category');
+      }
+    }
+  }, [data]);
 
   // Initial fetch when filters change
   useEffect(() => {
@@ -273,12 +284,22 @@ const TransactionList = () => {
   );
 
   const handleFilterChange = (key, value) => {
-    setFilters(prev => ({
-      ...prev,
+    const newFilters = {
+      ...filters,
       [key]: value,
       // Only reset page to 1 when changing filters other than page
       page: key === 'page' ? value : 1
-    }));
+    };
+    setFilters(newFilters);
+
+    // Update URL params
+    const params = new URLSearchParams();
+    Object.entries(newFilters).forEach(([k, v]) => {
+      if (v && v !== '') {
+        params.set(k, v);
+      }
+    });
+    navigate(`/transactions?${params.toString()}`, { replace: true });
   };
 
   // Debounce search input to avoid excessive API calls
@@ -542,6 +563,31 @@ const TransactionList = () => {
       <div className="card mb-4">
         <div className="card-body">
           <div className="row g-3">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <h6 className="mb-0">Filters</h6>
+              {(filters.startDate || filters.endDate || filters.status || filters.search || filters.category) && (
+                <button
+                  className="btn btn-outline-secondary btn-sm"
+                  onClick={() => {
+                    // Clear all filters
+                    setFilters({
+                      ...filters,
+                      startDate: null,
+                      endDate: null,
+                      status: '',
+                      search: '',
+                      category: null,
+                      page: 1
+                    });
+                    // Clear URL params
+                    navigate('/transactions', { replace: true });
+                  }}
+                >
+                  <i className="fas fa-times me-1"></i>
+                  Clear All Filters
+                </button>
+              )}
+            </div>
             <div className="col-md-3">
               <label className="form-label">Start Date</label>
               <DatePicker

@@ -94,7 +94,13 @@ const Dashboard = () => {
               <h5 className="card-title">Uncategorized Transactions</h5>
               <h2 className="card-text text-primary">{stats.uncategorized.count}</h2>
               <Link 
-                to="/transactions?status=invalid&category=null" 
+                to={{
+                  pathname: '/transactions',
+                  search: `?${new URLSearchParams({
+                    status: 'invalid',
+                    category: ''
+                  }).toString()}`
+                }}
                 className="btn btn-primary"
               >
                 Review All
@@ -136,7 +142,13 @@ const Dashboard = () => {
         <div className="card-body">
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h5 className="card-title mb-0">Recent Uncategorized Transactions</h5>
-            <Link to="/transactions?status=invalid&category=null">View All</Link>
+            <Link to={{
+              pathname: '/transactions',
+              search: `?${new URLSearchParams({
+                status: 'invalid',
+                category: ''
+              }).toString()}`
+            }}>View All</Link>
           </div>
           <div className="table-responsive">
             <table className="table table-hover">
@@ -161,7 +173,14 @@ const Dashboard = () => {
                     </td>
                     <td>
                       <Link 
-                        to={`/transactions?focus=${transaction.id}`}
+                        to={{
+                          pathname: '/transactions',
+                          search: `?${new URLSearchParams({
+                            focus: transaction.id,
+                            status: transaction.attributes.status,
+                            category: ''
+                          }).toString()}`
+                        }}
                         className="btn btn-sm btn-primary me-2"
                       >
                         <i className="fas fa-edit"></i>
@@ -180,7 +199,12 @@ const Dashboard = () => {
         <div className="card-body">
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h5 className="card-title mb-0">Recent Flagged Transactions</h5>
-            <Link to="/transactions?status=invalid">View All</Link>
+            <Link to={{
+              pathname: '/transactions',
+              search: `?${new URLSearchParams({
+                status: 'invalid'
+              }).toString()}`
+            }}>View All</Link>
           </div>
           <div className="table-responsive">
             <table className="table table-hover">
@@ -207,7 +231,14 @@ const Dashboard = () => {
                     <td>{transaction.attributes.category_name || 'Uncategorized'}</td>
                     <td>
                       <Link 
-                        to={`/transactions?focus=${transaction.id}`}
+                        to={{
+                          pathname: '/transactions',
+                          search: `?${new URLSearchParams({
+                            focus: transaction.id,
+                            status: transaction.attributes.status,
+                            category: transaction.attributes.category_name || ''
+                          }).toString()}`
+                        }}
                         className="btn btn-sm btn-primary me-2"
                       >
                         <i className="fas fa-edit"></i>

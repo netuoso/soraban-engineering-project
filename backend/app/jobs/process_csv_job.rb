@@ -51,12 +51,15 @@ class ProcessCsvJob < ApplicationJob
         transactions_to_import << transaction
       end
 
+      # Run anomaly detection on the batch before importing
+      AnomalyDetectionService.detect_bulk_anomalies(user, transactions_to_import)
+
       # Import the batch with validation to ensure consistency
       # with manual transaction creation
-      Transaction.import(
-        transactions_to_import,
-        validate: true
-      )
+      # Note: Using individual saves instead of bulk import to ensure callbacks run
+      transactions_to_import.each do |transaction|
+        transaction.save!
+      end
       transactions_to_import = [] # Clear the array for the next batch
 
       # Report progress

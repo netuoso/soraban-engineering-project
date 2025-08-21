@@ -69,7 +69,12 @@ const TransactionForm = ({ onSuccess, onCancel }) => {
               selected={formData.date}
               onChange={handleDateChange}
               className="form-control"
-              dateFormat="MMM dd, yyyy"
+              dateFormat="MMM dd, yyyy HH:mm:ss"
+              showTimeSelect
+              timeFormat="HH:mm:ss"
+              timeIntervals={15}
+              timeCaption="Time (UTC)"
+              utcOffset={0}
               required
             />
           </div>

@@ -72,8 +72,8 @@ const TransactionList = () => {
     },
     {
       id: 'date',
-      header: 'Date',
-      accessorKey: 'attributes.formatted_date',
+      header: 'Date & Time (UTC)',
+      accessorKey: 'attributes.formatted_datetime',
       cell: info => {
         const isEditing = editingRow === info.row.original.id;
         if (isEditing) {
@@ -82,11 +82,18 @@ const TransactionList = () => {
               selected={editFormData.date}
               onChange={(date) => handleEditChange('date', date)}
               className="form-control form-control-sm"
-              dateFormat="MMM dd, yyyy"
+              dateFormat="MMM dd, yyyy HH:mm:ss"
+              showTimeSelect
+              timeFormat="HH:mm:ss"
+              timeIntervals={15}
+              timeCaption="Time (UTC)"
+              utcOffset={0}
             />
           );
         }
-        return format(new Date(info.getValue()), 'MMM dd, yyyy');
+        // Parse the ISO8601 string and format it
+        const date = new Date(info.getValue());
+        return format(date, "MMM dd, yyyy HH:mm:ss 'UTC'");
       }
     },
     {
@@ -219,7 +226,7 @@ const TransactionList = () => {
     const transaction = row.original;
     setEditingRow(transaction.id);
     setEditFormData({
-      date: new Date(transaction.attributes.formatted_date),
+      date: new Date(transaction.attributes.formatted_datetime), // Use the UTC datetime
       description: transaction.attributes.description,
       amount: transaction.attributes.formatted_amount,
       category_id: transaction.relationships?.category?.data?.id || '',

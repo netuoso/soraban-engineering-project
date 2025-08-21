@@ -34,9 +34,21 @@ class ProcessCsvJob < ApplicationJob
   private
 
   def parse_date(date_string)
-    # Add flexible date parsing based on common formats
-    Date.parse(date_string)
-  rescue Date::Error
-    nil
+    return nil if date_string.blank?
+
+    # Try to parse date with time, assuming UTC
+    begin
+      # First try to parse as UTC datetime
+      datetime = Time.parse(date_string).utc
+      return datetime
+    rescue ArgumentError
+      # If time parsing fails, try date only and set time to midnight UTC
+      begin
+        date = Date.parse(date_string)
+        return date.to_time.utc.beginning_of_day
+      rescue Date::Error
+        return nil
+      end
+    end
   end
 end

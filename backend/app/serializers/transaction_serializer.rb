@@ -7,6 +7,11 @@ class TransactionSerializer
     object.date&.strftime('%Y-%m-%d')
   end
 
+  # Add timezone info for proper client-side handling
+  attribute :formatted_datetime do |object|
+    object.date&.utc&.iso8601
+  end
+
   attribute :formatted_amount do |object|
     object.amount&.to_f
   end

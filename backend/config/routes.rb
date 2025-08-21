@@ -6,6 +6,8 @@ Rails.application.routes.draw do
         collection do
           post :upload
           get :invalid
+          delete :bulk_delete
+          put :bulk_update
         end
         member do
           patch :categorize

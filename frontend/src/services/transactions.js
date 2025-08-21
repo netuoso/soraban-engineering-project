@@ -77,3 +77,20 @@ export const uploadTransactions = async (file) => {
     throw new Error(error.response?.data?.message || 'Failed to upload transactions');
   }
 };
+
+export const bulkDeleteTransactions = async (ids) => {
+  try {
+    await api.delete('/transactions/bulk_delete', { data: { ids } });
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to delete transactions');
+  }
+};
+
+export const bulkUpdateTransactions = async (ids, data) => {
+  try {
+    const response = await api.put('/transactions/bulk_update', { ids, ...data });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Failed to update transactions');
+  }
+};

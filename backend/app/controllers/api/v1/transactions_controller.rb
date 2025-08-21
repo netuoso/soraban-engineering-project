@@ -87,6 +87,21 @@ class Api::V1::TransactionsController < Api::V1::BaseController
     end
   end
 
+  def bulk_delete
+    @transactions = current_user.transactions.where(id: params[:ids])
+    @transactions.destroy_all
+    head :no_content
+  end
+
+  def bulk_update
+    @transactions = current_user.transactions.where(id: params[:ids])
+    if @transactions.update_all(status: params[:status])
+      head :no_content
+    else
+      render json: { error: 'Failed to update transactions' }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_transaction

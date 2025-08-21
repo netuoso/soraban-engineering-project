@@ -8,7 +8,11 @@ import {
 } from '@tanstack/react-table';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
-import { getTransactions } from '../services/transactions';
+import { 
+  getTransactions, 
+  bulkDeleteTransactions, 
+  bulkUpdateTransactions 
+} from '../services/transactions';
 import TransactionForm from './TransactionForm';
 import CsvUploadForm from './CsvUploadForm';
 import "react-datepicker/dist/react-datepicker.css";
@@ -35,8 +39,31 @@ const TransactionList = () => {
   });
   const [showTransactionForm, setShowTransactionForm] = useState(false);
   const [showUploadForm, setShowUploadForm] = useState(false);
+  const [selectedRows, setSelectedRows] = useState({});
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const columns = [
+    {
+      id: 'select',
+      header: ({ table }) => (
+        <input
+          type="checkbox"
+          checked={table.getIsAllRowsSelected()}
+          onChange={table.getToggleAllRowsSelectedHandler()}
+          className="form-check-input"
+        />
+      ),
+      cell: ({ row }) => (
+        <input
+          type="checkbox"
+          checked={row.getIsSelected()}
+          onChange={row.getToggleSelectedHandler()}
+          onClick={(e) => e.stopPropagation()}
+          className="form-check-input"
+        />
+      ),
+      size: 40
+    },
     {
       header: 'Date',
       accessorKey: 'attributes.formatted_date',
@@ -78,13 +105,16 @@ const TransactionList = () => {
     data,
     columns,
     state: {
-      sorting
+      sorting,
+      rowSelection: selectedRows,
     },
+    enableRowSelection: true,
+    onRowSelectionChange: setSelectedRows,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     meta: {
-      included: data.included // Make included data available to cells
+      included: data.included
     }
   });
 
@@ -121,6 +151,40 @@ const TransactionList = () => {
     }));
   };
 
+  const handleBulkDelete = async () => {
+    if (!window.confirm('Are you sure you want to delete the selected transactions?')) {
+      return;
+    }
+
+    try {
+      setIsProcessing(true);
+      const selectedIds = Object.keys(selectedRows).map(index => data[index].id);
+      await bulkDeleteTransactions(selectedIds);
+      setSelectedRows({});
+      fetchTransactions();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleBulkStatusUpdate = async (status) => {
+    try {
+      setIsProcessing(true);
+      const selectedIds = Object.keys(selectedRows).map(index => data[index].id);
+      await bulkUpdateTransactions(selectedIds, { status });
+      setSelectedRows({});
+      fetchTransactions();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const selectedCount = Object.keys(selectedRows).length;
+
   return (
     <div className="container mt-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -142,6 +206,38 @@ const TransactionList = () => {
           </button>
         </div>
       </div>
+
+      {selectedCount > 0 && (
+        <div className="alert alert-info d-flex justify-content-between align-items-center">
+          <span>{selectedCount} transaction(s) selected</span>
+          <div>
+            <button
+              className="btn btn-success btn-sm me-2"
+              onClick={() => handleBulkStatusUpdate('valid')}
+              disabled={isProcessing}
+            >
+              <i className="fas fa-check me-1"></i>
+              Mark Valid
+            </button>
+            <button
+              className="btn btn-warning btn-sm me-2"
+              onClick={() => handleBulkStatusUpdate('invalid')}
+              disabled={isProcessing}
+            >
+              <i className="fas fa-exclamation-triangle me-1"></i>
+              Mark Invalid
+            </button>
+            <button
+              className="btn btn-danger btn-sm"
+              onClick={handleBulkDelete}
+              disabled={isProcessing}
+            >
+              <i className="fas fa-trash me-1"></i>
+              Delete
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Transaction Form Modal */}
       {showTransactionForm && (

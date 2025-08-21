@@ -1,36 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { getCategories, createCategory } from '../services/categories';
+import React, { useState, memo, useCallback } from 'react';
+import { createCategory } from '../services/categories';
 
-const CategorySelect = ({ value, onChange, onError }) => {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+const CategorySelect = memo(({ value, onChange, onError, categories = [], onCategoryCreated }) => {
+  const [loading, setLoading] = useState(false);
   const [showNewCategory, setShowNewCategory] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const fetchCategories = async () => {
-    try {
-      setLoading(true);
-      const response = await getCategories();
-      // Initialize as empty array if response.data is undefined
-      const categoriesData = response?.data || [];
-      console.log('Categories loaded:', categoriesData); // Debug log
-      setCategories(categoriesData);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-      onError?.(err.message);
-      setCategories([]); // Ensure categories is an array even on error
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCreateCategory = async (e) => {
+  const handleCreateCategory = useCallback(async (e) => {
     e.preventDefault();
     if (!newCategoryName.trim()) return;
 
@@ -38,7 +15,7 @@ const CategorySelect = ({ value, onChange, onError }) => {
       setLoading(true);
       const response = await createCategory({ name: newCategoryName.trim() });
       if (response?.data) {
-        setCategories(prev => [...prev, response.data]);
+        onCategoryCreated?.(response.data);
         onChange(response.data.id);
         setNewCategoryName('');
         setShowNewCategory(false);
@@ -50,9 +27,9 @@ const CategorySelect = ({ value, onChange, onError }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [newCategoryName, onCategoryCreated, onChange, onError]);
 
-  const handleCreateSubmit = async () => {
+  const handleCreateSubmit = useCallback(async () => {
     if (!newCategoryName.trim()) return;
 
     try {
@@ -60,8 +37,7 @@ const CategorySelect = ({ value, onChange, onError }) => {
       const response = await createCategory({ name: newCategoryName.trim() });
       if (response?.data) {
         const newCategory = response.data;
-        console.log('New category created:', newCategory); // Debug log
-        setCategories(prev => [...prev, newCategory]);
+        onCategoryCreated?.(newCategory);
         onChange(newCategory.id);
         setNewCategoryName('');
         setShowNewCategory(false);
@@ -73,7 +49,7 @@ const CategorySelect = ({ value, onChange, onError }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [newCategoryName, onCategoryCreated, onChange, onError]);
 
   if (showNewCategory) {
     return (
@@ -125,17 +101,14 @@ const CategorySelect = ({ value, onChange, onError }) => {
         disabled={loading}
       >
         <option value="">Select a category</option>
-        {categories.map(category => {
-          console.log('Rendering category:', category); // Debug log
-          return (
-            <option 
-              key={category.id} 
-              value={category.id}
-            >
-              {category.attributes?.name || 'Unnamed Category'}
-            </option>
-          );
-        })}
+        {categories.map(category => (
+          <option 
+            key={category.id} 
+            value={category.id}
+          >
+            {category.attributes?.name || 'Unnamed Category'}
+          </option>
+        ))}
       </select>
       <button
         type="button"
@@ -147,6 +120,6 @@ const CategorySelect = ({ value, onChange, onError }) => {
       </button>
     </div>
   );
-};
+});
 
 export default CategorySelect;

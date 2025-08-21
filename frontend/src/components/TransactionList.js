@@ -17,10 +17,12 @@ import {
   updateTransaction
 } from '../services/transactions';
 import { getCategoryTotals } from '../services/summaryService';
+import { getCategories } from '../services/categories';
 import TransactionForm from './TransactionForm';
 import CsvUploadForm from './CsvUploadForm';
 import BulkCategorySelect from './BulkCategorySelect';
 import CategorySelect from './CategorySelect';
+import { EditableText, EditableNumber } from './EditableFields';
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/TransactionList.css";
 
@@ -29,6 +31,7 @@ const TransactionList = () => {
   const [data, setData] = useState([]);
   const [sorting, setSorting] = useState([]);
   const [categoryTotals, setCategoryTotals] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
@@ -50,12 +53,21 @@ const TransactionList = () => {
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [selectedRows, setSelectedRows] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
-  const [editingRow, setEditingRow] = useState(null);
+  const [editingCell, setEditingCell] = useState({ rowId: null, field: null });
   const [editFormData, setEditFormData] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [autoRefresh, setAutoRefresh] = useState(true);
 
-  const columns = [
+  const handleEditChange = useCallback((field, value) => {
+    setEditFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  }, []);
+
+
+
+  const columns = React.useMemo(() => [
     {
       id: 'select',
       header: ({ table }) => (
@@ -82,7 +94,7 @@ const TransactionList = () => {
       header: 'Date & Time (UTC)',
       accessorKey: 'attributes.formatted_datetime',
       cell: info => {
-        const isEditing = editingRow === info.row.original.id;
+        const isEditing = editingCell.rowId === info.row.original.id && editingCell.field === 'date';
         if (isEditing) {
           return (
             <DatePicker
@@ -95,6 +107,7 @@ const TransactionList = () => {
               timeIntervals={15}
               timeCaption="Time (UTC)"
               utcOffset={0}
+              autoFocus
             />
           );
         }
@@ -108,15 +121,14 @@ const TransactionList = () => {
       header: 'Description',
       accessorKey: 'attributes.description',
       cell: info => {
-        const isEditing = editingRow === info.row.original.id;
+        const isEditing = editingCell.rowId === info.row.original.id && editingCell.field === 'description';
         if (isEditing) {
           return (
-            <input
-              type="text"
-              className="form-control form-control-sm"
+            <EditableText
               value={editFormData.description}
-              onChange={(e) => handleEditChange('description', e.target.value)}
-              onClick={(e) => e.stopPropagation()}
+              onChange={(value) => handleEditChange('description', value)}
+              id={`description-${info.row.original.id}`}
+              autoFocus
             />
           );
         }
@@ -128,16 +140,15 @@ const TransactionList = () => {
       header: 'Amount',
       accessorKey: 'attributes.formatted_amount',
       cell: info => {
-        const isEditing = editingRow === info.row.original.id;
+        const isEditing = editingCell.rowId === info.row.original.id && editingCell.field === 'amount';
         if (isEditing) {
           return (
-            <input
-              type="number"
-              step="0.01"
-              className="form-control form-control-sm"
+            <EditableNumber
               value={editFormData.amount}
-              onChange={(e) => handleEditChange('amount', parseFloat(e.target.value))}
-              onClick={(e) => e.stopPropagation()}
+              onChange={(value) => handleEditChange('amount', value)}
+              step="0.01"
+              id={`amount-${info.row.original.id}`}
+              autoFocus
             />
           );
         }
@@ -152,13 +163,16 @@ const TransactionList = () => {
       header: 'Category',
       accessorKey: 'attributes.category_name',
       cell: info => {
-        const isEditing = editingRow === info.row.original.id;
+        const isEditing = editingCell.rowId === info.row.original.id && editingCell.field === 'category';
         if (isEditing) {
           return (
             <div onClick={(e) => e.stopPropagation()}>
               <CategorySelect
                 value={editFormData.category_id}
                 onChange={(value) => handleEditChange('category_id', value)}
+                categories={categories}
+                onCategoryCreated={(newCategory) => setCategories(prev => [...prev, newCategory])}
+                autoFocus
               />
             </div>
           );
@@ -177,7 +191,7 @@ const TransactionList = () => {
         </span>
       )
     }
-  ];
+  ], [categories, editFormData, editingCell, handleEditChange]);
 
   const table = useReactTable({
     data,
@@ -195,6 +209,15 @@ const TransactionList = () => {
       included: data.included
     }
   });
+
+  const fetchCategories = async () => {
+    try {
+      const response = await getCategories();
+      setCategories(response?.data || []);
+    } catch (err) {
+      console.error('Categories fetch error:', err);
+    }
+  };
 
   const fetchCategoryTotals = async () => {
     try {
@@ -225,6 +248,11 @@ const TransactionList = () => {
     }
   }, [filters]);
 
+  // Initial fetch when component mounts
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   // Initial fetch when filters change
   useEffect(() => {
     fetchTransactions();
@@ -234,13 +262,13 @@ const TransactionList = () => {
   // Set up polling
   usePolling(
     () => {
-      if (autoRefresh && !showTransactionForm && !showUploadForm && !editingRow) {
+      if (autoRefresh && !showTransactionForm && !showUploadForm && !editingCell.rowId) {
         fetchTransactions(false);
         fetchCategoryTotals();
       }
     },
     2500, // Poll every 2.5 seconds
-    [autoRefresh, showTransactionForm, showUploadForm, editingRow]
+    [autoRefresh, showTransactionForm, showUploadForm, editingCell.rowId]
   );
 
   const handleFilterChange = (key, value) => {
@@ -252,11 +280,11 @@ const TransactionList = () => {
     }));
   };
 
-  const startEditing = (row) => {
+  const startEditing = (row, field) => {
     const transaction = row.original;
-    setEditingRow(transaction.id);
+    setEditingCell({ rowId: transaction.id, field });
     setEditFormData({
-      date: new Date(transaction.attributes.formatted_datetime), // Use the UTC datetime
+      date: new Date(transaction.attributes.formatted_datetime),
       description: transaction.attributes.description,
       amount: transaction.attributes.formatted_amount,
       category_id: transaction.relationships?.category?.data?.id || '',
@@ -265,22 +293,15 @@ const TransactionList = () => {
   };
 
   const cancelEditing = () => {
-    setEditingRow(null);
+    setEditingCell({ rowId: null, field: null });
     setEditFormData(null);
-  };
-
-  const handleEditChange = (field, value) => {
-    setEditFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
   };
 
   const saveEdit = async () => {
     try {
       setIsProcessing(true);
-      await updateTransaction(editingRow, editFormData);
-      setEditingRow(null);
+      await updateTransaction(editingCell.rowId, editFormData);
+      setEditingCell({ rowId: null, field: null });
       setEditFormData(null);
       fetchTransactions();
     } catch (err) {
@@ -583,32 +604,32 @@ const TransactionList = () => {
                           )}
                         </th>
                       ))}
-                      {editingRow && <th style={{ width: '100px' }}>Actions</th>}
+                      {editingCell.rowId && <th style={{ width: '100px' }}>Actions</th>}
                     </tr>
                   ))}
                 </thead>
                 <tbody>
-                  {table.getRowModel().rows.map(row => {
-                    const isEditing = editingRow === row.original.id;
-                    return (
-                      <tr
-                        key={row.id}
-                        onClick={() => !isEditing && startEditing(row)}
-                        style={{ cursor: isEditing ? 'default' : 'pointer' }}
-                      >
-                        {row.getVisibleCells().map(cell => (
-                          <td key={cell.id}>
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </td>
-                        ))}
-                        {isEditing && (
-                          <td className="text-end">
-                            <div className="btn-group btn-group-sm">
+                  {table.getRowModel().rows.map(row => (
+                    <tr key={row.id}>
+                      {row.getVisibleCells().map(cell => (
+                        <td 
+                          key={cell.id}
+                          onClick={(e) => {
+                            const columnId = cell.column.id;
+                            if (columnId !== 'select' && columnId !== 'status') {
+                              e.stopPropagation();
+                              startEditing(row, columnId);
+                            }
+                          }}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                          {editingCell.rowId === row.original.id && editingCell.field === cell.column.id && (
+                            <div className="d-inline-flex ms-2">
                               <button
-                                className="btn btn-success"
+                                className="btn btn-success btn-sm me-1"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   saveEdit();
@@ -618,7 +639,7 @@ const TransactionList = () => {
                                 <i className="fas fa-check"></i>
                               </button>
                               <button
-                                className="btn btn-secondary"
+                                className="btn btn-secondary btn-sm"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   cancelEditing();
@@ -628,11 +649,11 @@ const TransactionList = () => {
                                 <i className="fas fa-times"></i>
                               </button>
                             </div>
-                          </td>
-                        )}
-                      </tr>
-                    );
-                  })}
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

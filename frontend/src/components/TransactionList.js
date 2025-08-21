@@ -615,11 +615,17 @@ const TransactionList = () => {
         <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
           <div className="modal-dialog">
             <TransactionForm
+              categories={categories}
               onSuccess={() => {
                 setShowTransactionForm(false);
                 fetchTransactions();
+                fetchCategories(); // Refresh categories in case a new one was created
               }}
               onCancel={() => setShowTransactionForm(false)}
+              onCategoryCreated={(newCategory) => {
+                // Add the new category to the existing categories list
+                setCategories(prev => [...prev, newCategory]);
+              }}
             />
           </div>
         </div>
@@ -713,33 +719,6 @@ const TransactionList = () => {
                 value={filters.search}
                 onChange={handleSearchChange}
               />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Anomaly Legend */}
-      <div className="card mb-2">
-        <div className="card-body py-2">
-          <div className="d-flex align-items-center justify-content-between">
-            <small className="text-muted">Row Highlighting:</small>
-            <div className="d-flex gap-3 align-items-center">
-              <div className="d-flex align-items-center gap-1">
-                <div className="transaction-row-invalid" style={{width: '12px', height: '12px', border: '1px solid #dee2e6'}}></div>
-                <small>Invalid/Anomalous</small>
-              </div>
-              <div className="d-flex align-items-center gap-1">
-                <div className="transaction-row-duplicate" style={{width: '12px', height: '12px', border: '1px solid #dee2e6'}}></div>
-                <small>Duplicate</small>
-              </div>
-              <div className="d-flex align-items-center gap-1">
-                <div className="transaction-row-amount-anomaly" style={{width: '12px', height: '12px', border: '1px solid #dee2e6'}}></div>
-                <small>Amount Anomaly</small>
-              </div>
-              <div className="d-flex align-items-center gap-1">
-                <div className="transaction-row-incomplete" style={{width: '12px', height: '12px', border: '1px solid #dee2e6'}}></div>
-                <small>Incomplete Metadata</small>
-              </div>
             </div>
           </div>
         </div>

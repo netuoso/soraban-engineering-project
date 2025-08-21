@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import { createTransaction } from '../services/transactions';
 import CategorySelect from './CategorySelect';
 
-const TransactionForm = ({ onSuccess, onCancel }) => {
+const TransactionForm = ({ onSuccess, onCancel, categories = [], onCategoryCreated }) => {
   const [formData, setFormData] = useState({
     date: new Date(),
     description: '',
@@ -113,6 +113,8 @@ const TransactionForm = ({ onSuccess, onCancel }) => {
               value={formData.category_id}
               onChange={(value) => handleChange({ target: { name: 'category_id', value } })}
               onError={(errorMessage) => setError(errorMessage)}
+              categories={categories}
+              onCategoryCreated={onCategoryCreated}
             />
           </div>
 

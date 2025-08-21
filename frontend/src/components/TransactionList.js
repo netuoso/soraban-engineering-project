@@ -15,6 +15,7 @@ import {
 } from '../services/transactions';
 import TransactionForm from './TransactionForm';
 import CsvUploadForm from './CsvUploadForm';
+import BulkCategorySelect from './BulkCategorySelect';
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/TransactionList.css";
 
@@ -39,6 +40,7 @@ const TransactionList = () => {
   });
   const [showTransactionForm, setShowTransactionForm] = useState(false);
   const [showUploadForm, setShowUploadForm] = useState(false);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [selectedRows, setSelectedRows] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -183,6 +185,21 @@ const TransactionList = () => {
     }
   };
 
+  const handleBulkCategoryUpdate = async (categoryId) => {
+    try {
+      setIsProcessing(true);
+      const selectedIds = Object.keys(selectedRows).map(index => data[index].id);
+      await bulkUpdateTransactions(selectedIds, { category_id: categoryId });
+      setShowCategoryModal(false);
+      setSelectedRows({});
+      fetchTransactions();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const selectedCount = Object.keys(selectedRows).length;
 
   return (
@@ -228,6 +245,14 @@ const TransactionList = () => {
               Mark Invalid
             </button>
             <button
+              className="btn btn-info btn-sm me-2"
+              onClick={() => setShowCategoryModal(true)}
+              disabled={isProcessing}
+            >
+              <i className="fas fa-tag me-1"></i>
+              Set Category
+            </button>
+            <button
               className="btn btn-danger btn-sm"
               onClick={handleBulkDelete}
               disabled={isProcessing}
@@ -235,6 +260,32 @@ const TransactionList = () => {
               <i className="fas fa-trash me-1"></i>
               Delete
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Category Selection Modal */}
+      {showCategoryModal && (
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Set Category for Selected Transactions</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowCategoryModal(false)}
+                  disabled={isProcessing}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <BulkCategorySelect
+                  onSelect={handleBulkCategoryUpdate}
+                  onCancel={() => setShowCategoryModal(false)}
+                  disabled={isProcessing}
+                />
+              </div>
+            </div>
           </div>
         </div>
       )}

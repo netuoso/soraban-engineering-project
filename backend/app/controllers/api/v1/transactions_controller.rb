@@ -95,7 +95,11 @@ class Api::V1::TransactionsController < Api::V1::BaseController
 
   def bulk_update
     @transactions = current_user.transactions.where(id: params[:ids])
-    if @transactions.update_all(status: params[:status])
+    update_params = {}
+    update_params[:status] = params[:status] if params[:status].present?
+    update_params[:category_id] = params[:category_id] if params[:category_id].present?
+    
+    if @transactions.update_all(update_params)
       head :no_content
     else
       render json: { error: 'Failed to update transactions' }, status: :unprocessable_entity

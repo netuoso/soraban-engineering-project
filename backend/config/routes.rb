@@ -16,6 +16,8 @@ Rails.application.routes.draw do
       
       resources :categories
       resources :rules
+      
+      get 'summaries/category_totals', to: 'summaries#category_totals'
     end
   end
 

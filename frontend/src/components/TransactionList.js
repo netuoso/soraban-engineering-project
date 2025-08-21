@@ -6,6 +6,7 @@ import {
   getSortedRowModel,
   flexRender,
 } from '@tanstack/react-table';
+import CategoryPieChart from './CategoryPieChart';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import { 
@@ -14,6 +15,7 @@ import {
   bulkUpdateTransactions,
   updateTransaction
 } from '../services/transactions';
+import { getCategoryTotals } from '../services/summaryService';
 import TransactionForm from './TransactionForm';
 import CsvUploadForm from './CsvUploadForm';
 import BulkCategorySelect from './BulkCategorySelect';
@@ -25,6 +27,7 @@ const TransactionList = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [sorting, setSorting] = useState([]);
+  const [categoryTotals, setCategoryTotals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
@@ -189,6 +192,15 @@ const TransactionList = () => {
     }
   });
 
+  const fetchCategoryTotals = async () => {
+    try {
+      const response = await getCategoryTotals();
+      setCategoryTotals(response.data);
+    } catch (err) {
+      console.error('Category totals fetch error:', err);
+    }
+  };
+
   const fetchTransactions = async () => {
     try {
       setLoading(true);
@@ -211,6 +223,7 @@ const TransactionList = () => {
 
   useEffect(() => {
     fetchTransactions();
+    fetchCategoryTotals();
   }, [filters]);
 
   const handleFilterChange = (key, value) => {
@@ -426,6 +439,14 @@ const TransactionList = () => {
           </div>
         </div>
       )}
+
+      {/* Category Summary Pie Chart */}
+      <div className="card mb-4">
+        <div className="card-body">
+          <h5 className="card-title mb-4">Category Summary</h5>
+          <CategoryPieChart data={categoryTotals} />
+        </div>
+      </div>
 
       <div className="card mb-4">
         <div className="card-body">

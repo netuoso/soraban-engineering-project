@@ -6,17 +6,25 @@ class ProcessCsvJob < ApplicationJob
     user = User.find(user_id)
     
     CSV.parse(csv_data, headers: true) do |row|
+      # Handle category first
+      category_name = row['category']&.strip
+      category = nil
+      
+      if category_name.present?
+        # Try to find existing category or create a new one
+        category = user.categories.find_or_create_by!(name: category_name)
+      elsif transaction.description.present?
+        # Fall back to rule-based categorization if no category provided
+        rule = user.rules.find_by("? ~* pattern", transaction.description)
+        category = rule.category if rule
+      end
+
       transaction = user.transactions.build(
         date: parse_date(row['date']),
         amount: row['amount'],
-        description: row['description']
+        description: row['description'],
+        category: category
       )
-
-      # Check for existing rules to auto-categorize
-      if transaction.description.present?
-        rule = user.rules.find_by("? ~* pattern", transaction.description)
-        transaction.category = rule.category if rule
-      end
 
       # Set status based on validation rules
       transaction.status = if transaction.description.blank? || transaction.category.nil?

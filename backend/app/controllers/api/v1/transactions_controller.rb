@@ -29,6 +29,7 @@ class Api::V1::TransactionsController < Api::V1::BaseController
     end
 
     render json: TransactionSerializer.new(@transactions, {
+      include: [:category],
       meta: {
         total_pages: @transactions.total_pages,
         total_count: @transactions.total_count,

@@ -56,8 +56,12 @@ const TransactionList = () => {
     },
     {
       header: 'Category',
-      accessorKey: 'attributes.category.name',
-      cell: info => info.getValue() || 'Uncategorized'
+      accessorKey: 'attributes.category_name',
+      cell: info => {
+        const value = info.getValue();
+        console.log('Category name from cell:', value); // Debug log
+        return value || 'Uncategorized';
+      }
     },
     {
       header: 'Status',
@@ -78,13 +82,17 @@ const TransactionList = () => {
     },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel()
+    getSortedRowModel: getSortedRowModel(),
+    meta: {
+      included: data.included // Make included data available to cells
+    }
   });
 
   const fetchTransactions = async () => {
     try {
       setLoading(true);
       const response = await getTransactions(filters);
+      console.log('Transaction response:', response); // Debug log
       setData(response.data);
       setPagination({
         currentPage: response.meta.current_page,
@@ -93,6 +101,7 @@ const TransactionList = () => {
       });
       setError(null);
     } catch (err) {
+      console.error('Transaction fetch error:', err); // Debug log
       setError(err.message);
     } finally {
       setLoading(false);

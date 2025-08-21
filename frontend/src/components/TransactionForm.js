@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { createTransaction } from '../services/transactions';
+import CategorySelect from './CategorySelect';
 
 const TransactionForm = ({ onSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -34,7 +35,7 @@ const TransactionForm = ({ onSuccess, onCancel }) => {
     setLoading(true);
 
     try {
-      const amount = parseFloat(formData.amount) * 100; // Convert to cents
+      const amount = parseFloat(formData.amount); // Keep as decimal value
       const transaction = {
         ...formData,
         amount
@@ -103,15 +104,11 @@ const TransactionForm = ({ onSuccess, onCancel }) => {
 
           <div className="mb-3">
             <label className="form-label">Category</label>
-            <select
-              className="form-select"
-              name="category_id"
+            <CategorySelect
               value={formData.category_id}
-              onChange={handleChange}
-            >
-              <option value="">Select a category</option>
-              {/* We'll populate this with categories from the API later */}
-            </select>
+              onChange={(value) => handleChange({ target: { name: 'category_id', value } })}
+              onError={(errorMessage) => setError(errorMessage)}
+            />
           </div>
 
           <div className="mb-3">

@@ -3,17 +3,17 @@ class Api::V1::CategoriesController < Api::V1::BaseController
 
   def index
     @categories = current_user.categories
-    render json: @categories
+    render json: CategorySerializer.new(@categories)
   end
 
   def show
-    render json: @category
+    render json: CategorySerializer.new(@category)
   end
 
   def create
     @category = current_user.categories.build(category_params)
     if @category.save
-      render json: @category, status: :created
+      render json: CategorySerializer.new(@category), status: :created
     else
       render json: @category.errors, status: :unprocessable_entity
     end
@@ -21,7 +21,7 @@ class Api::V1::CategoriesController < Api::V1::BaseController
 
   def update
     if @category.update(category_params)
-      render json: @category
+      render json: CategorySerializer.new(@category)
     else
       render json: @category.errors, status: :unprocessable_entity
     end

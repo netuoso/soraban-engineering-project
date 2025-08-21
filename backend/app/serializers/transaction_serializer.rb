@@ -11,14 +11,12 @@ class TransactionSerializer
     object.amount&.to_f
   end
 
-  belongs_to :category, if: Proc.new { |record| record.category.present? }
-
-  attribute :category do |object|
-    if object.category
-      {
-        id: object.category.id,
-        name: object.category.name
-      }
-    end
+  attribute :category_name do |object|
+    object.category&.name
   end
+
+  belongs_to :category
+
+  # Don't transform keys to camelCase since our frontend expects snake_case
+  # set_key_transform :camel_lower
 end

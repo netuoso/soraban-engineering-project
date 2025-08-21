@@ -20,7 +20,7 @@ export const getTransactions = async (filters = {}) => {
     if (endDate) params.append('end_date', endDate.toISOString());
     if (status) params.append('status', status);
     if (search) params.append('search', search);
-    if (filters.category) params.append('category', filters.category);
+    if (filters.category !== undefined) params.append('category', filters.category);
 
     const response = await api.get(`/transactions?${params.toString()}`);
     return response.data;

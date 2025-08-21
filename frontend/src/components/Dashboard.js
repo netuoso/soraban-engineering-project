@@ -16,15 +16,14 @@ const Dashboard = () => {
       try {
         setLoading(true);
         
-        // Fetch uncategorized transactions
+        // Fetch uncategorized transactions (no category assigned, any status)
         const uncategorizedResponse = await getTransactions({
-          status: 'invalid',
-          category: null,
+          category: '',  // Empty category means uncategorized
           page: 1,
           perPage: 5
         });
         
-        // Fetch flagged transactions
+        // Fetch flagged transactions (status invalid, any category)
         const flaggedResponse = await getTransactions({
           status: 'invalid',
           page: 1,
@@ -106,7 +105,6 @@ const Dashboard = () => {
                 to={{
                   pathname: '/transactions',
                   search: `?${new URLSearchParams({
-                    status: 'invalid',
                     category: ''
                   }).toString()}`
                 }}
@@ -162,7 +160,6 @@ const Dashboard = () => {
             <Link to={{
               pathname: '/transactions',
               search: `?${new URLSearchParams({
-                status: 'invalid',
                 category: ''
               }).toString()}`
             }}>View All</Link>
@@ -174,6 +171,7 @@ const Dashboard = () => {
                   <th>Date</th>
                   <th>Description</th>
                   <th>Amount</th>
+                  <th>Status</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -189,12 +187,16 @@ const Dashboard = () => {
                       }).format(transaction.attributes.amount)}
                     </td>
                     <td>
+                      <span className={`badge bg-${transaction.attributes.status === 'valid' ? 'success' : 'warning'}`}>
+                        {transaction.attributes.status}
+                      </span>
+                    </td>
+                    <td>
                       <Link 
                         to={{
                           pathname: '/transactions',
                           search: `?${new URLSearchParams({
                             focus: transaction.id,
-                            status: transaction.attributes.status,
                             category: ''
                           }).toString()}`
                         }}

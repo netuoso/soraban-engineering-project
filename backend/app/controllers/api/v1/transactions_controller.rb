@@ -12,8 +12,15 @@ class Api::V1::TransactionsController < Api::V1::BaseController
       @transactions = @transactions.where(status: params[:status])
     end
 
-    if params[:category].present?
-      @transactions = @transactions.joins(:category).where('categories.name = ?', params[:category])
+    if params.key?(:category)
+      if params[:category] == ''
+        # Filter for uncategorized transactions (no category assigned)
+        @transactions = @transactions.where(category_id: nil)
+      elsif params[:category].present?
+        # Filter for transactions with specific category name
+        @transactions = @transactions.joins(:category).where('categories.name = ?', params[:category])
+      end
+      # If params[:category] is nil, show all transactions (no filtering)
     end
 
     if params[:start_date].present?

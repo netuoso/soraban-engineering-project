@@ -42,7 +42,7 @@ const TransactionList = () => {
     endDate: null,
     status: searchParams.get('status') || '',
     search: searchParams.get('search') || '',
-    category: searchParams.get('category') || null,
+    category: searchParams.has('category') ? searchParams.get('category') : undefined,
     page: parseInt(searchParams.get('page')) || 1,
     perPage: parseInt(searchParams.get('perPage')) || 20
   });

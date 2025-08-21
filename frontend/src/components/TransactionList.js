@@ -68,7 +68,35 @@ const TransactionList = () => {
     }));
   }, []);
 
+  // Helper functions for anomaly detection and styling
+  const getAnomalyTypes = (transaction) => {
+    const notes = transaction?.attributes?.notes || '';
+    if (!notes) return [];
+    
+    const matches = notes.match(/\[ANOMALY:([^\]]+)\]/g);
+    if (!matches) return [];
+    
+    return matches.map(match => match.replace(/\[ANOMALY:|\]/g, ''));
+  };
 
+  const getRowClassName = (transaction) => {
+    const status = transaction?.attributes?.status;
+    const anomalyTypes = getAnomalyTypes(transaction);
+    
+    if (status === 'invalid') {
+      if (anomalyTypes.includes('duplicate')) {
+        return 'transaction-row-duplicate';
+      } else if (anomalyTypes.includes('amount_anomaly')) {
+        return 'transaction-row-amount-anomaly';
+      } else if (anomalyTypes.includes('incomplete_metadata')) {
+        return 'transaction-row-incomplete';
+      } else {
+        return 'transaction-row-invalid';
+      }
+    }
+    
+    return '';
+  };
 
   const columns = React.useMemo(() => [
     {
@@ -188,11 +216,41 @@ const TransactionList = () => {
       id: 'status',
       header: 'Status',
       accessorKey: 'attributes.status',
-      cell: info => (
-        <span className={`badge bg-${info.getValue() === 'valid' ? 'success' : 'warning'}`}>
-          {info.getValue()}
-        </span>
-      )
+      cell: info => {
+        const status = info.getValue();
+        const transaction = info.row.original;
+        const anomalyTypes = getAnomalyTypes(transaction);
+        
+        return (
+          <div className="d-flex flex-column align-items-start gap-1">
+            <span className={`badge bg-${status === 'valid' ? 'success' : 'danger'}`}>
+              {status}
+            </span>
+            {anomalyTypes.length > 0 && (
+              <div className="d-flex flex-wrap gap-1">
+                {anomalyTypes.map((type, index) => (
+                  <span 
+                    key={index}
+                    className={`badge text-dark ${
+                      type === 'duplicate' ? 'bg-warning' :
+                      type === 'amount_anomaly' ? 'bg-info' :
+                      type === 'incomplete_metadata' ? 'bg-secondary' :
+                      'bg-light'
+                    }`}
+                    style={{ fontSize: '0.7em' }}
+                    title={`Anomaly: ${type.replace('_', ' ')}`}
+                  >
+                    {type === 'duplicate' ? 'DUP' :
+                     type === 'amount_anomaly' ? 'AMT' :
+                     type === 'incomplete_metadata' ? 'META' :
+                     type.toUpperCase().substring(0, 3)}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      }
     }
   ], [categories, editFormData, editingCell, handleEditChange]);
 
@@ -250,6 +308,47 @@ const TransactionList = () => {
       if (showLoading) setLoading(false);
     }
   }, [filters]);
+
+  // Function to clear all filters and refresh data
+  const clearAllFilters = useCallback(async () => {
+    const clearedFilters = {
+      startDate: null,
+      endDate: null,
+      status: '',
+      search: '',
+      category: undefined,
+      page: 1,
+      perPage: filters.perPage
+    };
+    
+    // Clear URL params first
+    navigate('/transactions', { replace: true });
+    
+    // Update filters
+    setFilters(clearedFilters);
+    
+    // Force data refresh
+    try {
+      setLoading(true);
+      const response = await getTransactions(clearedFilters);
+      setData(response.data);
+      setPagination({
+        currentPage: response.meta.current_page,
+        totalPages: response.meta.total_pages,
+        totalCount: response.meta.total_count
+      });
+      setLastUpdated(new Date());
+      setError(null);
+      
+      // Also refresh category totals
+      fetchCategoryTotals();
+    } catch (err) {
+      console.error('Transaction fetch error:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [filters.perPage, navigate, fetchCategoryTotals]);
 
   // Initial fetch when component mounts
   useEffect(() => {
@@ -568,20 +667,7 @@ const TransactionList = () => {
               {(filters.startDate || filters.endDate || filters.status || filters.search || filters.category) && (
                 <button
                   className="btn btn-outline-secondary btn-sm"
-                  onClick={() => {
-                    // Clear all filters
-                    setFilters({
-                      ...filters,
-                      startDate: null,
-                      endDate: null,
-                      status: '',
-                      search: '',
-                      category: null,
-                      page: 1
-                    });
-                    // Clear URL params
-                    navigate('/transactions', { replace: true });
-                  }}
+                  onClick={clearAllFilters}
                 >
                   <i className="fas fa-times me-1"></i>
                   Clear All Filters
@@ -632,6 +718,33 @@ const TransactionList = () => {
         </div>
       </div>
 
+      {/* Anomaly Legend */}
+      <div className="card mb-2">
+        <div className="card-body py-2">
+          <div className="d-flex align-items-center justify-content-between">
+            <small className="text-muted">Row Highlighting:</small>
+            <div className="d-flex gap-3 align-items-center">
+              <div className="d-flex align-items-center gap-1">
+                <div className="transaction-row-invalid" style={{width: '12px', height: '12px', border: '1px solid #dee2e6'}}></div>
+                <small>Invalid/Anomalous</small>
+              </div>
+              <div className="d-flex align-items-center gap-1">
+                <div className="transaction-row-duplicate" style={{width: '12px', height: '12px', border: '1px solid #dee2e6'}}></div>
+                <small>Duplicate</small>
+              </div>
+              <div className="d-flex align-items-center gap-1">
+                <div className="transaction-row-amount-anomaly" style={{width: '12px', height: '12px', border: '1px solid #dee2e6'}}></div>
+                <small>Amount Anomaly</small>
+              </div>
+              <div className="d-flex align-items-center gap-1">
+                <div className="transaction-row-incomplete" style={{width: '12px', height: '12px', border: '1px solid #dee2e6'}}></div>
+                <small>Incomplete Metadata</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {error && (
         <div className="alert alert-danger" role="alert">
           {error}
@@ -670,7 +783,7 @@ const TransactionList = () => {
                 </thead>
                 <tbody>
                   {table.getRowModel().rows.map(row => (
-                    <tr key={row.id}>
+                    <tr key={row.id} className={getRowClassName(row.original)}>
                       {row.getVisibleCells().map(cell => (
                         <td 
                           key={cell.id}

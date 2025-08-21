@@ -24,7 +24,7 @@ const Navigation = () => {
             {user ? (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/">Home</Link>
+                  <Link className="nav-link" to="/">Dashboard</Link>
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/transactions">Transactions</Link>

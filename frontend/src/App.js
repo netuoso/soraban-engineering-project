@@ -3,7 +3,7 @@ import { AuthProvider } from './context/AuthContext';
 import Navigation from './components/Navigation';
 import Login from './components/Login';
 import Register from './components/Register';
-import Home from './components/Home';
+import Dashboard from './components/Dashboard';
 import TransactionList from './components/TransactionList';
 import Rules from './components/Rules';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -27,7 +27,7 @@ function App() {
               path="/"
               element={
                 <ProtectedRoute>
-                  <Home />
+                  <Dashboard />
                 </ProtectedRoute>
               }
             />

@@ -11,11 +11,13 @@ import { format } from 'date-fns';
 import { 
   getTransactions, 
   bulkDeleteTransactions, 
-  bulkUpdateTransactions 
+  bulkUpdateTransactions,
+  updateTransaction
 } from '../services/transactions';
 import TransactionForm from './TransactionForm';
 import CsvUploadForm from './CsvUploadForm';
 import BulkCategorySelect from './BulkCategorySelect';
+import CategorySelect from './CategorySelect';
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/TransactionList.css";
 
@@ -43,6 +45,8 @@ const TransactionList = () => {
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [selectedRows, setSelectedRows] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
+  const [editingRow, setEditingRow] = useState(null);
+  const [editFormData, setEditFormData] = useState(null);
 
   const columns = [
     {
@@ -67,32 +71,90 @@ const TransactionList = () => {
       size: 40
     },
     {
+      id: 'date',
       header: 'Date',
       accessorKey: 'attributes.formatted_date',
-      cell: info => format(new Date(info.getValue()), 'MMM dd, yyyy')
+      cell: info => {
+        const isEditing = editingRow === info.row.original.id;
+        if (isEditing) {
+          return (
+            <DatePicker
+              selected={editFormData.date}
+              onChange={(date) => handleEditChange('date', date)}
+              className="form-control form-control-sm"
+              dateFormat="MMM dd, yyyy"
+            />
+          );
+        }
+        return format(new Date(info.getValue()), 'MMM dd, yyyy');
+      }
     },
     {
+      id: 'description',
       header: 'Description',
-      accessorKey: 'attributes.description'
+      accessorKey: 'attributes.description',
+      cell: info => {
+        const isEditing = editingRow === info.row.original.id;
+        if (isEditing) {
+          return (
+            <input
+              type="text"
+              className="form-control form-control-sm"
+              value={editFormData.description}
+              onChange={(e) => handleEditChange('description', e.target.value)}
+              onClick={(e) => e.stopPropagation()}
+            />
+          );
+        }
+        return info.getValue();
+      }
     },
     {
+      id: 'amount',
       header: 'Amount',
       accessorKey: 'attributes.formatted_amount',
-      cell: info => new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
-      }).format(info.getValue())
+      cell: info => {
+        const isEditing = editingRow === info.row.original.id;
+        if (isEditing) {
+          return (
+            <input
+              type="number"
+              step="0.01"
+              className="form-control form-control-sm"
+              value={editFormData.amount}
+              onChange={(e) => handleEditChange('amount', parseFloat(e.target.value))}
+              onClick={(e) => e.stopPropagation()}
+            />
+          );
+        }
+        return new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD'
+        }).format(info.getValue());
+      }
     },
     {
+      id: 'category',
       header: 'Category',
       accessorKey: 'attributes.category_name',
       cell: info => {
+        const isEditing = editingRow === info.row.original.id;
+        if (isEditing) {
+          return (
+            <div onClick={(e) => e.stopPropagation()}>
+              <CategorySelect
+                value={editFormData.category_id}
+                onChange={(value) => handleEditChange('category_id', value)}
+              />
+            </div>
+          );
+        }
         const value = info.getValue();
-        console.log('Category name from cell:', value); // Debug log
         return value || 'Uncategorized';
       }
     },
     {
+      id: 'status',
       header: 'Status',
       accessorKey: 'attributes.status',
       cell: info => (
@@ -151,6 +213,44 @@ const TransactionList = () => {
       // Only reset page to 1 when changing filters other than page
       page: key === 'page' ? value : 1
     }));
+  };
+
+  const startEditing = (row) => {
+    const transaction = row.original;
+    setEditingRow(transaction.id);
+    setEditFormData({
+      date: new Date(transaction.attributes.formatted_date),
+      description: transaction.attributes.description,
+      amount: transaction.attributes.formatted_amount,
+      category_id: transaction.relationships?.category?.data?.id || '',
+      notes: transaction.attributes.notes || ''
+    });
+  };
+
+  const cancelEditing = () => {
+    setEditingRow(null);
+    setEditFormData(null);
+  };
+
+  const handleEditChange = (field, value) => {
+    setEditFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const saveEdit = async () => {
+    try {
+      setIsProcessing(true);
+      await updateTransaction(editingRow, editFormData);
+      setEditingRow(null);
+      setEditFormData(null);
+      fetchTransactions();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleBulkDelete = async () => {
@@ -399,26 +499,56 @@ const TransactionList = () => {
                           )}
                         </th>
                       ))}
+                      {editingRow && <th style={{ width: '100px' }}>Actions</th>}
                     </tr>
                   ))}
                 </thead>
                 <tbody>
-                  {table.getRowModel().rows.map(row => (
-                    <tr
-                      key={row.id}
-                      onClick={() => navigate(`/transactions/${row.original.id}`)}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      {row.getVisibleCells().map(cell => (
-                        <td key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
+                  {table.getRowModel().rows.map(row => {
+                    const isEditing = editingRow === row.original.id;
+                    return (
+                      <tr
+                        key={row.id}
+                        onClick={() => !isEditing && startEditing(row)}
+                        style={{ cursor: isEditing ? 'default' : 'pointer' }}
+                      >
+                        {row.getVisibleCells().map(cell => (
+                          <td key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </td>
+                        ))}
+                        {isEditing && (
+                          <td className="text-end">
+                            <div className="btn-group btn-group-sm">
+                              <button
+                                className="btn btn-success"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  saveEdit();
+                                }}
+                                disabled={isProcessing}
+                              >
+                                <i className="fas fa-check"></i>
+                              </button>
+                              <button
+                                className="btn btn-secondary"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  cancelEditing();
+                                }}
+                                disabled={isProcessing}
+                              >
+                                <i className="fas fa-times"></i>
+                              </button>
+                            </div>
+                          </td>
+                        )}
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

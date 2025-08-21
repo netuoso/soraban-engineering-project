@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { usePolling } from '../hooks/usePolling';
 import {
   useReactTable,
   getCoreRowModel,
@@ -51,6 +52,8 @@ const TransactionList = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [editingRow, setEditingRow] = useState(null);
   const [editFormData, setEditFormData] = useState(null);
+  const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [autoRefresh, setAutoRefresh] = useState(true);
 
   const columns = [
     {
@@ -202,30 +205,43 @@ const TransactionList = () => {
     }
   };
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = useCallback(async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       const response = await getTransactions(filters);
-      console.log('Transaction response:', response); // Debug log
       setData(response.data);
       setPagination({
         currentPage: response.meta.current_page,
         totalPages: response.meta.total_pages,
         totalCount: response.meta.total_count
       });
+      setLastUpdated(new Date());
       setError(null);
     } catch (err) {
-      console.error('Transaction fetch error:', err); // Debug log
+      console.error('Transaction fetch error:', err);
       setError(err.message);
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
-  };
+  }, [filters]);
 
+  // Initial fetch when filters change
   useEffect(() => {
     fetchTransactions();
     fetchCategoryTotals();
-  }, [filters]);
+  }, [filters, fetchTransactions]);
+
+  // Set up polling
+  usePolling(
+    () => {
+      if (autoRefresh && !showTransactionForm && !showUploadForm && !editingRow) {
+        fetchTransactions(false);
+        fetchCategoryTotals();
+      }
+    },
+    2500, // Poll every 2.5 seconds
+    [autoRefresh, showTransactionForm, showUploadForm, editingRow]
+  );
 
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({
@@ -325,23 +341,51 @@ const TransactionList = () => {
 
   return (
     <div className="container mt-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Transactions</h2>
-        <div>
-          <button 
-            className="btn btn-primary me-2"
-            onClick={() => setShowTransactionForm(true)}
-          >
-            <i className="fas fa-plus me-2"></i>
-            Add Transaction
-          </button>
-          <button 
-            className="btn btn-secondary"
-            onClick={() => setShowUploadForm(true)}
-          >
-            <i className="fas fa-upload me-2"></i>
-            Upload CSV
-          </button>
+      <div className="mb-4">
+        <div className="d-flex justify-content-between align-items-center">
+          <h2>Transactions</h2>
+          <div>
+            <button 
+              className="btn btn-primary me-2"
+              onClick={() => setShowTransactionForm(true)}
+            >
+              <i className="fas fa-plus me-2"></i>
+              Add Transaction
+            </button>
+            <button 
+              className="btn btn-secondary"
+              onClick={() => setShowUploadForm(true)}
+            >
+              <i className="fas fa-upload me-2"></i>
+              Upload CSV
+            </button>
+          </div>
+        </div>
+        <div className="d-flex justify-content-between align-items-center mt-2 text-muted small">
+          <div>
+            Last updated: {lastUpdated.toLocaleTimeString()}
+          </div>
+          <div className="d-flex align-items-center">
+            <div className="form-check form-switch">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="autoRefreshToggle"
+                checked={autoRefresh}
+                onChange={(e) => setAutoRefresh(e.target.checked)}
+              />
+              <label className="form-check-label" htmlFor="autoRefreshToggle">
+                Auto-refresh
+              </label>
+            </div>
+            <button
+              className="btn btn-link btn-sm text-muted p-0 ms-3"
+              onClick={() => fetchTransactions()}
+              disabled={loading}
+            >
+              <i className="fas fa-sync-alt"></i> Refresh Now
+            </button>
+          </div>
         </div>
       </div>
 

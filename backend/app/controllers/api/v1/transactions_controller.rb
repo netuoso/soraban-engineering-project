@@ -12,8 +12,8 @@ class Api::V1::TransactionsController < Api::V1::BaseController
       @transactions = @transactions.where(status: params[:status])
     end
 
-    if params[:category_id].present?
-      @transactions = @transactions.where(category_id: params[:category_id])
+    if params[:category].present?
+      @transactions = @transactions.joins(:category).where('categories.name = ?', params[:category])
     end
 
     if params[:start_date].present?

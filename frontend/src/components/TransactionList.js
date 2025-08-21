@@ -35,6 +35,7 @@ const TransactionList = () => {
     endDate: null,
     status: '',
     search: '',
+    category: null,
     page: 1,
     perPage: 20
   });
@@ -443,8 +444,19 @@ const TransactionList = () => {
       {/* Category Summary Pie Chart */}
       <div className="card mb-4">
         <div className="card-body">
-          <h5 className="card-title mb-4">Category Summary</h5>
-          <CategoryPieChart data={categoryTotals} />
+          <h5 className="card-title mb-4">
+            Category Summary
+            {filters.category && (
+              <span className="ms-2 text-muted">
+                (Filtered by: {filters.category})
+              </span>
+            )}
+          </h5>
+          <CategoryPieChart 
+            data={categoryTotals}
+            onCategoryClick={(category) => handleFilterChange('category', category)}
+            selectedCategory={filters.category}
+          />
         </div>
       </div>
 

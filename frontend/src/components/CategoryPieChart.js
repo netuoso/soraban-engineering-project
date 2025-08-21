@@ -20,10 +20,17 @@ const generateColors = (count) => {
   return colors;
 };
 
-const CategoryPieChart = ({ data }) => {
+const CategoryPieChart = ({ data, onCategoryClick, selectedCategory }) => {
   if (!data || data.length === 0) {
     return <div>No data available</div>;
   }
+
+  const handleClick = (event, elements) => {
+    if (elements.length > 0) {
+      const clickedCategory = data[elements[0].index].category;
+      onCategoryClick(clickedCategory === selectedCategory ? null : clickedCategory);
+    }
+  };
 
   const chartData = {
     labels: data.map(item => item.category),
@@ -39,6 +46,7 @@ const CategoryPieChart = ({ data }) => {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    onClick: handleClick,
     plugins: {
       legend: {
         position: 'right',
@@ -59,8 +67,29 @@ const CategoryPieChart = ({ data }) => {
   };
 
   return (
-    <div style={{ height: '400px', marginBottom: '2rem' }}>
-      <Pie data={chartData} options={options} />
+    <div style={{ height: '300px', marginBottom: '1rem' }}>
+      <Pie 
+        data={{
+          ...chartData,
+          datasets: [{
+            ...chartData.datasets[0],
+            backgroundColor: chartData.datasets[0].backgroundColor.map((color, index) => 
+              data[index].category === selectedCategory ? color : `${color}80`
+            )
+          }]
+        }} 
+        options={options}
+      />
+      {selectedCategory && (
+        <div className="text-center mt-2">
+          <button 
+            className="btn btn-sm btn-outline-secondary"
+            onClick={() => onCategoryClick(null)}
+          >
+            Clear Category Filter
+          </button>
+        </div>
+      )}
     </div>
   );
 };

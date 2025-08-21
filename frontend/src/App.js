@@ -5,6 +5,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Home from './components/Home';
 import TransactionList from './components/TransactionList';
+import Rules from './components/Rules';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Import styles
@@ -35,6 +36,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <TransactionList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/rules"
+              element={
+                <ProtectedRoute>
+                  <Rules />
                 </ProtectedRoute>
               }
             />

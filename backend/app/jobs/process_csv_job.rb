@@ -29,22 +29,28 @@ class ProcessCsvJob < ApplicationJob
     end
 
     # Pre-load rules for uncategorized transactions
-    rules_patterns = user.rules.pluck(:pattern, :category_id).to_h
+    rules = user.rules.includes(:category)
 
     # Process transactions in batches
     transactions_to_import = []
     csv_rows.each_slice(BATCH_SIZE).with_index do |batch, batch_index|
       batch.each do |row|
         category = nil
+        status = 'valid'
         
         if row['category'].present?
           category_name = row['category'].strip
           category = existing_categories[category_name]
-        elsif row['description'].present?
-          # Check against pre-loaded rules
-          pattern = rules_patterns.keys.find { |p| row['description'] =~ /#{p}/i }
-          category_id = rules_patterns[pattern] if pattern
-          category = existing_categories.values.find { |c| c.id == category_id }
+        elsif row['description'].present? || row['amount'].present?
+          # Apply rules to uncategorized transactions
+          matching_rule = find_matching_rule(rules, row['description'], row['amount'].to_f)
+          if matching_rule
+            if matching_rule.action_type == 'set_category'
+              category = matching_rule.category
+            elsif matching_rule.action_type == 'set_status'
+              status = matching_rule.action_value
+            end
+          end
         end
 
         # Build transaction without saving
@@ -53,7 +59,7 @@ class ProcessCsvJob < ApplicationJob
           amount: row['amount'],
           description: row['description'],
           category: category,
-          status: determine_status(row['description'], category, row['amount'])
+          status: determine_status(row['description'], category, row['amount'], status)
         )
 
         transactions_to_import << transaction
@@ -74,13 +80,28 @@ class ProcessCsvJob < ApplicationJob
 
   private
 
-  def determine_status(description, category, amount)
+  def find_matching_rule(rules, description, amount)
+    rules.find do |rule|
+      case rule.condition_type
+      when 'description_contains'
+        description&.downcase&.include?(rule.condition_value.downcase)
+      when 'amount_greater_than'
+        amount > rule.condition_value.to_f
+      when 'amount_less_than'
+        amount < rule.condition_value.to_f
+      else
+        false
+      end
+    end
+  end
+
+  def determine_status(description, category, amount, rule_status = 'valid')
     if description.blank? || category.nil?
       'invalid'
     elsif amount.to_f.abs >= 5000
       'invalid'  # Flag large transactions
     else
-      'valid'
+      rule_status # Use status from rule if applied
     end
   end
 

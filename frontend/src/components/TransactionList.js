@@ -59,7 +59,7 @@ const TransactionList = () => {
   const [editingCell, setEditingCell] = useState({ rowId: null, field: null });
   const [editFormData, setEditFormData] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(new Date());
-  const [autoRefresh, setAutoRefresh] = useState(true);
+  const [autoRefresh, setAutoRefresh] = useState(false);
 
   const handleEditChange = useCallback((field, value) => {
     setEditFormData(prev => ({

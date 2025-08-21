@@ -28,6 +28,11 @@ const TransactionList = () => {
     page: 1,
     perPage: 20
   });
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalCount: 0
+  });
   const [showTransactionForm, setShowTransactionForm] = useState(false);
   const [showUploadForm, setShowUploadForm] = useState(false);
 
@@ -81,6 +86,11 @@ const TransactionList = () => {
       setLoading(true);
       const response = await getTransactions(filters);
       setData(response.data);
+      setPagination({
+        currentPage: response.meta.current_page,
+        totalPages: response.meta.total_pages,
+        totalCount: response.meta.total_count
+      });
       setError(null);
     } catch (err) {
       setError(err.message);
@@ -97,7 +107,8 @@ const TransactionList = () => {
     setFilters(prev => ({
       ...prev,
       [key]: value,
-      page: 1 // Reset page when filter changes
+      // Only reset page to 1 when changing filters other than page
+      page: key === 'page' ? value : 1
     }));
   };
 
@@ -274,19 +285,25 @@ const TransactionList = () => {
         </div>
         <nav>
           <ul className="pagination mb-0">
-            <li className={`page-item ${filters.page === 1 ? 'disabled' : ''}`}>
+            <li className={`page-item ${pagination.currentPage === 1 ? 'disabled' : ''}`}>
               <button
                 className="page-link"
-                onClick={() => handleFilterChange('page', filters.page - 1)}
-                disabled={filters.page === 1}
+                onClick={() => handleFilterChange('page', pagination.currentPage - 1)}
+                disabled={pagination.currentPage === 1}
               >
                 Previous
               </button>
             </li>
             <li className="page-item">
+              <span className="page-link border-0 bg-transparent">
+                Page {pagination.currentPage} of {pagination.totalPages}
+              </span>
+            </li>
+            <li className={`page-item ${pagination.currentPage >= pagination.totalPages ? 'disabled' : ''}`}>
               <button
                 className="page-link"
-                onClick={() => handleFilterChange('page', filters.page + 1)}
+                onClick={() => handleFilterChange('page', pagination.currentPage + 1)}
+                disabled={pagination.currentPage >= pagination.totalPages}
               >
                 Next
               </button>

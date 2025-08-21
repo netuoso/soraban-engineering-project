@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export const usePolling = (callback, interval = 2500, dependencies = []) => {
+export const usePolling = (callback, interval = 10000, dependencies = []) => {
   const savedCallback = useRef();
 
   // Remember the latest callback

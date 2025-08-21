@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_21_203959) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_21_204802) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
   create_table "categories", force: :cascade do |t|
@@ -20,6 +21,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_21_203959) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id", "name"], name: "index_categories_on_user_id_and_name"
     t.index ["user_id"], name: "index_categories_on_user_id"
   end
 
@@ -41,6 +43,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_21_203959) do
     t.string "action_type", null: false
     t.string "action_value"
     t.index ["category_id"], name: "index_rules_on_category_id"
+    t.index ["user_id", "condition_type"], name: "index_rules_on_user_id_and_condition_type"
     t.index ["user_id"], name: "index_rules_on_user_id"
   end
 
@@ -55,6 +58,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_21_203959) do
     t.datetime "updated_at", null: false
     t.text "notes"
     t.index ["category_id"], name: "index_transactions_on_category_id"
+    t.index ["description"], name: "index_transactions_on_description"
+    t.index ["user_id", "category_id"], name: "index_transactions_on_user_id_and_category_id"
+    t.index ["user_id", "date"], name: "index_transactions_on_user_id_and_date"
+    t.index ["user_id", "status"], name: "index_transactions_on_user_id_and_status"
+    t.index ["user_id", "updated_at"], name: "index_transactions_on_user_id_and_updated_at"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 

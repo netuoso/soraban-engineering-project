@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePolling } from '../hooks/usePolling';
+import { useDebounce } from '../hooks/useDebounce';
 import {
   useReactTable,
   getCoreRowModel,
@@ -267,7 +268,7 @@ const TransactionList = () => {
         fetchCategoryTotals();
       }
     },
-    2500, // Poll every 2.5 seconds
+    10000, // Poll every 10 seconds instead of 2.5 seconds
     [autoRefresh, showTransactionForm, showUploadForm, editingCell.rowId]
   );
 
@@ -278,6 +279,19 @@ const TransactionList = () => {
       // Only reset page to 1 when changing filters other than page
       page: key === 'page' ? value : 1
     }));
+  };
+
+  // Debounce search input to avoid excessive API calls
+  const debouncedSearch = useDebounce((searchValue) => {
+    handleFilterChange('search', searchValue);
+  }, 500);
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    // Update local state immediately for UI responsiveness
+    setFilters(prev => ({ ...prev, search: value }));
+    // Debounce the actual API call
+    debouncedSearch(value);
   };
 
   const startEditing = (row, field) => {
@@ -565,7 +579,7 @@ const TransactionList = () => {
                 className="form-control"
                 placeholder="Search description..."
                 value={filters.search}
-                onChange={e => handleFilterChange('search', e.target.value)}
+                onChange={handleSearchChange}
               />
             </div>
           </div>

@@ -28,8 +28,19 @@ class Api::V1::TransactionsController < Api::V1::BaseController
       @transactions = @transactions.where('description ILIKE ?', "%#{params[:search]}%")
     end
 
+    # Preload transaction counts for categories to avoid N+1 queries
+    category_ids = @transactions.includes(:category).map(&:category_id).compact.uniq
+    transaction_counts = if category_ids.any?
+      Transaction.where(category_id: category_ids, user_id: current_user.id)
+                 .group(:category_id)
+                 .count
+    else
+      {}
+    end
+
     render json: TransactionSerializer.new(@transactions, {
       include: [:category],
+      params: { transaction_counts: transaction_counts },
       meta: {
         total_pages: @transactions.total_pages,
         total_count: @transactions.total_count,

@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getTransactions } from '../services/transactions';
-import { getCategoryTotals } from '../services/summaryService';
-import CategoryPieChart from './CategoryPieChart';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
     uncategorized: { count: 0, transactions: [] },
     flagged: { count: 0, transactions: [] },
+    anomalies: { count: 0, transactions: [] },
   });
-  const [categoryTotals, setCategoryTotals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -33,8 +31,16 @@ const Dashboard = () => {
           perPage: 5
         });
 
-        // Fetch category totals for the pie chart
-        const totalsResponse = await getCategoryTotals();
+        // Fetch transactions with anomalies (transactions with notes containing [ANOMALY:])
+        const anomaliesResponse = await getTransactions({
+          page: 1,
+          perPage: 100 // Get more to count anomalies accurately
+        });
+
+        // Filter transactions that have anomaly flags in their notes
+        const anomalousTransactions = anomaliesResponse.data.filter(transaction => 
+          transaction.attributes.notes && transaction.attributes.notes.includes('[ANOMALY:')
+        );
 
         setStats({
           uncategorized: {
@@ -44,10 +50,13 @@ const Dashboard = () => {
           flagged: {
             count: flaggedResponse.meta.total_count,
             transactions: flaggedResponse.data
+          },
+          anomalies: {
+            count: anomalousTransactions.length,
+            transactions: anomalousTransactions.slice(0, 5) // Show only first 5 for recent list
           }
         });
 
-        setCategoryTotals(totalsResponse.data);
         setError(null);
       } catch (err) {
         console.error('Dashboard data fetch error:', err);
@@ -127,11 +136,19 @@ const Dashboard = () => {
         <div className="col-md-4 mb-4">
           <div className="card h-100">
             <div className="card-body">
-              <h5 className="card-title">Category Distribution</h5>
-              <CategoryPieChart 
-                data={categoryTotals}
-                height={200}
-              />
+              <h5 className="card-title">Transactions with Anomalies</h5>
+              <h2 className="card-text text-danger">{stats.anomalies.count}</h2>
+              <Link 
+                to="/transactions?status=invalid" 
+                className="btn btn-danger"
+              >
+                Review All
+              </Link>
+              <div className="mt-3">
+                <small className="text-muted">
+                  Includes duplicates, unusual amounts, and missing metadata
+                </small>
+              </div>
             </div>
           </div>
         </div>
@@ -246,6 +263,79 @@ const Dashboard = () => {
                     </td>
                   </tr>
                 ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Transactions with Anomalies */}
+      <div className="card mb-4">
+        <div className="card-body">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h5 className="card-title mb-0">Recent Transactions with Anomalies</h5>
+            <Link to={{
+              pathname: '/transactions',
+              search: `?${new URLSearchParams({
+                status: 'invalid'
+              }).toString()}`
+            }}>View All</Link>
+          </div>
+          <div className="table-responsive">
+            <table className="table table-hover">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                  <th>Anomaly Types</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {stats.anomalies.transactions.map(transaction => {
+                  // Extract anomaly types from notes
+                  const anomalyTypes = transaction.attributes.notes 
+                    ? transaction.attributes.notes.match(/\[ANOMALY:([^\]]+)\]/g) || []
+                    : [];
+                  const anomalyLabels = anomalyTypes.map(type => 
+                    type.replace('[ANOMALY:', '').replace(']', '')
+                  );
+
+                  return (
+                    <tr key={transaction.id}>
+                      <td>{new Date(transaction.attributes.date).toLocaleDateString()}</td>
+                      <td>{transaction.attributes.description}</td>
+                      <td>
+                        {new Intl.NumberFormat('en-US', {
+                          style: 'currency',
+                          currency: 'USD'
+                        }).format(transaction.attributes.amount)}
+                      </td>
+                      <td>
+                        {anomalyLabels.map((label, index) => (
+                          <span key={index} className="badge bg-warning me-1">
+                            {label.replace('_', ' ')}
+                          </span>
+                        ))}
+                      </td>
+                      <td>
+                        <Link 
+                          to={{
+                            pathname: '/transactions',
+                            search: `?${new URLSearchParams({
+                              focus: transaction.id,
+                              status: transaction.attributes.status
+                            }).toString()}`
+                          }}
+                          className="btn btn-sm btn-primary me-2"
+                        >
+                          <i className="fas fa-edit"></i>
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

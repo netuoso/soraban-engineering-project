@@ -63,14 +63,19 @@ class BulkTransactionImportJob < ApplicationJob
         GC.start if chunk_index % 10 == 0
       end
       
-      update_progress(session_id, bulk_import, 80, "Running anomaly detection...")
+      update_progress(session_id, bulk_import, 80, "Applying rules to imported transactions...")
+      
+      # Apply rules to imported transactions in chunks
+      apply_rules_to_transactions(user, all_transaction_ids, session_id, bulk_import)
+      
+      update_progress(session_id, bulk_import, 90, "Running anomaly detection...")
       
       # Run anomaly detection in larger chunks
       all_transaction_ids.each_slice(ANOMALY_DETECTION_SIZE).with_index do |chunk_ids, chunk_index|
         BulkAnomalyDetectionJob.perform_later(user.id, chunk_ids, session_id)
       end
       
-      update_progress(session_id, bulk_import, 90, "Finalizing import...")
+      update_progress(session_id, bulk_import, 95, "Finalizing import...")
       
       # Update final counts and complete
       bulk_import.update!(imported_count: all_transaction_ids.size)
@@ -147,7 +152,7 @@ class BulkTransactionImportJob < ApplicationJob
         amount: row['amount'].to_f,
         description: row['description'],
         category_id: category&.id,
-        status: 'valid', # Will be updated by anomaly detection
+        status: 'valid', # Will be updated by rules and anomaly detection
         created_at: now,
         updated_at: now
       }
@@ -156,6 +161,65 @@ class BulkTransactionImportJob < ApplicationJob
     # Single bulk insert
     result = Transaction.insert_all(transaction_records, returning: [:id])
     result.rows.flatten
+  end
+  
+  def apply_rules_to_transactions(user, transaction_ids, session_id, bulk_import)
+    # Load user's rules once for efficiency
+    rules = user.rules.includes(:category).ordered
+    return if rules.empty?
+    
+    Rails.logger.info "Applying #{rules.count} rules to #{transaction_ids.size} transactions"
+    
+    # Process transactions in chunks to avoid memory issues
+    updated_transactions = []
+    
+    transaction_ids.each_slice(CHUNK_SIZE).with_index do |chunk_ids, chunk_index|
+      transactions = Transaction.includes(:category).where(id: chunk_ids)
+      
+      transactions.each do |transaction|
+        original_category_id = transaction.category_id
+        original_status = transaction.status
+        
+        # Apply rules (this will modify the transaction object)
+        RuleApplicationService.apply_rules(transaction, rules)
+        
+        # Track if anything changed
+        if transaction.category_id != original_category_id || transaction.status != original_status
+          Rails.logger.debug "Rule applied to transaction #{transaction.id}: category #{original_category_id} -> #{transaction.category_id}, status #{original_status} -> #{transaction.status}"
+          updated_transactions << {
+            id: transaction.id,
+            category_id: transaction.category_id,
+            status: transaction.status,
+            updated_at: Time.current
+          }
+        end
+      end
+      
+      # Update progress every few chunks
+      if chunk_index % 5 == 0
+        progress = 80 + (chunk_index.to_f / (transaction_ids.size / CHUNK_SIZE) * 10).round(1)
+        update_progress(session_id, bulk_import, progress, "Applied rules to #{(chunk_index + 1) * CHUNK_SIZE} transactions")
+      end
+    end
+    
+    # Bulk update only the transactions that changed
+    if updated_transactions.any?
+      Rails.logger.info "Updating #{updated_transactions.size} transactions after rule application"
+      
+      # Group updates by category_id and status for efficient bulk updates
+      updates_by_category = updated_transactions.group_by { |u| [u[:category_id], u[:status]] }
+      
+      updates_by_category.each do |(category_id, status), transactions|
+        transaction_ids = transactions.map { |t| t[:id] }
+        Transaction.where(id: transaction_ids).update_all(
+          category_id: category_id,
+          status: status,
+          updated_at: Time.current
+        )
+      end
+    else
+      Rails.logger.info "No transactions were modified by rule application"
+    end
   end
   
   def update_progress(session_id, bulk_import, progress, message)

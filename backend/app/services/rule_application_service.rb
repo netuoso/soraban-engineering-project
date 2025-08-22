@@ -44,8 +44,13 @@ class RuleApplicationService
   end
   
   def self.apply_category_rule(transaction, rule)
-    # Only set category if it's not already set (preserve user manual assignments)
-    transaction.category = rule.category if transaction.category.blank?
+    # Apply category rule if:
+    # 1. No category is currently set, OR
+    # 2. The current category_id is nil (from CSV import with empty category)
+    if transaction.category.blank? || transaction.category_id.nil?
+      transaction.category = rule.category
+      transaction.category_id = rule.category_id
+    end
   end
   
   def self.apply_status_rule(transaction, rule)

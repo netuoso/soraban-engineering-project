@@ -11,6 +11,7 @@
 8. [Development Decisions](#development-decisions)
 9. [System Workflows](#system-workflows)
 10. [Technical Achievements](#technical-achievements)
+11. [Screenshots](#screenshots)
 
 ## Application Overview
 
@@ -278,6 +279,23 @@ end
 - **DRY Compliance**: Eliminated duplicate code and consolidated functionality
 - **Service Architecture**: Clean separation of concerns
 - **Error Handling**: Comprehensive error handling and user feedback
+
+## Screenshots
+
+### Register/Login
+![Register](Screenshots/Register.png)
+![Login](Screenshots/Login.png)
+
+### Dashboard
+![Dashboard 1](Screenshots/Dashboard-1.png)
+![Dashboard 2](Screenshots/Dashboard-2.png)
+
+### Transactions
+![Transactions](Screenshots/Transactions.png)
+
+### Rules
+![Rules 1](Screenshots/Rules-1.png)
+![Rules 2](Screenshots/Rules-2.png)
 
 ---
 

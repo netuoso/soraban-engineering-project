@@ -194,13 +194,21 @@ const Rules = () => {
           </div>
           <div className="card-body">
             <p className="small mb-2">
-              Rules automatically process transactions when they're added to the system. Here are some examples:
+              Rules automatically process transactions when they're added to the system. Multiple rules can apply to the same transaction:
             </p>
-            <ul className="small mb-0">
+            <ul className="small mb-3">
               <li><strong>Description contains "Amazon"</strong> → Set category to "Shopping"</li>
               <li><strong>Amount greater than $1000</strong> → Set status to "High Value"</li>
               <li><strong>Description contains "Starbucks"</strong> → Set category to "Dining"</li>
             </ul>
+            <div className="alert alert-info small py-2 mb-0">
+              <strong>Multiple Rule Application:</strong>
+              <ul className="mb-0 mt-1">
+                <li>For <strong>categories</strong>: First matching rule wins (based on priority order)</li>
+                <li>For <strong>status</strong>: Last matching rule wins (allows status overrides)</li>
+                <li>Rules are processed in priority order (lower numbers = higher priority)</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>

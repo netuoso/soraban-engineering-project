@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_22_001500) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_22_181128) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -59,8 +59,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_22_001500) do
     t.string "condition_value", null: false
     t.string "action_type", null: false
     t.string "action_value"
+    t.integer "order", default: 0, null: false
     t.index ["category_id"], name: "index_rules_on_category_id"
     t.index ["user_id", "condition_type"], name: "index_rules_on_user_id_and_condition_type"
+    t.index ["user_id", "order"], name: "index_rules_on_user_id_and_order"
     t.index ["user_id"], name: "index_rules_on_user_id"
   end
 

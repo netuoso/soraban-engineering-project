@@ -2,7 +2,7 @@ class Api::V1::RulesController < Api::V1::BaseController
   before_action :set_rule, only: [:show, :update, :destroy]
 
   def index
-    @rules = current_user.rules.includes(:category)
+    @rules = current_user.rules.includes(:category).ordered
     render json: RuleSerializer.new(@rules, { include: [:category] })
   end
 
@@ -39,6 +39,6 @@ class Api::V1::RulesController < Api::V1::BaseController
   end
 
   def rule_params
-    params.require(:rule).permit(:condition_type, :condition_value, :action_type, :action_value, :category_id)
+    params.require(:rule).permit(:condition_type, :condition_value, :action_type, :action_value, :category_id, :order)
   end
 end

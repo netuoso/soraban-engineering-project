@@ -8,7 +8,8 @@ const RuleForm = ({ rule, onSubmit, onCancel }) => {
     condition_value: '',
     action_type: 'set_category',
     action_value: '',
-    category_id: ''
+    category_id: '',
+    order: ''
   });
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +39,8 @@ const RuleForm = ({ rule, onSubmit, onCancel }) => {
         condition_value: rule.attributes.condition_value,
         action_type: rule.attributes.action_type,
         action_value: rule.attributes.action_value,
-        category_id: rule.relationships?.category?.data?.id || ''
+        category_id: rule.relationships?.category?.data?.id || '',
+        order: rule.attributes.order || ''
       });
     }
   }, [rule]);
@@ -143,6 +145,21 @@ const RuleForm = ({ rule, onSubmit, onCancel }) => {
             <option value="high_value">High Value</option>
           </select>
         )}
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label">Priority Order (optional)</label>
+        <input
+          type="number"
+          className="form-control"
+          value={formData.order}
+          onChange={(e) => setFormData(prev => ({ ...prev, order: e.target.value }))}
+          placeholder="Leave blank for automatic ordering"
+          min="0"
+        />
+        <div className="form-text">
+          Lower numbers have higher priority. Leave blank to add at the end.
+        </div>
       </div>
 
       <div className="d-flex justify-content-end gap-2">

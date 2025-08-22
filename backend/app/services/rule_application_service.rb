@@ -1,27 +1,35 @@
 class RuleApplicationService
   def self.apply_rules(transaction, rules = nil)
-    return if transaction.category.present? # Skip if category is already set
+    # Use provided rules or fetch them from the transaction's user (ordered by priority)
+    rules ||= transaction.user.rules.includes(:category).ordered
     
-    # Use provided rules or fetch them from the transaction's user
-    rules ||= transaction.user.rules.includes(:category)
+    # Find all matching rules instead of just the first one
+    matching_rules = find_matching_rules(rules, transaction)
     
-    # Find the first matching rule
-    matching_rule = find_matching_rule(rules, transaction)
+    # Apply all matching rules in order
+    # Category rules are applied first (first match wins for category)
+    # Status rules are applied last (last match wins for status)
+    category_applied = false
     
-    # Apply the rule if found
-    if matching_rule
-      if matching_rule.action_type == 'set_category'
-        transaction.category = matching_rule.category
-      elsif matching_rule.action_type == 'set_status'
-        transaction.status = matching_rule.action_value
+    matching_rules.each do |rule|
+      case rule.action_type
+      when 'set_category'
+        # Only apply the first matching category rule
+        unless category_applied
+          apply_category_rule(transaction, rule)
+          category_applied = true
+        end
+      when 'set_status'
+        # Apply all status rules (last one wins)
+        apply_status_rule(transaction, rule)
       end
     end
   end
   
   private
   
-  def self.find_matching_rule(rules, transaction)
-    rules.find do |rule|
+  def self.find_matching_rules(rules, transaction)
+    rules.select do |rule|
       case rule.condition_type
       when 'description_contains'
         transaction.description&.downcase&.include?(rule.condition_value.downcase)
@@ -33,5 +41,15 @@ class RuleApplicationService
         false
       end
     end
+  end
+  
+  def self.apply_category_rule(transaction, rule)
+    # Only set category if it's not already set (preserve user manual assignments)
+    transaction.category = rule.category if transaction.category.blank?
+  end
+  
+  def self.apply_status_rule(transaction, rule)
+    # Status can be overridden by rules (last matching rule wins for status)
+    transaction.status = rule.action_value
   end
 end

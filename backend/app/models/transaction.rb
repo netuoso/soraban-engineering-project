@@ -4,10 +4,11 @@ class Transaction < ApplicationRecord
 
   validates :date, presence: true
   validates :amount, presence: true, numericality: true
-  validates :status, inclusion: { in: %w[valid invalid] }
+  validates :status, presence: true
 
+  before_validation :set_default_status
   before_validation :apply_rules
-  before_validation :set_status
+  before_validation :handle_anomaly_status
   after_commit :enqueue_anomaly_detection, on: [:create, :update], unless: :skip_anomaly_detection?
 
   # Store anomaly information in notes field with a prefix
@@ -40,10 +41,15 @@ class Transaction < ApplicationRecord
 
   def apply_rules
     return if errors.any? || !description.present? || !amount.present? # Skip if validation failed or missing required data
+    
+    # Apply rules regardless of existing category (rules may update status too)
     RuleApplicationService.apply_rules(self)
   end
 
-  def set_status
+  def set_default_status
+    # Only set default status if no status has been set yet
+    return if status.present?
+    
     # Start with base status
     base_status = if category.nil? || description.blank?
                     'invalid'
@@ -51,9 +57,14 @@ class Transaction < ApplicationRecord
                     'valid'
                   end
     
-    # If there are anomaly flags in notes, mark as invalid
-    has_anomalies = notes.present? && notes.include?('[ANOMALY:')
-    self.status = (has_anomalies || base_status == 'invalid') ? 'invalid' : 'valid'
+    self.status = base_status
+  end
+  
+  def handle_anomaly_status
+    # If there are anomaly flags in notes, override status to invalid
+    if notes.present? && notes.include?('[ANOMALY:')
+      self.status = 'invalid'
+    end
   end
 
   def enqueue_anomaly_detection

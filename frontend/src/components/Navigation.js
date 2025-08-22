@@ -32,9 +32,6 @@ const Navigation = () => {
                 <li className="nav-item">
                   <Link className="nav-link" to="/rules">Rules</Link>
                 </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/categories">Categories</Link>
-                </li>
               </>
             ) : null}
           </ul>

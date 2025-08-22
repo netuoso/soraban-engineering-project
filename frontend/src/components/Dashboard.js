@@ -120,9 +120,6 @@ const Dashboard = () => {
     <div className="container mt-4">
       <h1 className="mb-4">Dashboard</h1>
 
-      {/* Bulk Import Section */}
-      <BulkImport onImportComplete={handleImportComplete} />
-
       <div className="row">
         {/* Quick Stats Cards - render immediately with loading states */}
         <DashboardCard
@@ -184,6 +181,9 @@ const Dashboard = () => {
         viewAllLink="/transactions?status=invalid"
         showAnomalies={true}
       />
+
+      {/* Bulk Import Section */}
+      <BulkImport onImportComplete={handleImportComplete} />
 
       {/* Import History */}
       <ImportHistory />

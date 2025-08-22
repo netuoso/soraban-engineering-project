@@ -6,6 +6,8 @@ const ImportHistory = () => {
   const [imports, setImports] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
 
   useEffect(() => {
     fetchImportHistory();
@@ -16,6 +18,7 @@ const ImportHistory = () => {
     try {
       const data = await getBulkImportHistory();
       setImports(data);
+      setCurrentPage(1); // Reset to first page when fetching new data
       setError(null);
     } catch (err) {
       console.error('Failed to fetch import history:', err);
@@ -42,6 +45,53 @@ const ImportHistory = () => {
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleString();
+  };
+
+  // Pagination calculations
+  const totalPages = Math.ceil(imports.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentImports = imports.slice(startIndex, endIndex);
+
+  const goToPage = (page) => {
+    setCurrentPage(page);
+  };
+
+  const renderPagination = () => {
+    if (totalPages <= 1) return null;
+
+    const pages = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(
+        <button
+          key={i}
+          className={`btn btn-sm ${currentPage === i ? 'btn-primary' : 'btn-outline-primary'} me-1`}
+          onClick={() => goToPage(i)}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    return (
+      <div className="d-flex justify-content-center align-items-center mt-3">
+        <button
+          className="btn btn-sm btn-outline-secondary me-2"
+          onClick={() => goToPage(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          <i className="fas fa-chevron-left"></i>
+        </button>
+        {pages}
+        <button
+          className="btn btn-sm btn-outline-secondary ms-2"
+          onClick={() => goToPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          <i className="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    );
   };
 
   if (loading) {
@@ -77,79 +127,98 @@ const ImportHistory = () => {
       </div>
 
       {imports.length === 0 ? (
-        <div className="no-imports">
+        <div className="no-imports text-center py-4">
           <p className="text-muted mb-0">No imports found. Start your first bulk import above!</p>
         </div>
       ) : (
-        <div className="imports-list">
-          {imports.map((importRecord) => (
-            <div key={importRecord.id} className="import-item">
-              <div className="import-header">
-                <div className="import-status">
-                  <span className={`badge bg-${getStatusBadgeClass(importRecord.status)}`}>
-                    {importRecord.status}
-                  </span>
-                  <span className="import-date">
-                    {formatDate(importRecord.created_at)}
-                  </span>
-                </div>
-                <div className="import-stats">
-                  <span className="stat">
-                    <i className="fas fa-file-csv text-muted me-1"></i>
-                    {importRecord.total_rows?.toLocaleString() || 0} rows
-                  </span>
-                </div>
-              </div>
-
-              <div className="import-details">
-                <div className="row">
-                  <div className="col-md-3">
-                    <div className="detail-item">
-                      <small className="text-muted">Imported</small>
-                      <div className="detail-value text-success">
+        <>
+          <div className="table-responsive">
+            <table className="table table-hover">
+              <thead className="table-light">
+                <tr>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Total Rows</th>
+                  <th>Imported</th>
+                  <th>Errors</th>
+                  <th>Progress</th>
+                  <th>Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentImports.map((importRecord) => (
+                  <tr key={importRecord.id}>
+                    <td>
+                      <div className="fw-medium">
+                        {formatDate(importRecord.created_at)}
+                      </div>
+                    </td>
+                    <td>
+                      <span className={`badge bg-${getStatusBadgeClass(importRecord.status)}`}>
+                        {importRecord.status}
+                      </span>
+                      {importRecord.status === 'processing' && (
+                        <div className="progress mt-1" style={{ height: '4px' }}>
+                          <div 
+                            className="progress-bar" 
+                            style={{ width: `${importRecord.progress_percentage || 0}%` }}
+                            role="progressbar"
+                          />
+                        </div>
+                      )}
+                    </td>
+                    <td>
+                      <span className="fw-medium">
+                        <i className="fas fa-file-csv text-muted me-1"></i>
+                        {importRecord.total_rows?.toLocaleString() || 0}
+                      </span>
+                    </td>
+                    <td>
+                      <span className="text-success fw-medium">
                         {importRecord.imported_count?.toLocaleString() || 0}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <div className="detail-item">
-                      <small className="text-muted">Errors</small>
-                      <div className="detail-value text-danger">
+                      </span>
+                    </td>
+                    <td>
+                      <span className="text-danger fw-medium">
                         {importRecord.error_count?.toLocaleString() || 0}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="d-flex align-items-center">
+                        <span className="me-2">
+                          {importRecord.progress_percentage?.toFixed(1) || 0}%
+                        </span>
+                        {importRecord.status === 'processing' && (
+                          <div className="spinner-border spinner-border-sm text-primary" role="status">
+                            <span className="visually-hidden">Processing...</span>
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <div className="detail-item">
-                      <small className="text-muted">Progress</small>
-                      <div className="detail-value">
-                        {importRecord.progress_percentage?.toFixed(1) || 0}%
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    <div className="detail-item">
-                      <small className="text-muted">Duration</small>
-                      <div className="detail-value">
+                    </td>
+                    <td>
+                      <span className="text-muted">
                         {importRecord.duration ? formatDuration(importRecord.duration) : 'N/A'}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {importRecord.status === 'processing' && (
-                  <div className="progress mt-2">
-                    <div 
-                      className="progress-bar" 
-                      style={{ width: `${importRecord.progress_percentage || 0}%` }}
-                      role="progressbar"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          
+          {/* Pagination */}
+          {renderPagination()}
+          
+          {/* Summary info */}
+          <div className="d-flex justify-content-between align-items-center mt-2">
+            <small className="text-muted">
+              Showing {startIndex + 1}-{Math.min(endIndex, imports.length)} of {imports.length} imports
+            </small>
+            <small className="text-muted">
+              Page {currentPage} of {totalPages}
+            </small>
+          </div>
+        </>
       )}
     </div>
   );

@@ -27,14 +27,8 @@ class ActionCableService {
       console.log('Creating ActionCable consumer...');
       this.consumer = createConsumer(getWebSocketURL());
       
-      // Add connection debugging
-      this.consumer.connection.monitor.addEventListener('connect', () => {
-        console.log('ActionCable connection established');
-      });
-      
-      this.consumer.connection.monitor.addEventListener('disconnect', () => {
-        console.log('ActionCable connection lost');
-      });
+      // ActionCable doesn't expose addEventListener on connection.monitor
+      // Connection status will be handled in individual subscriptions
     }
     return this.consumer;
   }

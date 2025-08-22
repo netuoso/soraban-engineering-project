@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { startBulkImport, validateCSVFile, formatDuration, getBulkImportProgress } from '../services/bulkImport';
-import actionCableService from '../services/actioncable';
 import './BulkImport.css';
 
 const BulkImport = ({ onImportComplete }) => {
@@ -15,30 +14,25 @@ const BulkImport = ({ onImportComplete }) => {
     status: 'pending'
   });
   const [sessionId, setSessionId] = useState(null);
-  const [subscription, setSubscription] = useState(null);
   const [validationErrors, setValidationErrors] = useState([]);
   const [pollingInterval, setPollingInterval] = useState(null);
-  const [websocketConnected, setWebsocketConnected] = useState(false);
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (subscription) {
-        actionCableService.unsubscribeFromImportProgress(sessionId);
-      }
       if (pollingInterval) {
         clearInterval(pollingInterval);
       }
     };
-  }, [subscription, sessionId, pollingInterval]);
+  }, [pollingInterval]);
 
-  // Polling fallback for progress updates
+  // Polling for progress updates
   const startPolling = useCallback((sessionId) => {
-    console.log('Starting polling fallback for session:', sessionId);
+    console.log('Starting progress polling for session:', sessionId);
     const interval = setInterval(async () => {
       try {
         const progressData = await getBulkImportProgress(sessionId);
-        console.log('Polling progress update:', progressData);
+        console.log('Progress update:', progressData);
         
         setProgress(prev => ({
           ...prev,
@@ -59,7 +53,7 @@ const BulkImport = ({ onImportComplete }) => {
         console.error('Polling error:', error);
         // Continue polling even if there's an error
       }
-    }, 2000); // Poll every 2 seconds
+    }, 1000); // Poll every 1 second for responsive updates
     
     setPollingInterval(interval);
     return interval;
@@ -82,72 +76,6 @@ const BulkImport = ({ onImportComplete }) => {
     }
   };
 
-  const connectToProgressChannel = useCallback((sessionId) => {
-    console.log('Attempting to connect to WebSocket for session:', sessionId);
-    
-    const newSubscription = actionCableService.subscribeToImportProgress(sessionId, {
-      connected() {
-        console.log('✅ WebSocket connected to import progress channel');
-        setWebsocketConnected(true);
-        // If we have polling running, stop it since WebSocket is working
-        if (pollingInterval) {
-          clearInterval(pollingInterval);
-          setPollingInterval(null);
-        }
-      },
-      
-      disconnected() {
-        console.log('❌ WebSocket disconnected from import progress channel');
-        setWebsocketConnected(false);
-        // Start polling as fallback if we're still importing
-        if (importing && sessionId && !pollingInterval) {
-          console.log('Starting polling fallback due to WebSocket disconnection');
-          startPolling(sessionId);
-        }
-      },
-      
-      received(data) {
-        console.log('📨 WebSocket progress update:', data);
-        setProgress(prevProgress => ({
-          ...prevProgress,
-          ...data
-        }));
-        
-        // If import is complete, cleanup
-        if (data.status === 'completed' || data.status === 'failed') {
-          setImporting(false);
-          setWebsocketConnected(false);
-          if (data.status === 'completed' && onImportComplete) {
-            onImportComplete(data);
-          }
-          // Cleanup will happen in useEffect
-        }
-      },
-      
-      rejected() {
-        console.error('🚫 WebSocket connection rejected - starting polling fallback');
-        setWebsocketConnected(false);
-        setImporting(true); // Keep importing state
-        // Start polling as fallback
-        if (sessionId && !pollingInterval) {
-          startPolling(sessionId);
-        }
-      }
-    });
-    
-    setSubscription(newSubscription);
-    
-    // Start polling as immediate fallback in case WebSocket doesn't connect quickly
-    setTimeout(() => {
-      if (!websocketConnected && importing && sessionId && !pollingInterval) {
-        console.log('WebSocket not connected after 3 seconds, starting polling fallback');
-        startPolling(sessionId);
-      }
-    }, 3000);
-    
-    return newSubscription;
-  }, [onImportComplete, pollingInterval, importing, websocketConnected, startPolling]);
-
   const startImport = async () => {
     if (!file) return;
 
@@ -165,8 +93,8 @@ const BulkImport = ({ onImportComplete }) => {
       const result = await startBulkImport(file);
       setSessionId(result.session_id);
       
-      // Connect to progress channel
-      connectToProgressChannel(result.session_id);
+      // Start polling for progress updates
+      startPolling(result.session_id);
       
     } catch (error) {
       console.error('Error starting import:', error);
@@ -182,17 +110,12 @@ const BulkImport = ({ onImportComplete }) => {
   };
 
   const cancelImport = () => {
-    if (subscription && sessionId) {
-      actionCableService.unsubscribeFromImportProgress(sessionId);
-      setSubscription(null);
-    }
     if (pollingInterval) {
       clearInterval(pollingInterval);
       setPollingInterval(null);
     }
     setImporting(false);
     setSessionId(null);
-    setWebsocketConnected(false);
     setProgress({
       percentage: 0,
       processed: 0,
@@ -275,20 +198,15 @@ const BulkImport = ({ onImportComplete }) => {
             <div className="d-flex align-items-center">
               {/* Connection status indicator */}
               <small className="me-3 text-muted">
-                {websocketConnected ? (
+                {pollingInterval ? (
                   <span className="text-success">
-                    <i className="fas fa-wifi me-1"></i>
-                    Real-time
-                  </span>
-                ) : pollingInterval ? (
-                  <span className="text-warning">
-                    <i className="fas fa-clock me-1"></i>
-                    Polling
+                    <i className="fas fa-sync fa-spin me-1"></i>
+                    Live Updates
                   </span>
                 ) : (
                   <span className="text-secondary">
                     <i className="fas fa-hourglass-half me-1"></i>
-                    Connecting...
+                    Starting...
                   </span>
                 )}
               </small>

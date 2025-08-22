@@ -441,6 +441,7 @@ const TransactionList = () => {
       setEditingCell({ rowId: null, field: null });
       setEditFormData(null);
       fetchTransactions();
+      fetchCategoryTotals(); // Refresh category totals for pie chart
     } catch (err) {
       setError(err.message);
     } finally {
@@ -459,6 +460,7 @@ const TransactionList = () => {
       await bulkDeleteTransactions(selectedIds);
       setSelectedRows({});
       fetchTransactions();
+      fetchCategoryTotals(); // Refresh category totals for pie chart
     } catch (err) {
       setError(err.message);
     } finally {
@@ -473,6 +475,7 @@ const TransactionList = () => {
       await bulkUpdateTransactions(selectedIds, { status });
       setSelectedRows({});
       fetchTransactions();
+      fetchCategoryTotals(); // Refresh category totals for pie chart
     } catch (err) {
       setError(err.message);
     } finally {
@@ -488,6 +491,7 @@ const TransactionList = () => {
       setShowCategoryModal(false);
       setSelectedRows({});
       fetchTransactions();
+      fetchCategoryTotals(); // Refresh category totals for pie chart
     } catch (err) {
       setError(err.message);
     } finally {
@@ -582,6 +586,7 @@ const TransactionList = () => {
                 setShowTransactionForm(false);
                 fetchTransactions();
                 fetchCategories();
+                fetchCategoryTotals(); // Refresh category totals for pie chart
               }}
               onCancel={() => setShowTransactionForm(false)}
             />
@@ -597,6 +602,7 @@ const TransactionList = () => {
               onSuccess={() => {
                 setShowUploadForm(false);
                 fetchTransactions();
+                fetchCategoryTotals(); // Refresh category totals for pie chart
               }}
               onCancel={() => setShowUploadForm(false)}
             />

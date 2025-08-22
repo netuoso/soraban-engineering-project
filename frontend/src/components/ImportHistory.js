@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 import { getBulkImportHistory, formatDuration } from '../services/bulkImport';
 import './ImportHistory.css';
 
-const ImportHistory = () => {
+const ImportHistory = forwardRef((props, ref) => {
   const [imports, setImports] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -12,6 +12,11 @@ const ImportHistory = () => {
   useEffect(() => {
     fetchImportHistory();
   }, []);
+
+  // Expose refresh function to parent components
+  useImperativeHandle(ref, () => ({
+    refresh: fetchImportHistory
+  }));
 
   const fetchImportHistory = async () => {
     setLoading(true);
@@ -222,6 +227,8 @@ const ImportHistory = () => {
       )}
     </div>
   );
-};
+});
+
+ImportHistory.displayName = 'ImportHistory';
 
 export default ImportHistory;

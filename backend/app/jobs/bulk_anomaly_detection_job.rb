@@ -165,8 +165,15 @@ class BulkAnomalyDetectionJob < ApplicationJob
     
     # Batch update all transactions
     unless updates.empty?
-      # Use upsert_all for efficient bulk updates
-      Transaction.upsert_all(updates, unique_by: :id)
+      # Use simple update_all for each transaction to avoid upsert issues
+      updates.each do |update_data|
+        Transaction.where(id: update_data[:id])
+                  .update_all(
+                    notes: update_data[:notes],
+                    status: update_data[:status],
+                    updated_at: update_data[:updated_at]
+                  )
+      end
     end
   end
   

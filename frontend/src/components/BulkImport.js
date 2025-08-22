@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { startBulkImport, validateCSVFile, formatDuration } from '../services/bulkImport';
+import { startBulkImport, validateCSVFile, formatDuration, getBulkImportProgress } from '../services/bulkImport';
 import actionCableService from '../services/actioncable';
 import './BulkImport.css';
 
@@ -17,6 +17,8 @@ const BulkImport = ({ onImportComplete }) => {
   const [sessionId, setSessionId] = useState(null);
   const [subscription, setSubscription] = useState(null);
   const [validationErrors, setValidationErrors] = useState([]);
+  const [pollingInterval, setPollingInterval] = useState(null);
+  const [websocketConnected, setWebsocketConnected] = useState(false);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -24,8 +26,44 @@ const BulkImport = ({ onImportComplete }) => {
       if (subscription) {
         actionCableService.unsubscribeFromImportProgress(sessionId);
       }
+      if (pollingInterval) {
+        clearInterval(pollingInterval);
+      }
     };
-  }, [subscription, sessionId]);
+  }, [subscription, sessionId, pollingInterval]);
+
+  // Polling fallback for progress updates
+  const startPolling = useCallback((sessionId) => {
+    console.log('Starting polling fallback for session:', sessionId);
+    const interval = setInterval(async () => {
+      try {
+        const progressData = await getBulkImportProgress(sessionId);
+        console.log('Polling progress update:', progressData);
+        
+        setProgress(prev => ({
+          ...prev,
+          ...progressData
+        }));
+        
+        // If import is complete, stop polling
+        if (progressData.status === 'completed' || progressData.status === 'failed') {
+          clearInterval(interval);
+          setPollingInterval(null);
+          setImporting(false);
+          
+          if (progressData.status === 'completed' && onImportComplete) {
+            onImportComplete(progressData);
+          }
+        }
+      } catch (error) {
+        console.error('Polling error:', error);
+        // Continue polling even if there's an error
+      }
+    }, 2000); // Poll every 2 seconds
+    
+    setPollingInterval(interval);
+    return interval;
+  }, [onImportComplete]);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -45,17 +83,31 @@ const BulkImport = ({ onImportComplete }) => {
   };
 
   const connectToProgressChannel = useCallback((sessionId) => {
+    console.log('Attempting to connect to WebSocket for session:', sessionId);
+    
     const newSubscription = actionCableService.subscribeToImportProgress(sessionId, {
       connected() {
-        console.log('Connected to import progress channel');
+        console.log('✅ WebSocket connected to import progress channel');
+        setWebsocketConnected(true);
+        // If we have polling running, stop it since WebSocket is working
+        if (pollingInterval) {
+          clearInterval(pollingInterval);
+          setPollingInterval(null);
+        }
       },
       
       disconnected() {
-        console.log('Disconnected from import progress channel');
+        console.log('❌ WebSocket disconnected from import progress channel');
+        setWebsocketConnected(false);
+        // Start polling as fallback if we're still importing
+        if (importing && sessionId && !pollingInterval) {
+          console.log('Starting polling fallback due to WebSocket disconnection');
+          startPolling(sessionId);
+        }
       },
       
       received(data) {
-        console.log('Progress update:', data);
+        console.log('📨 WebSocket progress update:', data);
         setProgress(prevProgress => ({
           ...prevProgress,
           ...data
@@ -64,6 +116,7 @@ const BulkImport = ({ onImportComplete }) => {
         // If import is complete, cleanup
         if (data.status === 'completed' || data.status === 'failed') {
           setImporting(false);
+          setWebsocketConnected(false);
           if (data.status === 'completed' && onImportComplete) {
             onImportComplete(data);
           }
@@ -72,14 +125,28 @@ const BulkImport = ({ onImportComplete }) => {
       },
       
       rejected() {
-        console.error('Connection to progress channel was rejected');
-        setImporting(false);
+        console.error('🚫 WebSocket connection rejected - starting polling fallback');
+        setWebsocketConnected(false);
+        setImporting(true); // Keep importing state
+        // Start polling as fallback
+        if (sessionId && !pollingInterval) {
+          startPolling(sessionId);
+        }
       }
     });
     
     setSubscription(newSubscription);
+    
+    // Start polling as immediate fallback in case WebSocket doesn't connect quickly
+    setTimeout(() => {
+      if (!websocketConnected && importing && sessionId && !pollingInterval) {
+        console.log('WebSocket not connected after 3 seconds, starting polling fallback');
+        startPolling(sessionId);
+      }
+    }, 3000);
+    
     return newSubscription;
-  }, [onImportComplete]);
+  }, [onImportComplete, pollingInterval, importing, websocketConnected, startPolling]);
 
   const startImport = async () => {
     if (!file) return;
@@ -119,8 +186,13 @@ const BulkImport = ({ onImportComplete }) => {
       actionCableService.unsubscribeFromImportProgress(sessionId);
       setSubscription(null);
     }
+    if (pollingInterval) {
+      clearInterval(pollingInterval);
+      setPollingInterval(null);
+    }
     setImporting(false);
     setSessionId(null);
+    setWebsocketConnected(false);
     setProgress({
       percentage: 0,
       processed: 0,
@@ -200,9 +272,30 @@ const BulkImport = ({ onImportComplete }) => {
         <div className="progress-section">
           <div className="progress-header">
             <h4>{getStatusMessage()}</h4>
-            <button onClick={cancelImport} className="cancel-button">
-              Cancel
-            </button>
+            <div className="d-flex align-items-center">
+              {/* Connection status indicator */}
+              <small className="me-3 text-muted">
+                {websocketConnected ? (
+                  <span className="text-success">
+                    <i className="fas fa-wifi me-1"></i>
+                    Real-time
+                  </span>
+                ) : pollingInterval ? (
+                  <span className="text-warning">
+                    <i className="fas fa-clock me-1"></i>
+                    Polling
+                  </span>
+                ) : (
+                  <span className="text-secondary">
+                    <i className="fas fa-hourglass-half me-1"></i>
+                    Connecting...
+                  </span>
+                )}
+              </small>
+              <button onClick={cancelImport} className="cancel-button">
+                Cancel
+              </button>
+            </div>
           </div>
           
           <div className="progress-bar-container">

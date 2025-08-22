@@ -21,8 +21,10 @@ Rails.application.routes.draw do
       
       # Bulk import routes
       resources :bulk_imports, only: [:create, :index] do
-        member do
+        collection do
           get :progress
+        end
+        member do
           patch :cancel
         end
       end

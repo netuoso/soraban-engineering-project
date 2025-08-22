@@ -2,9 +2,12 @@ class ImportProgressChannel < ApplicationCable::Channel
   def subscribed
     session_id = params[:session_id]
     
+    Rails.logger.info "ImportProgressChannel: Attempting to subscribe to session_id: #{session_id}, current_user: #{current_user&.id}"
+    
     # Verify user owns this import session
     if session_id.present? && valid_session?(session_id)
       stream_from "import_progress_#{session_id}"
+      Rails.logger.info "ImportProgressChannel: Successfully subscribed to session: #{session_id}"
       
       # Send current progress immediately
       bulk_import = current_user&.bulk_imports&.find_by(session_id: session_id)
@@ -22,12 +25,14 @@ class ImportProgressChannel < ApplicationCable::Channel
         })
       end
     else
+      Rails.logger.warn "ImportProgressChannel: Rejecting subscription for session_id: #{session_id}, current_user: #{current_user&.id}"
       reject
     end
   end
   
   def unsubscribed
     # Clean up when user disconnects
+    Rails.logger.info "ImportProgressChannel: Unsubscribed from session"
     stop_all_streams
   end
   
@@ -35,12 +40,8 @@ class ImportProgressChannel < ApplicationCable::Channel
   
   def valid_session?(session_id)
     # Check if the current user has this import session
-    current_user&.bulk_imports&.exists?(session_id: session_id)
-  end
-  
-  def current_user
-    # This needs to be implemented based on your authentication
-    # For now, assuming connection has access to current_user
-    connection.current_user if connection.respond_to?(:current_user)
+    result = current_user&.bulk_imports&.exists?(session_id: session_id)
+    Rails.logger.info "ImportProgressChannel: Session validation for #{session_id}: #{result}, user: #{current_user&.id}"
+    result
   end
 end

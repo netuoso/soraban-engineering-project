@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   getDashboardSummary, 
   getUncategorizedTransactions, 
@@ -11,6 +11,9 @@ import DashboardCard from './DashboardCard';
 import TransactionTable from './TransactionTable';
 
 const Dashboard = () => {
+  // Ref for ImportHistory component
+  const importHistoryRef = useRef();
+  
   // Separate loading states for different sections
   const [statsLoading, setStatsLoading] = useState(true);
   const [uncategorizedLoading, setUncategorizedLoading] = useState(true);
@@ -36,6 +39,10 @@ const Dashboard = () => {
     console.log('Import completed:', importData);
     // Refresh all dashboard data
     loadDashboardData();
+    // Refresh import history table
+    if (importHistoryRef.current) {
+      importHistoryRef.current.refresh();
+    }
   };
 
   // Load dashboard summary stats (fastest query)
@@ -186,7 +193,7 @@ const Dashboard = () => {
       <BulkImport onImportComplete={handleImportComplete} />
 
       {/* Import History */}
-      <ImportHistory />
+      <ImportHistory ref={importHistoryRef} />
     </div>
   );
 };

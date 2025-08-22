@@ -64,7 +64,7 @@ class AnomalyDetectionService
       if (amount - mean).abs > 2 * std_dev && std_dev > 0
         @anomalies << {
           transaction: transaction,
-          type: :unusual_amount,
+          type: :amount_anomaly,
           details: "Amount significantly different from usual patterns (#{amount} vs avg #{mean.round(2)})"
         }
       end
@@ -94,7 +94,7 @@ class AnomalyDetectionService
       if (amount - mean).abs > 2 * std_dev && std_dev > 0
         @anomalies << {
           transaction: transaction,
-          type: :unusual_amount,
+          type: :amount_anomaly,
           details: "Amount significantly different from usual patterns (#{amount} vs avg #{mean.round(2)})"
         }
       end
@@ -109,7 +109,7 @@ class AnomalyDetectionService
       group.each do |transaction|
         @anomalies << {
           transaction: transaction,
-          type: :potential_duplicate,
+          type: :duplicate,
           details: "Duplicate transaction found in the same batch"
         }
       end
@@ -128,7 +128,7 @@ class AnomalyDetectionService
       if existing_similar.exists?
         @anomalies << {
           transaction: transaction,
-          type: :potential_duplicate,
+          type: :duplicate,
           details: "Similar transaction found in database on the same date"
         }
       end
@@ -145,7 +145,7 @@ class AnomalyDetectionService
       group.each do |transaction|
         @anomalies << {
           transaction: transaction,
-          type: :potential_duplicate,
+          type: :duplicate,
           details: "Duplicate transaction found in the same import batch"
         }
       end
@@ -175,7 +175,7 @@ class AnomalyDetectionService
       if existing_lookup[key]&.any?
         @anomalies << {
           transaction: transaction,
-          type: :potential_duplicate,
+          type: :duplicate,
           details: "Similar transaction found in database on the same date"
         }
       end

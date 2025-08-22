@@ -30,6 +30,8 @@ class ProcessCsvJob < ApplicationJob
 
     # Process transactions in batches
     transactions_to_import = []
+    imported_transaction_ids = []
+    
     csv_rows.each_slice(BATCH_SIZE).with_index do |batch, batch_index|
       batch.each do |row|
         category = nil
@@ -40,7 +42,7 @@ class ProcessCsvJob < ApplicationJob
           category = existing_categories[category_name]
         end
 
-        # Build transaction without saving
+        # Build and save transaction
         transaction = user.transactions.build(
           date: parse_date(row['date']),
           amount: row['amount'],
@@ -48,19 +50,14 @@ class ProcessCsvJob < ApplicationJob
           category: category
         )
 
-        transactions_to_import << transaction
-      end
-
-      # Run anomaly detection on the batch before importing
-      AnomalyDetectionService.detect_bulk_anomalies(user, transactions_to_import)
-
-      # Import the batch with validation to ensure consistency
-      # with manual transaction creation
-      # Note: Using individual saves instead of bulk import to ensure callbacks run
-      transactions_to_import.each do |transaction|
+        # Skip individual anomaly detection since we'll do bulk detection
+        transaction.skip_anomaly_detection = true
         transaction.save!
+        imported_transaction_ids << transaction.id
       end
-      transactions_to_import = [] # Clear the array for the next batch
+
+      # Run bulk anomaly detection for this batch
+      AnomalyDetectionJob.perform_bulk(user.id, imported_transaction_ids.last(batch.size))
 
       # Report progress
       progress = ((batch_index + 1) * BATCH_SIZE * 100.0 / total_rows).round(2)

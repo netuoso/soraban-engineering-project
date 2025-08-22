@@ -81,6 +81,10 @@ class BulkTransactionImportJob < ApplicationJob
       bulk_import.update!(imported_count: all_transaction_ids.size)
       bulk_import.mark_completed!
       
+      # Invalidate transaction and category totals cache after bulk import
+      Rails.cache.delete_matched("user_#{user.id}_transactions_*")
+      Rails.cache.delete_matched("user_#{user.id}_category_totals_*")
+      
       update_progress(session_id, bulk_import, 100, "Import completed successfully!")
       
       # Broadcast completion

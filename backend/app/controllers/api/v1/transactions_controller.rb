@@ -59,6 +59,8 @@ class Api::V1::TransactionsController < Api::V1::BaseController
   def create
     @transaction = current_user.transactions.build(transaction_params)
     if @transaction.save
+      # Invalidate cache after creating transaction
+      invalidate_transaction_cache
       render json: @transaction, status: :created
     else
       render json: @transaction.errors, status: :unprocessable_entity
@@ -67,6 +69,8 @@ class Api::V1::TransactionsController < Api::V1::BaseController
 
   def update
     if @transaction.update(transaction_params)
+      # Invalidate cache after updating transaction
+      invalidate_transaction_cache
       render json: @transaction
     else
       render json: @transaction.errors, status: :unprocessable_entity
@@ -75,6 +79,8 @@ class Api::V1::TransactionsController < Api::V1::BaseController
 
   def destroy
     @transaction.destroy
+    # Invalidate cache after destroying transaction
+    invalidate_transaction_cache
     head :no_content
   end
 
@@ -85,6 +91,8 @@ class Api::V1::TransactionsController < Api::V1::BaseController
 
   def categorize
     if @transaction.update(category_id: params[:category_id])
+      # Invalidate cache after categorizing transaction
+      invalidate_transaction_cache
       render json: @transaction
     else
       render json: @transaction.errors, status: :unprocessable_entity
@@ -93,7 +101,13 @@ class Api::V1::TransactionsController < Api::V1::BaseController
 
   def bulk_delete
     @transactions = current_user.transactions.where(id: params[:ids])
+    deleted_count = @transactions.count
     @transactions.destroy_all
+    
+    # Explicitly invalidate cache after bulk delete
+    invalidate_transaction_cache
+    
+    Rails.logger.info "Bulk deleted #{deleted_count} transactions for user #{current_user.id}"
     head :no_content
   end
 
@@ -104,6 +118,10 @@ class Api::V1::TransactionsController < Api::V1::BaseController
     update_params[:category_id] = params[:category_id] if params[:category_id].present?
     
     if @transactions.update_all(update_params)
+      # Explicitly invalidate cache after bulk update
+      invalidate_transaction_cache
+      
+      Rails.logger.info "Bulk updated #{@transactions.count} transactions for user #{current_user.id}"
       head :no_content
     else
       render json: { error: 'Failed to update transactions' }, status: :unprocessable_entity
@@ -111,6 +129,12 @@ class Api::V1::TransactionsController < Api::V1::BaseController
   end
 
   private
+
+  def invalidate_transaction_cache
+    Rails.cache.delete_matched("user_#{current_user.id}_transactions_*")
+    Rails.cache.delete_matched("user_#{current_user.id}_category_totals_*")
+    Rails.logger.debug "Invalidated transaction and category totals cache for user #{current_user.id}"
+  end
 
   def cache_key_suffix
     # Create a cache key that changes when filters change or data is updated

@@ -438,8 +438,13 @@ const TransactionList = () => {
       await updateTransaction(editingCell.rowId, editFormData);
       setEditingCell({ rowId: null, field: null });
       setEditFormData(null);
-      fetchTransactions();
-      fetchCategoryTotals(); // Refresh category totals for pie chart
+      
+      // Refresh data to ensure UI is in sync with backend
+      await Promise.all([
+        fetchTransactions(), 
+        fetchCategoryTotals()
+      ]);
+      
     } catch (err) {
       setError(err.message);
     } finally {
@@ -455,10 +460,19 @@ const TransactionList = () => {
     try {
       setIsProcessing(true);
       const selectedIds = Object.keys(selectedRows).map(index => data[index].id);
+      
+      // Perform bulk delete
       await bulkDeleteTransactions(selectedIds);
+      
+      // Clear selections immediately
       setSelectedRows({});
-      fetchTransactions();
-      fetchCategoryTotals(); // Refresh category totals for pie chart
+      
+      // Refresh data to ensure UI is in sync with backend
+      await Promise.all([
+        fetchTransactions(), 
+        fetchCategoryTotals()
+      ]);
+      
     } catch (err) {
       setError(err.message);
     } finally {
@@ -470,10 +484,19 @@ const TransactionList = () => {
     try {
       setIsProcessing(true);
       const selectedIds = Object.keys(selectedRows).map(index => data[index].id);
+      
+      // Perform bulk status update
       await bulkUpdateTransactions(selectedIds, { status });
+      
+      // Clear selections immediately
       setSelectedRows({});
-      fetchTransactions();
-      fetchCategoryTotals(); // Refresh category totals for pie chart
+      
+      // Refresh data to ensure UI is in sync with backend
+      await Promise.all([
+        fetchTransactions(), 
+        fetchCategoryTotals()
+      ]);
+      
     } catch (err) {
       setError(err.message);
     } finally {
@@ -485,11 +508,20 @@ const TransactionList = () => {
     try {
       setIsProcessing(true);
       const selectedIds = Object.keys(selectedRows).map(index => data[index].id);
+      
+      // Perform bulk category update
       await bulkUpdateTransactions(selectedIds, { category_id: categoryId });
+      
+      // Close modal and clear selections immediately
       setShowCategoryModal(false);
       setSelectedRows({});
-      fetchTransactions();
-      fetchCategoryTotals(); // Refresh category totals for pie chart
+      
+      // Refresh data to ensure UI is in sync with backend
+      await Promise.all([
+        fetchTransactions(), 
+        fetchCategoryTotals()
+      ]);
+      
     } catch (err) {
       setError(err.message);
     } finally {

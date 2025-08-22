@@ -1,0 +1,129 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: backend_development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching and Sidekiq
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Rails Backend Application
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.dev
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/backend_development
+      - REDIS_URL=redis://redis:6379/0
+      - RAILS_MAX_THREADS=5
+      - WEB_CONCURRENCY=1
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../backend:/rails
+      - backend_bundle:/usr/local/bundle
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    command: >
+      sh -c "
+        bundle install &&
+        ./bin/rails db:create db:migrate db:seed &&
+        touch tmp/caching-dev.txt &&
+        ./bin/rails server -b 0.0.0.0
+      "
+    stdin_open: true
+    tty: true
+
+  # Sidekiq Background Job Processor
+  sidekiq:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.dev
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/backend_development
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ../backend:/rails
+      - backend_bundle:/usr/local/bundle
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    command: >
+      sh -c "
+        bundle install &&
+        bundle exec sidekiq
+      "
+
+  # React Frontend Application
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile.dev
+    environment:
+      - REACT_APP_API_URL=http://localhost:3000
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    ports:
+      - "3001:3000"
+    volumes:
+      - ../frontend:/app
+      - frontend_node_modules:/app/node_modules
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    command: npm start
+    stdin_open: true
+    tty: true
+
+volumes:
+  postgres_data:
+  redis_data:
+  backend_bundle:
+  frontend_node_modules:

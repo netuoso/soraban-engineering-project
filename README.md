@@ -1,25 +1,4 @@
 # Soraban Engineering Project
-
-## Quick Start with Docker 🐳
-
-The fastest way to run the complete application:
-
-```bash
-# Start all services (PostgreSQL, Redis, Sidekiq, Rails, React)
-./start-dev.sh
-
-# Access the application
-# Frontend: http://localhost:3001
-# Backend:  http://localhost:3000
-
-# Stop all services
-./stop-dev.sh
-```
-
-See [DOCKER_README.md](DOCKER_README.md) for detailed Docker setup and troubleshooting.
-
----
-
 The following is a take-home project for Soraban engineering candidates.
 
 ## Submission Instructions

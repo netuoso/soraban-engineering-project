@@ -188,7 +188,7 @@ const BulkImport = ({ onImportComplete }) => {
           
           <div className="import-info">
             <p>Supported format: CSV with columns: date, amount, description, category</p>
-            <p>Maximum file size: 50MB</p>
+            <p>Maximum file size: 100MB</p>
           </div>
         </div>
       ) : (

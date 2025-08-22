@@ -87,21 +87,6 @@ export const getCategoryTotals = async (filters = {}) => {
   }
 };
 
-export const uploadTransactions = async (file) => {
-  try {
-    const formData = new FormData();
-    formData.append('file', file);
-    const response = await api.post('/transactions/upload', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
-    return response.data;
-  } catch (error) {
-    throw new Error(error.response?.data?.message || 'Failed to upload transactions');
-  }
-};
-
 export const bulkDeleteTransactions = async (ids) => {
   try {
     await api.delete('/transactions/bulk_delete', { data: { ids } });

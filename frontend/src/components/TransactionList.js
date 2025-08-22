@@ -20,7 +20,6 @@ import {
 } from '../services/transactions';
 import { getCategories } from '../services/categories';
 import TransactionForm from './TransactionForm';
-import CsvUploadForm from './CsvUploadForm';
 import BulkCategorySelect from './BulkCategorySelect';
 import CategorySelect from './CategorySelect';
 import { EditableText, EditableNumber } from './EditableFields';
@@ -62,7 +61,6 @@ const TransactionList = () => {
   });
   
   const [showTransactionForm, setShowTransactionForm] = useState(false);
-  const [showUploadForm, setShowUploadForm] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [selectedRows, setSelectedRows] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
@@ -379,13 +377,13 @@ const TransactionList = () => {
   // Set up polling for auto-refresh
   usePolling(
     () => {
-      if (autoRefresh && !showTransactionForm && !showUploadForm && !editingCell.rowId) {
+      if (autoRefresh && !showTransactionForm && !editingCell.rowId) {
         fetchTransactions(false);
         fetchCategoryTotals();
       }
     },
     10000,
-    [autoRefresh, showTransactionForm, showUploadForm, editingCell.rowId]
+    [autoRefresh, showTransactionForm, editingCell.rowId]
   );
 
   const handleFilterChange = (key, value) => {
@@ -506,20 +504,17 @@ const TransactionList = () => {
       <div className="mb-4">
         <div className="d-flex justify-content-between align-items-center">
           <h2>Transactions</h2>
-          <div>
+          <div className="d-flex align-items-center">
+            <small className="text-muted me-3">
+              <i className="fas fa-info-circle me-1"></i>
+              To upload CSV files, use the <strong>Bulk Import</strong> feature on the Dashboard
+            </small>
             <button 
-              className="btn btn-primary me-2"
+              className="btn btn-primary"
               onClick={() => setShowTransactionForm(true)}
             >
               <i className="fas fa-plus me-2"></i>
               Add Transaction
-            </button>
-            <button 
-              className="btn btn-secondary"
-              onClick={() => setShowUploadForm(true)}
-            >
-              <i className="fas fa-upload me-2"></i>
-              Upload CSV
             </button>
           </div>
         </div>
@@ -589,22 +584,6 @@ const TransactionList = () => {
                 fetchCategoryTotals(); // Refresh category totals for pie chart
               }}
               onCancel={() => setShowTransactionForm(false)}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* CSV Upload Modal */}
-      {showUploadForm && (
-        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog">
-            <CsvUploadForm
-              onSuccess={() => {
-                setShowUploadForm(false);
-                fetchTransactions();
-                fetchCategoryTotals(); // Refresh category totals for pie chart
-              }}
-              onCancel={() => setShowUploadForm(false)}
             />
           </div>
         </div>

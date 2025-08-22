@@ -78,16 +78,6 @@ class Api::V1::TransactionsController < Api::V1::BaseController
     head :no_content
   end
 
-  def upload
-    if params[:file].present?
-      csv_data = params[:file].read
-      ProcessCsvJob.perform_later(csv_data, current_user.id)
-      render json: { message: 'File upload started. Transactions will be processed in the background.' }
-    else
-      render json: { error: 'No file provided' }, status: :unprocessable_entity
-    end
-  end
-
   def invalid
     @transactions = current_user.transactions.where(status: 'invalid')
     render json: @transactions

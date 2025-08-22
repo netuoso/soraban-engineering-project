@@ -2,18 +2,14 @@ Rails.application.routes.draw do
   # API routes
   namespace :api do
     namespace :v1 do
-      # Optimized endpoints for performance
-      get 'transactions/optimized', to: 'transactions_optimized#index'
-      get 'transactions/categories_summary', to: 'transactions_optimized#categories_summary'
-      get 'transactions/category_totals', to: 'transactions_optimized#category_totals'
-      get 'categories/optimized', to: 'categories_optimized#index'
-      
       resources :transactions do
         collection do
           post :upload
           get :invalid
           delete :bulk_delete
           put :bulk_update
+          get :categories
+          get :category_totals
         end
         member do
           patch :categorize

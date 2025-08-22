@@ -2,30 +2,30 @@ import api from './api';
 
 export const getTransactions = async (filters = {}) => {
   try {
-    const {
-      page = 1,
-      perPage = 20,
-      startDate,
-      endDate,
-      status,
-      search
-    } = filters;
-
-    const params = new URLSearchParams({
-      page,
-      per_page: perPage
-    });
-
-    if (startDate) params.append('start_date', startDate.toISOString());
-    if (endDate) params.append('end_date', endDate.toISOString());
-    if (status) params.append('status', status);
-    if (search) params.append('search', search);
-    if (filters.category !== undefined) params.append('category', filters.category);
-
-    const response = await api.get(`/transactions?${params.toString()}`);
+    // Transform camelCase to snake_case for backend compatibility
+    const transformedParams = { ...filters };
+    
+    // Handle parameter name transformations
+    if (transformedParams.perPage) {
+      transformedParams.per_page = transformedParams.perPage;
+      delete transformedParams.perPage;
+    }
+    
+    if (transformedParams.startDate) {
+      transformedParams.start_date = transformedParams.startDate;
+      delete transformedParams.startDate;
+    }
+    
+    if (transformedParams.endDate) {
+      transformedParams.end_date = transformedParams.endDate;
+      delete transformedParams.endDate;
+    }
+    
+    const response = await api.get('/transactions', { params: transformedParams });
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Failed to fetch transactions');
+    console.error('Error fetching transactions:', error);
+    throw error;
   }
 };
 
@@ -61,6 +61,39 @@ export const deleteTransaction = async (id) => {
     await api.delete(`/transactions/${id}`);
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Failed to delete transaction');
+  }
+};
+
+export const getCategories = async () => {
+  try {
+    const response = await api.get('/transactions/categories');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
+};
+
+export const getCategoryTotals = async (filters = {}) => {
+  try {
+    // Transform camelCase to snake_case for backend compatibility
+    const transformedParams = { ...filters };
+    
+    if (transformedParams.startDate) {
+      transformedParams.start_date = transformedParams.startDate;
+      delete transformedParams.startDate;
+    }
+    
+    if (transformedParams.endDate) {
+      transformedParams.end_date = transformedParams.endDate;
+      delete transformedParams.endDate;
+    }
+    
+    const response = await api.get('/transactions/category_totals', { params: transformedParams });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching category totals:', error);
+    throw error;
   }
 };
 

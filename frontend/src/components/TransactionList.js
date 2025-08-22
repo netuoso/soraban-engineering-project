@@ -12,29 +12,39 @@ import CategoryPieChart from './CategoryPieChart';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import { 
-  getTransactions, 
+  getTransactions,
+  getCategories,
+  getCategoryTotals
+} from '../services/transactions';
+import { 
   bulkDeleteTransactions, 
   bulkUpdateTransactions,
   updateTransaction
 } from '../services/transactions';
-import { getCategoryTotals } from '../services/summaryService';
-import { getCategories } from '../services/categories';
 import TransactionForm from './TransactionForm';
 import CsvUploadForm from './CsvUploadForm';
 import BulkCategorySelect from './BulkCategorySelect';
 import CategorySelect from './CategorySelect';
 import { EditableText, EditableNumber } from './EditableFields';
+import { TableSkeleton, FiltersSkeleton, ChartSkeleton } from './LoadingSkeletons';
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/TransactionList.css";
 
 const TransactionList = () => {
   const navigate = useNavigate();
+  
+  // Separate loading states for progressive loading
+  const [transactionsLoading, setTransactionsLoading] = useState(true);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [categoryTotalsLoading, setCategoryTotalsLoading] = useState(true);
+  
+  // Data states
   const [data, setData] = useState([]);
   const [sorting, setSorting] = useState([]);
   const [categoryTotals, setCategoryTotals] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
   // Get URL search params
   const searchParams = new URLSearchParams(window.location.search);
   const [filters, setFilters] = useState({
@@ -46,11 +56,13 @@ const TransactionList = () => {
     page: parseInt(searchParams.get('page')) || 1,
     perPage: parseInt(searchParams.get('perPage')) || 20
   });
+  
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
     totalCount: 0
   });
+  
   const [showTransactionForm, setShowTransactionForm] = useState(false);
   const [showUploadForm, setShowUploadForm] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
@@ -98,6 +110,83 @@ const TransactionList = () => {
     return '';
   };
 
+  // Optimized data fetching functions
+  const fetchTransactions = useCallback(async (showLoading = true) => {
+    try {
+      if (showLoading) setTransactionsLoading(true);
+      const response = await getTransactions(filters);
+      setData(response.data || []);
+      setPagination({
+        currentPage: response.meta?.current_page || 1,
+        totalPages: response.meta?.total_pages || 1,
+        totalCount: response.meta?.total_count || 0
+      });
+      setLastUpdated(new Date());
+      setError(null);
+    } catch (err) {
+      console.error('Transaction fetch error:', err);
+      setError(err.message);
+    } finally {
+      if (showLoading) setTransactionsLoading(false);
+    }
+  }, [filters]);
+
+  const fetchCategories = useCallback(async () => {
+    try {
+      const response = await getCategories();
+      setCategories(response.data || []);
+      setCategoriesLoading(false);
+    } catch (err) {
+      console.error('Categories fetch error:', err);
+      setCategoriesLoading(false);
+    }
+  }, []);
+
+  const fetchCategoryTotals = useCallback(async () => {
+    try {
+      const response = await getCategoryTotals();
+      setCategoryTotals(response.data || []);
+      setCategoryTotalsLoading(false);
+    } catch (err) {
+      console.error('Category totals fetch error:', err);
+      setCategoryTotalsLoading(false);
+    }
+  }, []);
+
+  // Load all data in parallel
+  const loadAllData = useCallback(() => {
+    setTransactionsLoading(true);
+    setCategoriesLoading(true);
+    setCategoryTotalsLoading(true);
+    
+    // Start all requests in parallel
+    fetchTransactions();
+    fetchCategories();
+    fetchCategoryTotals();
+  }, [fetchTransactions, fetchCategories, fetchCategoryTotals]);
+
+  // Function to clear all filters and refresh data
+  const clearAllFilters = useCallback(async () => {
+    const clearedFilters = {
+      startDate: null,
+      endDate: null,
+      status: '',
+      search: '',
+      category: undefined,
+      page: 1,
+      perPage: filters.perPage
+    };
+    
+    // Clear URL params first
+    navigate('/transactions', { replace: true });
+    
+    // Update filters
+    setFilters(clearedFilters);
+    
+    // Force data refresh with new filters will be handled by useEffect
+  }, [filters.perPage, navigate]);
+
+  // Optimized columns definition
   const columns = React.useMemo(() => [
     {
       id: 'select',
@@ -142,7 +231,6 @@ const TransactionList = () => {
             />
           );
         }
-        // Parse the ISO8601 string and format it
         const date = new Date(info.getValue());
         return format(date, "MMM dd, yyyy HH:mm:ss 'UTC'");
       }
@@ -271,89 +359,10 @@ const TransactionList = () => {
     }
   });
 
-  const fetchCategories = async () => {
-    try {
-      const response = await getCategories();
-      setCategories(response?.data || []);
-    } catch (err) {
-      console.error('Categories fetch error:', err);
-    }
-  };
-
-  const fetchCategoryTotals = async () => {
-    try {
-      const response = await getCategoryTotals();
-      setCategoryTotals(response.data);
-    } catch (err) {
-      console.error('Category totals fetch error:', err);
-    }
-  };
-
-  const fetchTransactions = useCallback(async (showLoading = true) => {
-    try {
-      if (showLoading) setLoading(true);
-      const response = await getTransactions(filters);
-      setData(response.data);
-      setPagination({
-        currentPage: response.meta.current_page,
-        totalPages: response.meta.total_pages,
-        totalCount: response.meta.total_count
-      });
-      setLastUpdated(new Date());
-      setError(null);
-    } catch (err) {
-      console.error('Transaction fetch error:', err);
-      setError(err.message);
-    } finally {
-      if (showLoading) setLoading(false);
-    }
-  }, [filters]);
-
-  // Function to clear all filters and refresh data
-  const clearAllFilters = useCallback(async () => {
-    const clearedFilters = {
-      startDate: null,
-      endDate: null,
-      status: '',
-      search: '',
-      category: undefined,
-      page: 1,
-      perPage: filters.perPage
-    };
-    
-    // Clear URL params first
-    navigate('/transactions', { replace: true });
-    
-    // Update filters
-    setFilters(clearedFilters);
-    
-    // Force data refresh
-    try {
-      setLoading(true);
-      const response = await getTransactions(clearedFilters);
-      setData(response.data);
-      setPagination({
-        currentPage: response.meta.current_page,
-        totalPages: response.meta.total_pages,
-        totalCount: response.meta.total_count
-      });
-      setLastUpdated(new Date());
-      setError(null);
-      
-      // Also refresh category totals
-      fetchCategoryTotals();
-    } catch (err) {
-      console.error('Transaction fetch error:', err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [filters.perPage, navigate, fetchCategoryTotals]);
-
-  // Initial fetch when component mounts
+  // Initial data loading
   useEffect(() => {
-    fetchCategories();
-
+    loadAllData();
+    
     // Check for focused transaction
     const focusedId = searchParams.get('focus');
     if (focusedId && data.length > 0) {
@@ -362,15 +371,14 @@ const TransactionList = () => {
         startEditing({ original: focusedRow }, 'category');
       }
     }
-  }, [data]);
+  }, []);
 
-  // Initial fetch when filters change
+  // Reload transactions when filters change
   useEffect(() => {
     fetchTransactions();
-    fetchCategoryTotals();
-  }, [filters, fetchTransactions]);
+  }, [fetchTransactions]);
 
-  // Set up polling
+  // Set up polling for auto-refresh
   usePolling(
     () => {
       if (autoRefresh && !showTransactionForm && !showUploadForm && !editingCell.rowId) {
@@ -378,7 +386,7 @@ const TransactionList = () => {
         fetchCategoryTotals();
       }
     },
-    10000, // Poll every 10 seconds instead of 2.5 seconds
+    10000,
     [autoRefresh, showTransactionForm, showUploadForm, editingCell.rowId]
   );
 
@@ -386,7 +394,6 @@ const TransactionList = () => {
     const newFilters = {
       ...filters,
       [key]: value,
-      // Only reset page to 1 when changing filters other than page
       page: key === 'page' ? value : 1
     };
     setFilters(newFilters);
@@ -401,16 +408,14 @@ const TransactionList = () => {
     navigate(`/transactions?${params.toString()}`, { replace: true });
   };
 
-  // Debounce search input to avoid excessive API calls
+  // Debounce search input
   const debouncedSearch = useDebounce((searchValue) => {
     handleFilterChange('search', searchValue);
   }, 500);
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
-    // Update local state immediately for UI responsiveness
     setFilters(prev => ({ ...prev, search: value }));
-    // Debounce the actual API call
     debouncedSearch(value);
   };
 
@@ -536,7 +541,7 @@ const TransactionList = () => {
             <button
               className="btn btn-link btn-sm text-muted p-0 ms-3"
               onClick={() => fetchTransactions()}
-              disabled={loading}
+              disabled={transactionsLoading}
             >
               <i className="fas fa-sync-alt"></i> Refresh Now
             </button>
@@ -619,11 +624,10 @@ const TransactionList = () => {
               onSuccess={() => {
                 setShowTransactionForm(false);
                 fetchTransactions();
-                fetchCategories(); // Refresh categories in case a new one was created
+                fetchCategories();
               }}
               onCancel={() => setShowTransactionForm(false)}
               onCategoryCreated={(newCategory) => {
-                // Add the new category to the existing categories list
                 setCategories(prev => [...prev, newCategory]);
               }}
             />
@@ -647,82 +651,91 @@ const TransactionList = () => {
       )}
 
       {/* Category Summary Pie Chart */}
-      <div className="card mb-4">
-        <div className="card-body">
-          <h5 className="card-title mb-4">
-            Category Summary
-            {filters.category && (
-              <span className="ms-2 text-muted">
-                (Filtered by: {filters.category})
-              </span>
-            )}
-          </h5>
-          <CategoryPieChart 
-            data={categoryTotals}
-            onCategoryClick={(category) => handleFilterChange('category', category)}
-            selectedCategory={filters.category}
-          />
-        </div>
-      </div>
-
-      <div className="card mb-4">
-        <div className="card-body">
-          <div className="row g-3">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <h6 className="mb-0">Filters</h6>
-              {(filters.startDate || filters.endDate || filters.status || filters.search || filters.category) && (
-                <button
-                  className="btn btn-outline-secondary btn-sm"
-                  onClick={clearAllFilters}
-                >
-                  <i className="fas fa-times me-1"></i>
-                  Clear All Filters
-                </button>
+      {categoryTotalsLoading ? (
+        <ChartSkeleton />
+      ) : (
+        <div className="card mb-4">
+          <div className="card-body">
+            <h5 className="card-title mb-4">
+              Category Summary
+              {filters.category && (
+                <span className="ms-2 text-muted">
+                  (Filtered by: {filters.category})
+                </span>
               )}
-            </div>
-            <div className="col-md-3">
-              <label className="form-label">Start Date</label>
-              <DatePicker
-                selected={filters.startDate}
-                onChange={date => handleFilterChange('startDate', date)}
-                className="form-control"
-                placeholderText="Start Date"
-              />
-            </div>
-            <div className="col-md-3">
-              <label className="form-label">End Date</label>
-              <DatePicker
-                selected={filters.endDate}
-                onChange={date => handleFilterChange('endDate', date)}
-                className="form-control"
-                placeholderText="End Date"
-              />
-            </div>
-            <div className="col-md-3">
-              <label className="form-label">Status</label>
-              <select
-                className="form-select"
-                value={filters.status}
-                onChange={e => handleFilterChange('status', e.target.value)}
-              >
-                <option value="">All</option>
-                <option value="valid">Valid</option>
-                <option value="invalid">Invalid</option>
-              </select>
-            </div>
-            <div className="col-md-3">
-              <label className="form-label">Search</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Search description..."
-                value={filters.search}
-                onChange={handleSearchChange}
-              />
+            </h5>
+            <CategoryPieChart 
+              data={categoryTotals}
+              onCategoryClick={(category) => handleFilterChange('category', category)}
+              selectedCategory={filters.category}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Filters */}
+      {categoriesLoading ? (
+        <FiltersSkeleton />
+      ) : (
+        <div className="card mb-4">
+          <div className="card-body">
+            <div className="row g-3">
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <h6 className="mb-0">Filters</h6>
+                {(filters.startDate || filters.endDate || filters.status || filters.search || filters.category) && (
+                  <button
+                    className="btn btn-outline-secondary btn-sm"
+                    onClick={clearAllFilters}
+                  >
+                    <i className="fas fa-times me-1"></i>
+                    Clear All Filters
+                  </button>
+                )}
+              </div>
+              <div className="col-md-3">
+                <label className="form-label">Start Date</label>
+                <DatePicker
+                  selected={filters.startDate}
+                  onChange={date => handleFilterChange('startDate', date)}
+                  className="form-control"
+                  placeholderText="Start Date"
+                />
+              </div>
+              <div className="col-md-3">
+                <label className="form-label">End Date</label>
+                <DatePicker
+                  selected={filters.endDate}
+                  onChange={date => handleFilterChange('endDate', date)}
+                  className="form-control"
+                  placeholderText="End Date"
+                />
+              </div>
+              <div className="col-md-3">
+                <label className="form-label">Status</label>
+                <select
+                  className="form-select"
+                  value={filters.status}
+                  onChange={e => handleFilterChange('status', e.target.value)}
+                >
+                  <option value="">All</option>
+                  <option value="valid">Valid</option>
+                  <option value="invalid">Invalid</option>
+                </select>
+              </div>
+              <div className="col-md-3">
+                <label className="form-label">Search</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search description..."
+                  value={filters.search}
+                  onChange={handleSearchChange}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {error && (
         <div className="alert alert-danger" role="alert">
@@ -730,14 +743,11 @@ const TransactionList = () => {
         </div>
       )}
 
+      {/* Transactions Table */}
       <div className="card">
         <div className="card-body">
-          {loading ? (
-            <div className="text-center py-4">
-              <div className="spinner-border" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </div>
-            </div>
+          {transactionsLoading ? (
+            <TableSkeleton rows={filters.perPage} columns={6} />
           ) : (
             <div className="table-responsive">
               <table className="table table-hover">
@@ -813,6 +823,7 @@ const TransactionList = () => {
         </div>
       </div>
 
+      {/* Pagination */}
       <div className="d-flex justify-content-between align-items-center mt-4">
         <div>
           <select

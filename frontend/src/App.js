@@ -4,7 +4,7 @@ import Navigation from './components/Navigation';
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
-import TransactionListOptimized from './components/TransactionListOptimized';
+import TransactionList from './components/TransactionList';
 import Rules from './components/Rules';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -35,7 +35,7 @@ function App() {
               path="/transactions"
               element={
                 <ProtectedRoute>
-                  <TransactionListOptimized />
+                  <TransactionList />
                 </ProtectedRoute>
               }
             />

@@ -731,6 +731,7 @@ const TransactionList = () => {
                   <option value="">All</option>
                   <option value="valid">Valid</option>
                   <option value="invalid">Invalid</option>
+                  <option value="high_value">High Value</option>
                 </select>
               </div>
               <div className="col-md-3">

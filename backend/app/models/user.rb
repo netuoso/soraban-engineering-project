@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :categories, dependent: :destroy
   has_many :transactions, dependent: :destroy
   has_many :rules, dependent: :destroy
+  has_many :bulk_imports, dependent: :destroy
 
   def jwt_payload
     { 

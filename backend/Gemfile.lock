@@ -130,6 +130,15 @@ GEM
     erubi (1.13.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    google-protobuf (4.32.0-aarch64-linux-gnu)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.32.0-arm64-darwin)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.32.0-x86_64-linux-gnu)
+      bigdecimal
+      rake (>= 13)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.2.2)
@@ -196,6 +205,8 @@ GEM
     pg (1.6.1-aarch64-linux)
     pg (1.6.1-arm64-darwin)
     pg (1.6.1-x86_64-linux)
+    pg_query (6.1.0)
+      google-protobuf (>= 3.25.3)
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
@@ -250,6 +261,8 @@ GEM
     rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
+    redis (5.4.1)
+      redis-client (>= 0.22.0)
     redis-client (0.25.2)
       connection_pool
     regexp_parser (2.11.2)
@@ -321,6 +334,7 @@ DEPENDENCIES
   activerecord-import
   bootsnap
   capybara
+  connection_pool
   debug
   devise
   devise-jwt
@@ -329,9 +343,11 @@ DEPENDENCIES
   jsonapi-serializer
   kaminari
   pg (~> 1.1)
+  pg_query
   puma (>= 5.0)
   rack-cors
   rails (~> 7.1.5, >= 7.1.5.2)
+  redis (>= 4.0.1)
   selenium-webdriver
   sidekiq
   sprockets-rails

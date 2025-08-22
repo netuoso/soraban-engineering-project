@@ -15,9 +15,17 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # https://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  # Optimized connection pooling for bulk operations
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 25 } %>
+  # Increase timeout for bulk operations
+  checkout_timeout: 10
+  # Prepared statements for better performance
+  prepared_statements: true
+  # Connection settings for bulk operations
+  variables:
+    statement_timeout: 300000  # 5 minutes for bulk operations
+    lock_timeout: 60000       # 1 minute lock timeout
+    idle_in_transaction_session_timeout: 300000
 
 development:
   <<: *default

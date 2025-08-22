@@ -17,6 +17,14 @@ Rails.application.routes.draw do
       resources :categories
       resources :rules
       
+      # Bulk import routes
+      resources :bulk_imports, only: [:create, :index] do
+        member do
+          get :progress
+          patch :cancel
+        end
+      end
+      
       get 'summaries/category_totals', to: 'summaries#category_totals'
     end
   end
@@ -33,6 +41,9 @@ Rails.application.routes.draw do
                registrations: 'users/registrations'
              },
              defaults: { format: :json }
+
+  # Mount ActionCable
+  mount ActionCable.server => '/cable'
 
   # Sidekiq Web UI
   require 'sidekiq/web'

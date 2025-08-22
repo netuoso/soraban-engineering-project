@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getTransactions } from '../services/transactions';
+import BulkImport from './BulkImport';
+import ImportHistory from './ImportHistory';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -10,6 +12,13 @@ const Dashboard = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const handleImportComplete = (importData) => {
+    // Refresh dashboard data after successful import
+    console.log('Import completed:', importData);
+    // Reload the page data or refetch specific components
+    window.location.reload(); // Simple approach, could be optimized
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,6 +102,9 @@ const Dashboard = () => {
   return (
     <div className="container mt-4">
       <h1 className="mb-4">Dashboard</h1>
+
+      {/* Bulk Import Section */}
+      <BulkImport onImportComplete={handleImportComplete} />
 
       <div className="row">
         {/* Quick Stats */}
@@ -343,6 +355,9 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Import History */}
+      <ImportHistory />
     </div>
   );
 };

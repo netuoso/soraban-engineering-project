@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   getDashboardSummary, 
   getUncategorizedTransactions, 
@@ -13,6 +13,11 @@ import TransactionTable from './TransactionTable';
 const Dashboard = () => {
   // Ref for ImportHistory component
   const importHistoryRef = useRef();
+  
+  // Polling state
+  const [pollingEnabled, setPollingEnabled] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState(null);
+  const pollingIntervalRef = useRef(null); // Use ref instead of state for interval
   
   // Separate loading states for different sections
   const [statsLoading, setStatsLoading] = useState(true);
@@ -35,6 +40,47 @@ const Dashboard = () => {
   
   const [error, setError] = useState(null);
 
+  // Cleanup polling on unmount
+  useEffect(() => {
+    return () => {
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+      }
+    };
+  }, []);
+
+  // Polling logic
+  const startPolling = useCallback(() => {
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+    }
+    
+    const interval = setInterval(() => {
+      console.log('Dashboard polling: refreshing data');
+      loadDashboardData(false); // false = don't reset loading states for polling updates
+      setLastUpdated(new Date());
+    }, 5000); // 5 second interval
+    
+    pollingIntervalRef.current = interval;
+  }, []); // Remove pollingInterval from dependencies to prevent infinite loop
+
+  const stopPolling = useCallback(() => {
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
+    }
+  }, []); // Remove pollingInterval from dependencies
+
+  const togglePolling = useCallback(() => {
+    if (pollingEnabled) {
+      stopPolling();
+      setPollingEnabled(false);
+    } else {
+      startPolling();
+      setPollingEnabled(true);
+    }
+  }, [pollingEnabled, startPolling, stopPolling]);
+
   const handleImportComplete = (importData) => {
     console.log('Import completed:', importData);
     // Refresh all dashboard data
@@ -43,6 +89,7 @@ const Dashboard = () => {
     if (importHistoryRef.current) {
       importHistoryRef.current.refresh();
     }
+    setLastUpdated(new Date());
   };
 
   // Load dashboard summary stats (fastest query)
@@ -95,11 +142,13 @@ const Dashboard = () => {
   };
 
   // Function to reload all data
-  const loadDashboardData = () => {
-    setStatsLoading(true);
-    setUncategorizedLoading(true);
-    setFlaggedLoading(true);
-    setAnomaliesLoading(true);
+  const loadDashboardData = (resetLoadingStates = true) => {
+    if (resetLoadingStates) {
+      setStatsLoading(true);
+      setUncategorizedLoading(true);
+      setFlaggedLoading(true);
+      setAnomaliesLoading(true);
+    }
     
     // Load data in parallel
     loadSummaryStats();
@@ -110,7 +159,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     loadDashboardData();
-  }, []);
+    setLastUpdated(new Date());
+    // Start polling automatically since pollingEnabled is true by default
+    startPolling();
+  }, []); // Empty dependency array to run only once on mount
 
   // Show error if critical failure
   if (error) {
@@ -125,7 +177,41 @@ const Dashboard = () => {
 
   return (
     <div className="container mt-4">
-      <h1 className="mb-4">Dashboard</h1>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h1 className="mb-0">Dashboard</h1>
+        
+        {/* Polling Controls */}
+        <div className="d-flex align-items-center">
+          {lastUpdated && (
+            <small className="text-muted me-3">
+              Last updated: {lastUpdated.toLocaleTimeString()}
+            </small>
+          )}
+          
+          <div className="d-flex align-items-center">
+            <button
+              className={`btn btn-sm me-2 ${pollingEnabled ? 'btn-success' : 'btn-outline-secondary'}`}
+              onClick={togglePolling}
+              title={pollingEnabled ? 'Disable auto-refresh' : 'Enable auto-refresh (5s interval)'}
+            >
+              <i className={`fas ${pollingEnabled ? 'fa-pause' : 'fa-play'} me-1`}></i>
+              {pollingEnabled ? 'Auto-refresh ON' : 'Auto-refresh OFF'}
+            </button>
+            
+            <button
+              className="btn btn-sm btn-outline-primary"
+              onClick={() => {
+                loadDashboardData();
+                setLastUpdated(new Date());
+              }}
+              title="Refresh dashboard data"
+            >
+              <i className="fas fa-sync-alt me-1"></i>
+              Refresh
+            </button>
+          </div>
+        </div>
+      </div>
 
       <div className="row">
         {/* Quick Stats Cards - render immediately with loading states */}

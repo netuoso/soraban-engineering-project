@@ -15,24 +15,24 @@ const BulkImport = ({ onImportComplete }) => {
   });
   const [sessionId, setSessionId] = useState(null);
   const [validationErrors, setValidationErrors] = useState([]);
-  const [pollingInterval, setPollingInterval] = useState(null);
+  const [localPollingInterval, setLocalPollingInterval] = useState(null);
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (pollingInterval) {
-        clearInterval(pollingInterval);
+      if (localPollingInterval) {
+        clearInterval(localPollingInterval);
       }
     };
-  }, [pollingInterval]);
+  }, [localPollingInterval]);
 
-  // Polling for progress updates
-  const startPolling = useCallback((sessionId) => {
-    console.log('Starting progress polling for session:', sessionId);
+  // Local polling for import progress (faster updates during active import)
+  const startLocalPolling = useCallback((sessionId) => {
+    console.log('Starting import progress polling for session:', sessionId);
     const interval = setInterval(async () => {
       try {
         const progressData = await getBulkImportProgress(sessionId);
-        console.log('Progress update:', progressData);
+        console.log('Import progress update:', progressData);
         
         setProgress(prev => ({
           ...prev,
@@ -42,7 +42,7 @@ const BulkImport = ({ onImportComplete }) => {
         // If import is complete, stop polling
         if (progressData.status === 'completed' || progressData.status === 'failed') {
           clearInterval(interval);
-          setPollingInterval(null);
+          setLocalPollingInterval(null);
           setImporting(false);
           
           if (progressData.status === 'completed' && onImportComplete) {
@@ -50,12 +50,12 @@ const BulkImport = ({ onImportComplete }) => {
           }
         }
       } catch (error) {
-        console.error('Polling error:', error);
+        console.error('Import polling error:', error);
         // Continue polling even if there's an error
       }
-    }, 1000); // Poll every 1 second for responsive updates
+    }, 1000); // Poll every 1 second for responsive import updates
     
-    setPollingInterval(interval);
+    setLocalPollingInterval(interval);
     return interval;
   }, [onImportComplete]);
 
@@ -93,8 +93,8 @@ const BulkImport = ({ onImportComplete }) => {
       const result = await startBulkImport(file);
       setSessionId(result.session_id);
       
-      // Start polling for progress updates
-      startPolling(result.session_id);
+      // Start local polling for import progress (faster updates during active import)
+      startLocalPolling(result.session_id);
       
     } catch (error) {
       console.error('Error starting import:', error);
@@ -110,9 +110,9 @@ const BulkImport = ({ onImportComplete }) => {
   };
 
   const cancelImport = () => {
-    if (pollingInterval) {
-      clearInterval(pollingInterval);
-      setPollingInterval(null);
+    if (localPollingInterval) {
+      clearInterval(localPollingInterval);
+      setLocalPollingInterval(null);
     }
     setImporting(false);
     setSessionId(null);
@@ -196,12 +196,12 @@ const BulkImport = ({ onImportComplete }) => {
           <div className="progress-header">
             <h4>{getStatusMessage()}</h4>
             <div className="d-flex align-items-center">
-              {/* Connection status indicator */}
+              {/* Import progress indicator */}
               <small className="me-3 text-muted">
-                {pollingInterval ? (
+                {localPollingInterval ? (
                   <span className="text-success">
                     <i className="fas fa-sync fa-spin me-1"></i>
-                    Live Updates
+                    Processing
                   </span>
                 ) : (
                   <span className="text-secondary">

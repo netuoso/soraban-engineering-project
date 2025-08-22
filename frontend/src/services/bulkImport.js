@@ -90,7 +90,7 @@ export const formatDuration = (seconds) => {
 // Utility function to validate CSV file
 export const validateCSVFile = (file) => {
   const errors = [];
-  const maxSize = 50 * 1024 * 1024; // 50MB
+  const maxSize = 100 * 1024 * 1024; // 50MB
   
   if (!file) {
     errors.push('No file selected');
@@ -104,7 +104,7 @@ export const validateCSVFile = (file) => {
   
   // Check file size
   if (file.size > maxSize) {
-    errors.push(`File size (${formatFileSize(file.size)}) exceeds maximum allowed size (50MB)`);
+    errors.push(`File size (${formatFileSize(file.size)}) exceeds maximum allowed size (100MB)`);
   }
   
   // Check if file is empty

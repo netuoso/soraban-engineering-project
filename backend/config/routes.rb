@@ -8,7 +8,6 @@ Rails.application.routes.draw do
           get :invalid
           delete :bulk_delete
           put :bulk_update
-          get :categories
           get :category_totals
         end
         member do

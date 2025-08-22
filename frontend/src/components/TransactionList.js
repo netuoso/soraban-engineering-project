@@ -13,14 +13,12 @@ import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import { 
   getTransactions,
-  getCategories,
-  getCategoryTotals
-} from '../services/transactions';
-import { 
+  getCategoryTotals,
   bulkDeleteTransactions, 
   bulkUpdateTransactions,
   updateTransaction
 } from '../services/transactions';
+import { getCategories } from '../services/categories';
 import TransactionForm from './TransactionForm';
 import CsvUploadForm from './CsvUploadForm';
 import BulkCategorySelect from './BulkCategorySelect';
@@ -580,16 +578,12 @@ const TransactionList = () => {
         <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
           <div className="modal-dialog">
             <TransactionForm
-              categories={categories}
               onSuccess={() => {
                 setShowTransactionForm(false);
                 fetchTransactions();
                 fetchCategories();
               }}
               onCancel={() => setShowTransactionForm(false)}
-              onCategoryCreated={(newCategory) => {
-                setCategories(prev => [...prev, newCategory]);
-              }}
             />
           </div>
         </div>

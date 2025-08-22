@@ -64,16 +64,6 @@ export const deleteTransaction = async (id) => {
   }
 };
 
-export const getCategories = async () => {
-  try {
-    const response = await api.get('/transactions/categories');
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    throw error;
-  }
-};
-
 export const getCategoryTotals = async (filters = {}) => {
   try {
     // Transform camelCase to snake_case for backend compatibility

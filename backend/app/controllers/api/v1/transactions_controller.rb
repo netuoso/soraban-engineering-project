@@ -35,40 +35,6 @@ class Api::V1::TransactionsController < Api::V1::BaseController
     render json: cached_result
   end
 
-  def categories
-    # Cache categories summary for performance
-    cache_key = "user_#{current_user.id}_categories_summary_#{current_user.categories.maximum(:updated_at)&.to_i}"
-    
-    cached_result = Rails.cache.fetch(cache_key, expires_in: 5.minutes) do
-      # Get categories with transaction counts efficiently
-      categories_with_counts = current_user.categories
-                                         .left_joins(:transactions)
-                                         .group('categories.id')
-                                         .select(
-                                           'categories.id, categories.name, categories.description, 
-                                            categories.created_at, categories.updated_at,
-                                            COUNT(transactions.id) as transaction_count'
-                                         )
-
-      # Manual serialization for performance
-      categories_with_counts.map do |category|
-        {
-          id: category.id,
-          type: 'category',
-          attributes: {
-            name: category.name,
-            description: category.description,
-            transaction_count: category.transaction_count.to_i
-          }
-        }
-      end
-    end
-
-    # Set cache headers
-    expires_in 2.minutes, public: false
-    render json: { data: cached_result }
-  end
-
   def category_totals
     # Cache category totals for performance
     cache_key = "user_#{current_user.id}_category_totals_optimized_#{current_user.transactions.maximum(:updated_at)&.to_i}"

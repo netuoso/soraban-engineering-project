@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import { createTransaction } from '../services/transactions';
+import { getCategories } from '../services/categories';
 import CategorySelect from './CategorySelect';
 
-const TransactionForm = ({ onSuccess, onCancel, categories = [], onCategoryCreated }) => {
+const TransactionForm = ({ onSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
     date: new Date(),
     description: '',
@@ -11,8 +12,26 @@ const TransactionForm = ({ onSuccess, onCancel, categories = [], onCategoryCreat
     category_id: '',
     notes: ''
   });
+  const [categories, setCategories] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+
+  // Fetch categories when component mounts
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await getCategories();
+        setCategories(response?.data || []);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setCategoriesLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -114,8 +133,14 @@ const TransactionForm = ({ onSuccess, onCancel, categories = [], onCategoryCreat
               onChange={(value) => handleChange({ target: { name: 'category_id', value } })}
               onError={(errorMessage) => setError(errorMessage)}
               categories={categories}
-              onCategoryCreated={onCategoryCreated}
+              onCategoryCreated={(newCategory) => {
+                setCategories(prev => [...prev, newCategory]);
+              }}
+              disabled={categoriesLoading}
             />
+            {categoriesLoading && (
+              <div className="text-muted small mt-1">Loading categories...</div>
+            )}
           </div>
 
           <div className="mb-3">

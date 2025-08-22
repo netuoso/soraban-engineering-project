@@ -39,7 +39,7 @@ class Api::V1::CategoriesController < Api::V1::BaseController
   end
 
   def category_params
-    params.require(:category).permit(:name, :description)
+    params.require(:category).permit(:name)
   end
 
   # Lightweight serialization for categories - avoids loading all transactions
@@ -50,8 +50,7 @@ class Api::V1::CategoriesController < Api::V1::BaseController
           id: category.id.to_s,
           type: "category",
           attributes: {
-            name: category.name,
-            description: category.description&.truncate(200)
+            name: category.name
           }
         }
       end
@@ -64,8 +63,7 @@ class Api::V1::CategoriesController < Api::V1::BaseController
         id: category.id.to_s,
         type: "category",
         attributes: {
-          name: category.name,
-          description: category.description&.truncate(200)
+          name: category.name
         }
       }
     }

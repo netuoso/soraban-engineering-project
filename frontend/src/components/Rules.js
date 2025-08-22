@@ -13,7 +13,12 @@ const Rules = () => {
     try {
       setLoading(true);
       const response = await getRules();
-      setRules(response?.data || []);
+      const sortedRules = (response?.data || []).sort((a, b) => {
+        const orderA = a.attributes.order || 0;
+        const orderB = b.attributes.order || 0;
+        return orderA - orderB;
+      });
+      setRules(sortedRules);
     } catch (err) {
       setError(err.message);
       setRules([]);
@@ -73,7 +78,7 @@ const Rules = () => {
     const actionValue = rule.attributes.action_value;
     
     if (actionType === 'set_category') {
-      const categoryName = rule.relationships?.category?.data?.attributes?.name || 'Unknown Category';
+      const categoryName = rule.attributes.category_name || 'Unknown Category';
       return `Set category to "${categoryName}"`;
     } else {
       return `Set status to "${actionValue}"`;
@@ -131,6 +136,13 @@ const Rules = () => {
       )}
 
       <div className="card">
+        <div className="card-header d-flex justify-content-between align-items-center">
+          <h5 className="mb-0">Your Rules</h5>
+          <small className="text-muted">
+            <i className="fas fa-sort-numeric-down me-1"></i>
+            Rules execute in priority order (lower numbers first)
+          </small>
+        </div>
         <div className="card-body">
           {Array.isArray(rules) && rules.length > 0 ? (
             <div className="list-group list-group-flush">
@@ -138,6 +150,7 @@ const Rules = () => {
                 <div key={rule.id} className="list-group-item d-flex justify-content-between align-items-start">
                   <div className="flex-grow-1">
                     <div className="fw-bold mb-1">
+                      <span className="badge bg-secondary me-2" title="Execution Priority">#{rule.attributes.order || 0}</span>
                       <span className="badge bg-primary me-2">If</span>
                       {formatCondition(rule)}
                     </div>
@@ -194,19 +207,20 @@ const Rules = () => {
           </div>
           <div className="card-body">
             <p className="small mb-2">
-              Rules automatically process transactions when they're added to the system. Multiple rules can apply to the same transaction:
+              Rules automatically process transactions when they're added to the system. The priority number (e.g., #0, #1, #2) shows the execution order:
             </p>
             <ul className="small mb-3">
-              <li><strong>Description contains "Amazon"</strong> → Set category to "Shopping"</li>
-              <li><strong>Amount greater than $1000</strong> → Set status to "High Value"</li>
-              <li><strong>Description contains "Starbucks"</strong> → Set category to "Dining"</li>
+              <li><strong>#0 - Description contains "Amazon"</strong> → Set category to "Shopping"</li>
+              <li><strong>#1 - Amount greater than $1000</strong> → Set status to "High Value"</li>
+              <li><strong>#2 - Description contains "Starbucks"</strong> → Set category to "Dining"</li>
             </ul>
             <div className="alert alert-info small py-2 mb-0">
-              <strong>Multiple Rule Application:</strong>
+              <strong>Priority & Multiple Rule Application:</strong>
               <ul className="mb-0 mt-1">
-                <li>For <strong>categories</strong>: First matching rule wins (based on priority order)</li>
-                <li>For <strong>status</strong>: Last matching rule wins (allows status overrides)</li>
-                <li>Rules are processed in priority order (lower numbers = higher priority)</li>
+                <li><strong>Priority:</strong> Lower numbers execute first (#0 before #1 before #2)</li>
+                <li><strong>Categories:</strong> First matching rule wins (prevents conflicts)</li>
+                <li><strong>Status:</strong> Last matching rule wins (allows progressive refinement)</li>
+                <li><strong>Auto-ordering:</strong> New rules get the next available priority automatically</li>
               </ul>
             </div>
           </div>

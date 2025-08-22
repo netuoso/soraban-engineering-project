@@ -12,8 +12,8 @@ end
 
 class BulkImportValidator
   REQUIRED_HEADERS = %w[date amount description category].freeze
-  MAX_FILE_SIZE = 50.megabytes
-  MAX_ROWS = 500_000
+  MAX_FILE_SIZE = 100.megabytes
+  MAX_ROWS = 10_000_000
 
   def self.validate_file(file)
     errors = []

@@ -235,10 +235,6 @@ const BulkImport = ({ onImportComplete }) => {
               <span className="stat-label">Total:</span>
               <span className="stat-value">{progress.total.toLocaleString()}</span>
             </div>
-            <div className="stat">
-              <span className="stat-label">Imported:</span>
-              <span className="stat-value">{progress.imported.toLocaleString()}</span>
-            </div>
             {progress.errors > 0 && (
               <div className="stat error">
                 <span className="stat-label">Errors:</span>

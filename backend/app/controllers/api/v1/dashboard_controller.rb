@@ -27,9 +27,10 @@ class Api::V1::DashboardController < Api::V1::BaseController
                               .order(date: :desc)
                               .limit(5)
 
-    render json: TransactionSerializer.new(transactions, {
-      include: [:category]
-    })
+    # Use lightweight manual serialization instead of heavy serializer
+    render json: { 
+      data: transactions.map { |t| serialize_transaction_light(t) }
+    }
   end
 
   def flagged_transactions
@@ -39,9 +40,10 @@ class Api::V1::DashboardController < Api::V1::BaseController
                               .order(date: :desc)
                               .limit(5)
 
-    render json: TransactionSerializer.new(transactions, {
-      include: [:category]
-    })
+    # Use lightweight manual serialization instead of heavy serializer
+    render json: { 
+      data: transactions.map { |t| serialize_transaction_light(t) }
+    }
   end
 
   def anomaly_transactions
@@ -51,8 +53,29 @@ class Api::V1::DashboardController < Api::V1::BaseController
                               .order(date: :desc)
                               .limit(5)
 
-    render json: TransactionSerializer.new(transactions, {
-      include: [:category]
-    })
+    # Use lightweight manual serialization instead of heavy serializer
+    render json: { 
+      data: transactions.map { |t| serialize_transaction_light(t) }
+    }
+  end
+
+  private
+
+  def serialize_transaction_light(transaction)
+    {
+      id: transaction.id.to_s,
+      type: 'transaction',
+      attributes: {
+        date: transaction.date,
+        amount: transaction.amount.to_f,
+        formatted_amount: transaction.amount.to_f,
+        description: transaction.description,
+        status: transaction.status,
+        notes: transaction.notes&.truncate(200), # Truncate long notes
+        category_name: transaction.category&.name,
+        created_at: transaction.created_at,
+        updated_at: transaction.updated_at
+      }
+    }
   end
 end

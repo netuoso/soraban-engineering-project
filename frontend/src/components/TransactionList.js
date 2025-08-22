@@ -549,46 +549,6 @@ const TransactionList = () => {
         </div>
       </div>
 
-      {selectedCount > 0 && (
-        <div className="alert alert-info d-flex justify-content-between align-items-center">
-          <span>{selectedCount} transaction(s) selected</span>
-          <div>
-            <button
-              className="btn btn-success btn-sm me-2"
-              onClick={() => handleBulkStatusUpdate('valid')}
-              disabled={isProcessing}
-            >
-              <i className="fas fa-check me-1"></i>
-              Mark Valid
-            </button>
-            <button
-              className="btn btn-warning btn-sm me-2"
-              onClick={() => handleBulkStatusUpdate('invalid')}
-              disabled={isProcessing}
-            >
-              <i className="fas fa-exclamation-triangle me-1"></i>
-              Mark Invalid
-            </button>
-            <button
-              className="btn btn-info btn-sm me-2"
-              onClick={() => setShowCategoryModal(true)}
-              disabled={isProcessing}
-            >
-              <i className="fas fa-tag me-1"></i>
-              Set Category
-            </button>
-            <button
-              className="btn btn-danger btn-sm"
-              onClick={handleBulkDelete}
-              disabled={isProcessing}
-            >
-              <i className="fas fa-trash me-1"></i>
-              Delete
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Category Selection Modal */}
       {showCategoryModal && (
         <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
@@ -669,6 +629,46 @@ const TransactionList = () => {
               onCategoryClick={(category) => handleFilterChange('category', category)}
               selectedCategory={filters.category}
             />
+          </div>
+        </div>
+      )}
+
+      {selectedCount > 0 && (
+        <div className="alert alert-info d-flex justify-content-between align-items-center">
+          <span>{selectedCount} transaction(s) selected</span>
+          <div>
+            <button
+              className="btn btn-success btn-sm me-2"
+              onClick={() => handleBulkStatusUpdate('valid')}
+              disabled={isProcessing}
+            >
+              <i className="fas fa-check me-1"></i>
+              Mark Valid
+            </button>
+            <button
+              className="btn btn-warning btn-sm me-2"
+              onClick={() => handleBulkStatusUpdate('invalid')}
+              disabled={isProcessing}
+            >
+              <i className="fas fa-exclamation-triangle me-1"></i>
+              Mark Invalid
+            </button>
+            <button
+              className="btn btn-info btn-sm me-2"
+              onClick={() => setShowCategoryModal(true)}
+              disabled={isProcessing}
+            >
+              <i className="fas fa-tag me-1"></i>
+              Set Category
+            </button>
+            <button
+              className="btn btn-danger btn-sm"
+              onClick={handleBulkDelete}
+              disabled={isProcessing}
+            >
+              <i className="fas fa-trash me-1"></i>
+              Delete
+            </button>
           </div>
         </div>
       )}

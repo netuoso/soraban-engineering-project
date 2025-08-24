@@ -51,7 +51,9 @@ const TransactionList = () => {
     search: searchParams.get('search') || '',
     category: searchParams.has('category') ? searchParams.get('category') : undefined,
     page: parseInt(searchParams.get('page')) || 1,
-    perPage: parseInt(searchParams.get('perPage')) || 20
+    perPage: parseInt(searchParams.get('perPage')) || 20,
+    exclude_anomalies: searchParams.get('exclude_anomalies') === 'true',
+    has_anomalies: searchParams.get('has_anomalies') === 'true'
   });
   
   const [pagination, setPagination] = useState({
@@ -170,7 +172,9 @@ const TransactionList = () => {
       search: '',
       category: undefined,
       page: 1,
-      perPage: filters.perPage
+      perPage: filters.perPage,
+      exclude_anomalies: false,
+      has_anomalies: false
     };
     
     // Clear URL params first
@@ -397,8 +401,49 @@ const TransactionList = () => {
     // Update URL params
     const params = new URLSearchParams();
     Object.entries(newFilters).forEach(([k, v]) => {
-      if (v && v !== '') {
-        params.set(k, v);
+      // Include parameters that have meaningful values
+      if (v && v !== '' && v !== false && v !== null && v !== undefined) {
+        params.set(k, v.toString());
+      }
+    });
+    navigate(`/transactions?${params.toString()}`, { replace: true });
+  };
+
+  // Specialized function for handling status filter changes
+  const handleStatusFilterChange = (value) => {
+    let newFilters = { ...filters, page: 1 }; // Reset to page 1
+    
+    if (value === 'anomalies') {
+      newFilters = {
+        ...newFilters,
+        has_anomalies: true,
+        exclude_anomalies: false,
+        status: ''
+      };
+    } else if (value === 'flagged_only') {
+      newFilters = {
+        ...newFilters,
+        exclude_anomalies: true,
+        has_anomalies: false,
+        status: 'invalid'
+      };
+    } else {
+      newFilters = {
+        ...newFilters,
+        has_anomalies: false,
+        exclude_anomalies: false,
+        status: value
+      };
+    }
+    
+    setFilters(newFilters);
+
+    // Update URL params with all changes at once
+    const params = new URLSearchParams();
+    Object.entries(newFilters).forEach(([k, v]) => {
+      // Include parameters that have meaningful values
+      if (v && v !== '' && v !== false && v !== null && v !== undefined) {
+        params.set(k, v.toString());
       }
     });
     navigate(`/transactions?${params.toString()}`, { replace: true });
@@ -693,7 +738,7 @@ const TransactionList = () => {
             <div className="row g-3">
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h6 className="mb-0">Filters</h6>
-                {(filters.startDate || filters.endDate || filters.status || filters.search || filters.category) && (
+                {(filters.startDate || filters.endDate || filters.status || filters.search || filters.category || filters.exclude_anomalies || filters.has_anomalies) && (
                   <button
                     className="btn btn-outline-secondary btn-sm"
                     onClick={clearAllFilters}
@@ -725,12 +770,18 @@ const TransactionList = () => {
                 <label className="form-label">Status</label>
                 <select
                   className="form-select"
-                  value={filters.status}
-                  onChange={e => handleFilterChange('status', e.target.value)}
+                  value={
+                    filters.has_anomalies ? 'anomalies' :
+                    filters.exclude_anomalies ? 'flagged_only' :
+                    filters.status
+                  }
+                  onChange={e => handleStatusFilterChange(e.target.value)}
                 >
                   <option value="">All</option>
                   <option value="valid">Valid</option>
-                  <option value="invalid">Invalid</option>
+                  <option value="invalid">Invalid (All)</option>
+                  <option value="flagged_only">Flagged (Manual/Rules)</option>
+                  <option value="anomalies">Anomalies (System Detected)</option>
                   <option value="high_value">High Value</option>
                 </select>
               </div>

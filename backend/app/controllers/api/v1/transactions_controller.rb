@@ -184,6 +184,16 @@ class Api::V1::TransactionsController < Api::V1::BaseController
       @transactions = @transactions.where(status: params[:status])
     end
 
+    # Handle special anomaly filtering
+    if params[:exclude_anomalies] == 'true'
+      # Show only invalid transactions that DON'T have anomaly notes
+      @transactions = @transactions.where(status: 'invalid')
+                                 .where("notes IS NULL OR notes NOT LIKE '%[ANOMALY:%'")
+    elsif params[:has_anomalies] == 'true'
+      # Show only transactions that have anomaly notes
+      @transactions = @transactions.where("notes LIKE '%[ANOMALY:%'")
+    end
+
     if params.key?(:category)
       if params[:category] == ''
         @transactions = @transactions.where(category_id: nil)

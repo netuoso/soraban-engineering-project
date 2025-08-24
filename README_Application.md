@@ -173,7 +173,7 @@ src/components/
 - **Dashboard**: Real-time KPIs, spending trends, and quick actions
 - **TransactionList**: Advanced filtering, bulk operations, and inline editing
 - **Rules**: Visual rule builder with priority management
-- **BulkImport**: Drag-and-drop import with real-time progress
+- **BulkImport**: Simple import with real-time progress
 - **Tables**: Virtualized tables for large datasets with sorting and pagination
 
 ## Backend Services
@@ -240,7 +240,7 @@ end
 ## System Workflows
 
 ### Transaction Import Workflow
-1. **File Upload**: User selects CSV file via drag-and-drop interface
+1. **File Upload**: User selects CSV file via file import interface
 2. **Validation**: Server validates file format and structure
 3. **Background Processing**: Import job processes file in chunks
 4. **Progress Updates**: Frontend polls for progress updates every 2 seconds

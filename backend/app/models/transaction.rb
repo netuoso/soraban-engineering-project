@@ -89,6 +89,18 @@ class Transaction < ApplicationRecord
       return
     end
     
+    # If status was manually changed to 'invalid' in this update, preserve it
+    # This allows manual flagging to be preserved
+    if status_changed? && status == 'invalid'
+      return
+    end
+    
+    # If status is already 'invalid' and wasn't changed in this update, preserve it
+    # This prevents automatic override of manually flagged transactions
+    if status == 'invalid' && !status_changed?
+      return
+    end
+    
     # Set status based on transaction completeness after rules have been applied
     if category.present? && description.present?
       self.status = 'valid'

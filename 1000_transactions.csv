@@ -1,0 +1,1001 @@
+date,description,amount,category
+01/01/2025 08:45:25,Trader Joe's - Weekly Shopping - Shopping Center #9108,259.99,Groceries
+01/01/2025 10:00:00,Health Plus Insurance - Premium,283.63,Health
+01/01/2025 11:00:00,FitLife Gym - Monthly Membership,52.0,Health
+01/01/2025 11:30:00,First National Bank - Mortgage Payment,2128.65,Housing
+01/01/2025 11:30:00,Verizon Wireless - Annual Contract,117.5,Utilities
+01/01/2025 13:15:00,Workshop Central Mobile App - Library Fine,464.5,Education
+01/01/2025 14:30:00,City Water Dept - Service Charge,43.8,Utilities
+01/01/2025 15:00:00,Property Management Co - Monthly Rent,1780.98,Housing
+01/02/2025 11:00:00,Comcast Internet Meter Reading - Monthly Bill,41.79,Utilities
+01/02/2025 14:15:00,Property Tax - Home & Garden #2899,2534.99,Housing
+01/03/2025 09:30:00,Therapy Session - LabCorp,85.07,Health
+01/03/2025 15:00:00,Personal Care at PetSmart,66.07,Personal
+01/03/2025 15:30:00,Netflix - Premium Plan,15.78,Entertainment
+01/03/2025 17:00:00,Walmart Village Square - Snacks & Beverages,118.0,Groceries
+01/03/2025 18:45:00,Bridge Authority (Highway I-95) #6326,34.14,Transportation
+01/03/2025 19:50:00,Yellow Cab - Fuel & Snacks - Express Lane,4.28,Transportation
+01/04/2025 09:15:00,Kroger Downtown - Frozen Foods #1624,122.5,Groceries
+01/04/2025 10:45:00,Fresh Bread - Walmart,39.84,Groceries
+01/04/2025 13:15:00,Textbook Bundle - Skillshare,201.99,Education
+01/04/2025 13:15:32,Subway Airport - Lunch Special,26.94,Dining
+01/04/2025 15:07:00,Waste Management - Seasonal Adjustment,175.75,Utilities
+01/04/2025 15:45:00,Study Hub - Tuition Payment - Registrar Office,938.95,Education
+01/05/2025 11:41:11,Language Learning - Study Hub,92.89,Education
+01/05/2025 15:00:55,IKEA Store #1254 - Outdoor Gear,586.5,Shopping
+01/05/2025 16:30:00,Vision Center Medical Plaza - Supplements,315.99,Health
+01/05/2025 17:47:00,Panera Bread Financial District - Coffee & Pastry,182.25,Dining
+01/05/2025 18:15:00,Happy Hour at Starbucks,12.45,Dining
+01/06/2025 09:00:22,CVS Pharmacy - Prescription Refill,388.75,Health
+01/06/2025 09:30:00,Dairy Products - Costco,105.25,Groceries
+01/06/2025 14:45:00,City Library - School Supplies,455.0,Education
+01/06/2025 19:00:00,H&M Fashion (Day Spa),43.89,Personal
+01/06/2025 20:09:00,Snacks & Beverages at Whole Foods Market,218.99,Groceries
+01/07/2025 14:30:00,Wellness Therapy - Eye Exam #6706,189.0,Health
+01/07/2025 19:00:28,PetSmart Fashion District - Dry Cleaning,49.93,Personal
+01/08/2025 11:50:00,Swift Movers - Property Tax - Apt 4B,2505.99,Housing
+01/08/2025 14:30:00,Comcast Internet - Monthly Plan,83.86,Utilities
+01/08/2025 14:45:00,Home Insurance - Handy Home Repair #7974,1044.95,Housing
+01/08/2025 15:15:00,Quick Wash Laundry Day Spa - Birthday Gift #9593,220.99,Personal
+01/09/2025 20:19:38,AMC Theaters - Concert Event - Digital Platform #3975,32.25,Entertainment
+01/09/2025 21:15:00,Late Night Snack - Food Truck,123.0,Dining
+01/10/2025 11:45:00,New Outfit at PetSmart #5726,195.75,Personal
+01/10/2025 11:45:00,State Farm Insurance Policy Update - Monthly Rent,2277.25,Housing
+01/10/2025 14:29:00,Training Program - Duolingo Plus,424.0,Education
+01/10/2025 14:42:00,Heating Solutions - Equipment Rental #6949,120.0,Utilities
+01/10/2025 15:15:00,Monthly Membership at Health Plus Insurance,129.25,Health
+01/11/2025 09:15:00,Greenwood HOA Loan #987654 - Garden Makeover,811.95,Housing
+01/11/2025 14:30:00,Emergency Repair - City Water Dept,115.99,Utilities
+01/11/2025 20:15:00,Gaming Bundle at GameStop,117.0,Entertainment
+01/12/2025 09:15:00,Yellow Cab (Business District),72.31,Transportation
+01/12/2025 10:30:38,Bulk Items - Safeway,37.04,Groceries
+01/12/2025 12:00:00,Spotify - Family Plan,15.43,Entertainment
+01/12/2025 19:34:00,Kroger - Household Items,183.5,Groceries
+01/12/2025 19:40:00,Toll Road - Yellow Cab,22.73,Transportation
+01/12/2025 21:30:18,Disney+ - Annual Membership,104.25,Entertainment
+01/13/2025 08:38:00,Corner Café - Coffee & Pastry - Financial District,24.13,Dining
+01/13/2025 19:00:00,Meat & Seafood - Safeway,103.22,Groceries
+01/13/2025 19:45:00,McDonald's - Catering,182.99,Dining
+01/14/2025 09:45:00,State University - Textbook Bundle - Digital Download #8646,560.95,Education
+01/14/2025 10:15:00,Weekly Shopping - Trader Joe's #3500,63.51,Groceries
+01/14/2025 11:30:00,Local Market - Household Items - Shopping Center #2497,81.55,Groceries
+01/14/2025 15:00:00,Usage Fee at ADT Security,291.75,Utilities
+01/14/2025 19:15:00,Trader Joe's - Dairy Products - Main St,133.5,Groceries
+01/15/2025 08:00:28,Chipotle - Dinner for Two,70.3,Dining
+01/15/2025 10:00:00,Haircut & Style - Personal Care Plus,217.5,Personal
+01/15/2025 14:00:00,Pacific Gas & Electric - Monthly Bill,88.56,Utilities
+01/15/2025 16:00:29,Outdoor Gear - Macy's,100.75,Shopping
+01/15/2025 19:30:00,Steam - Movie Tickets,133.99,Entertainment
+01/15/2025 20:15:00,Digital Content at Netflix #6952,66.75,Entertainment
+01/15/2025 21:45:00,Digital Content at Apple TV+,54.22,Entertainment
+01/16/2025 08:18:00,Target - Meat & Seafood - South Location,42.84,Groceries
+01/16/2025 10:30:00,Language Learning - City Library,476.25,Education
+01/16/2025 18:15:00,Season Pass at Ticketmaster,113.0,Entertainment
+01/16/2025 19:15:00,Bus Pass - Car Wash Premium #1432,4.47,Transportation
+01/17/2025 07:15:00,Weekend Trip at Uber #8145,58.31,Transportation
+01/17/2025 11:45:00,Kroger Eastside - Meat & Seafood,13.83,Groceries
+01/17/2025 14:30:00,Skillshare - Language Learning,33.92,Education
+01/18/2025 12:03:00,Weekend Brunch - Corner Café #8031,24.74,Dining
+01/18/2025 15:15:33,Target - Garden Supplies #1319,323.99,Shopping
+01/18/2025 18:15:19,Hobby Lobby Gift Shop - Personal Care,19.7,Personal
+01/19/2025 09:15:00,Wellness Therapy (Lab Facility) #4568,166.75,Health
+01/19/2025 11:00:00,Greenwood HOA Service Call - Moving Services,2586.5,Housing
+01/19/2025 17:00:00,Chipotle - Happy Hour,86.72,Dining
+01/20/2025 10:17:00,HOA Assessment - CleanPro Services #9518,2828.5,Housing
+01/20/2025 11:14:00,Gift Gallery (Fashion District),65.4,Personal
+01/20/2025 19:15:00,Bridge Authority Shopping Mall - Weekend Trip,54.8,Transportation
+01/21/2025 10:45:00,State Farm Insurance (Residential) #7408,2821.95,Housing
+01/21/2025 11:15:00,Target Super Center - Sports Equipment #9780,290.5,Shopping
+01/21/2025 15:12:00,H&M Fashion (Beauty Counter) #2559,144.5,Personal
+01/21/2025 19:30:00,Bridge Authority (Main Terminal),41.28,Transportation
+01/21/2025 20:15:00,HBO Max - Premium Plan,211.99,Entertainment
+01/21/2025 20:45:00,Sports Equipment - Target #1311,50.99,Shopping
+01/22/2025 07:45:42,Metro Transit Garage Level 3 - Weekend Trip,72.56,Transportation
+01/22/2025 08:45:00,Local Bistro Mall - Weekend Brunch,21.47,Dining
+01/22/2025 09:45:59,Mortgage Payment at State Farm Insurance,3320.5,Housing
+01/22/2025 11:06:00,Heating Solutions - Equipment Rental - Customer Service,119.0,Utilities
+01/22/2025 11:15:00,County Tax Office Showroom - Moving Services #1006,2436.95,Housing
+01/22/2025 15:00:00,Verizon Wireless - Family Plan,181.24,Utilities
+01/22/2025 15:45:00,ADT Security - Equipment Rental #7013,171.5,Utilities
+01/22/2025 20:32:38,Starbucks (Financial District),26.56,Dining
+01/22/2025 22:00:00,Ticketmaster - Season Pass,28.79,Entertainment
+01/23/2025 19:15:39,Aldi - Organic Produce #8014,301.5,Groceries
+01/24/2025 08:00:00,Kroger Eastside - Weekly Shopping,101.25,Groceries
+01/24/2025 13:00:00,Study Hub (Student Center),78.6,Education
+01/24/2025 13:45:16,Workshop Fee at City Library,960.25,Education
+01/24/2025 17:00:00,Yellow Cab Express Lane - Car Wash Premium,93.82,Transportation
+01/24/2025 18:45:13,Gas Fill-up at Bridge Authority,123.5,Transportation
+01/25/2025 07:15:00,Chipotle - Takeout Order - Financial District,12.81,Dining
+01/25/2025 10:09:57,Service Charge - Solar Energy Inc,196.0,Utilities
+01/25/2025 14:15:00,Cable One (Customer Service) #1815,260.95,Utilities
+01/25/2025 20:15:06,Skillshare (Learning Center),102.5,Education
+01/26/2025 09:15:00,Monthly Membership at CVS Pharmacy,1054.5,Health
+01/26/2025 10:45:00,Ashley Furniture Loan #987654 - Plumbing Repair #4956,890.95,Housing
+01/26/2025 13:37:09,City Library - Training Program,439.95,Education
+01/26/2025 14:15:00,Late Fee Waived - Solar Energy Inc,79.95,Utilities
+01/26/2025 15:30:14,City Water Dept - Usage Fee - Support Center,395.99,Utilities
+01/26/2025 15:45:00,Home & Garden (Apt 4B),2544.95,Housing
+01/27/2025 10:30:00,Seasonal Adjustment - Cable One #8171,267.5,Utilities
+01/27/2025 11:35:00,Solar Energy Inc (Account #12345),134.95,Utilities
+01/27/2025 19:37:01,Rush Hour Ride at Shell Gas,56.87,Transportation
+01/27/2025 19:48:00,City Parking - Toll Road,32.04,Transportation
+01/28/2025 09:54:00,Aldi Downtown - Frozen Foods,173.99,Groceries
+01/28/2025 10:13:00,Walmart - Bulk Items - Main St,345.25,Groceries
+01/28/2025 14:15:00,Walmart Marketplace - Sports Equipment,298.0,Shopping
+01/28/2025 14:30:38,CareNow Clinic (Online),424.95,Health
+01/28/2025 15:45:00,CareNow Clinic Medical Plaza - Prescription Refill,769.0,Health
+01/28/2025 19:45:00,Netflix - Digital Content - Streaming,192.75,Entertainment
+01/28/2025 20:44:00,Netflix - New Release - Downtown Theater,9.45,Entertainment
+01/29/2025 09:15:00,LabCorp (Online) #7547,461.0,Health
+01/29/2025 11:15:36,Dr. Smith's Office Eye Center - Eye Exam,155.0,Health
+01/29/2025 11:15:40,Amazon Books - Software License #3576,368.75,Education
+01/29/2025 11:42:00,Waste Management - Emergency Repair - Billing Dept,100.99,Utilities
+01/29/2025 16:00:16,Apple Store (Super Center),227.95,Shopping
+01/29/2025 17:38:00,Target - Meat & Seafood - Main St,173.0,Groceries
+01/29/2025 19:40:00,Weekend Trip - Shell Gas #6943,4.79,Transportation
+01/30/2025 08:00:00,Catering - Corner Café,146.5,Dining
+01/30/2025 22:45:00,Spotify - Digital Content,27.63,Entertainment
+01/31/2025 07:02:10,Starbucks (Financial District),25.1,Dining
+01/31/2025 11:45:00,Plumbing Repair - Property Management Co,1697.99,Housing
+01/31/2025 14:30:00,Sports Equipment - REI #8738,55.34,Shopping
+01/31/2025 18:00:00,Barnes & Noble - Monthly Subscription - Mall Cinema,119.5,Entertainment
+02/01/2025 09:00:00,First National Bank - Mortgage Payment,2141.07,Housing
+02/01/2025 11:00:00,City Water Dept - Service Charge,44.82,Utilities
+02/01/2025 11:15:00,Heating Solutions - Usage Fee,264.99,Utilities
+02/01/2025 12:00:00,Property Management Co - Monthly Rent,1785.28,Housing
+02/01/2025 13:00:00,FitLife Gym - Monthly Membership,47.56,Health
+02/01/2025 14:45:00,Solar Energy Inc - Seasonal Adjustment - Installation Team,192.25,Utilities
+02/01/2025 14:45:00,Cable One Field Service - Emergency Repair #6318,84.68,Utilities
+02/01/2025 15:00:00,Health Plus Insurance - Premium,264.96,Health
+02/01/2025 15:15:00,Annual Contract at Pacific Gas & Electric,397.0,Utilities
+02/01/2025 16:41:03,Office Supplies - Target,144.5,Shopping
+02/02/2025 13:23:26,Takeout Order at Food Truck,110.5,Dining
+02/02/2025 18:00:00,Gaming Bundle at Spotify,65.2,Entertainment
+02/02/2025 21:19:00,Coursera Registrar Office - Software License,215.25,Education
+02/02/2025 21:30:00,Amazon Books (Online Platform),917.99,Education
+02/03/2025 10:00:00,PetSmart (Pet Center) #4998,50.66,Personal
+02/03/2025 10:02:00,County Tax Office (Policy Update),1980.25,Housing
+02/03/2025 10:30:00,Netflix - Premium Plan,16.55,Entertainment
+02/03/2025 10:30:00,Service Charge at Heating Solutions,127.95,Utilities
+02/03/2025 11:15:00,Amazon Books (Online Training) #9519,916.5,Education
+02/03/2025 18:00:54,Barnes & Noble (Downtown Theater),32.37,Entertainment
+02/04/2025 15:00:00,Hobby Lobby Gift Shop - New Outfit,105.95,Personal
+02/04/2025 20:15:00,Skillshare Study Group - Study Materials,195.25,Education
+02/05/2025 10:30:00,Annual Checkup - Dr. Smith's Office,385.5,Health
+02/06/2025 06:15:00,Bus Pass Downtown - Gas Fill-up #5993,4.77,Transportation
+02/06/2025 14:30:00,Office Depot - Training Program - Online Platform #8317,507.95,Education
+02/06/2025 19:15:00,Pet Food & Toys - Quick Wash Laundry #3575,17.4,Personal
+02/07/2025 09:15:00,Property Management Co - Moving Services,564.99,Housing
+02/07/2025 11:15:00,Eye Exam - Vitamin World #2102,1161.25,Health
+02/07/2025 14:45:26,Service Charge - Cable One,175.99,Utilities
+02/08/2025 10:00:00,Comcast Internet - Monthly Plan,76.72,Utilities
+02/08/2025 11:45:46,Bliss Spa (Main St Salon),214.5,Personal
+02/08/2025 20:45:00,Ticketmaster (Cinema 16),170.95,Entertainment
+02/09/2025 09:29:00,Shell Gas - Round Trip,91.29,Transportation
+02/09/2025 20:15:00,Nike - Electronics,333.95,Shopping
+02/10/2025 10:00:00,Whole Foods Market (Highway 101),109.99,Groceries
+02/10/2025 21:30:00,Catering - Chipotle,40.22,Dining
+02/11/2025 11:00:19,Adobe Creative (Learning Center),851.99,Education
+02/12/2025 11:15:00,Annual Contract at Heating Solutions,434.95,Utilities
+02/12/2025 12:00:00,Spotify - Family Plan,14.68,Entertainment
+02/12/2025 14:01:00,Living Room Set at Ashley Furniture,1506.5,Housing
+02/12/2025 21:30:50,Skillshare Mobile App - Library Fine,287.5,Education
+02/13/2025 10:12:56,Walmart Village Square - Meat & Seafood #6102,133.0,Groceries
+02/13/2025 11:45:00,Vision Center (Main Branch),71.1,Health
+02/13/2025 14:45:00,ADT Security - Service Charge - Main Office #3747,83.84,Utilities
+02/13/2025 15:15:00,Spa Package - Personal Care Plus,99.43,Personal
+02/13/2025 18:15:00,Pizza Palace Drive-Thru - Coffee & Pastry #6474,12.36,Dining
+02/13/2025 19:52:00,Uber City Center - Monthly Pass #6242,39.99,Transportation
+02/14/2025 08:13:00,Bus Pass - Gas Fill-up - Highway I-95 #8168,28.62,Transportation
+02/14/2025 10:00:07,Late Fee Waived at Cable One,170.0,Utilities
+02/14/2025 18:15:00,Organic Produce - Costco,304.25,Groceries
+02/14/2025 19:30:00,Haircut & Style - Bliss Spa,193.0,Personal
+02/14/2025 20:00:00,Study Hub - Tuition Payment - Campus Bookstore,551.99,Education
+02/15/2025 09:00:55,Online Course at Adobe Creative,93.16,Education
+02/15/2025 10:15:00,Solar Energy Inc - Seasonal Adjustment,79.58,Utilities
+02/15/2025 10:30:00,Pacific Gas & Electric - Monthly Bill,92.65,Utilities
+02/15/2025 11:45:00,Property Tax - State Farm Insurance #9831,3017.99,Housing
+02/16/2025 08:45:00,AutoWash Pro - Monthly Pass,3.62,Transportation
+02/16/2025 13:11:00,Business Lunch at Corner Café,21.68,Dining
+02/16/2025 19:45:00,Local Market (Main St),223.75,Groceries
+02/16/2025 20:30:00,Corner Café - Coffee & Pastry,56.74,Dining
+02/17/2025 09:30:26,School Supplies at Amazon Books,100.67,Education
+02/17/2025 10:00:00,Cable One Account #12345 - Emergency Repair,120.95,Utilities
+02/17/2025 13:15:00,Training Program - Duolingo Plus,723.0,Education
+02/17/2025 15:30:00,FitLife Gym Eye Center - Annual Checkup,600.99,Health
+02/17/2025 20:39:00,Best Buy Express Store - Clothing & Accessories,294.99,Shopping
+02/18/2025 11:06:00,Household Items at Farm Fresh,252.75,Groceries
+02/18/2025 13:58:00,Office Depot (Campus Bookstore),471.25,Education
+02/18/2025 14:45:00,Cable One - Monthly Bill,186.0,Utilities
+02/18/2025 15:15:00,Usage Fee - Pacific Gas & Electric,80.17,Utilities
+02/18/2025 15:30:00,Verizon Wireless - Emergency Repair - Service Address #1611,124.0,Utilities
+02/18/2025 17:15:00,Bridge Authority - Weekend Trip #9472,35.07,Transportation
+02/18/2025 18:45:00,City Parking - Round Trip - Business District,69.31,Transportation
+02/19/2025 10:45:00,Costco - Health Foods - Shopping Center,309.95,Groceries
+02/19/2025 13:00:08,Dinner for Two at Corner Café,55.87,Dining
+02/19/2025 18:30:00,Fresh Bread at Costco #7743,71.39,Groceries
+02/20/2025 06:00:34,Bus Pass Downtown - Rush Hour Ride,4.63,Transportation
+02/20/2025 06:15:00,AutoWash Pro - Fuel & Snacks #9132,71.23,Transportation
+02/20/2025 09:00:00,Whole Foods Market - Household Items #1323,81.64,Groceries
+02/20/2025 10:00:00,Target Outlet Center - Kitchen Appliances,22.25,Shopping
+02/20/2025 14:00:00,Handy Home Repair (Loan #987654),1381.75,Housing
+02/20/2025 20:40:04,GameStop - Live Performance,71.6,Entertainment
+02/20/2025 22:30:00,Movie Tickets at HBO Max #6692,128.5,Entertainment
+02/21/2025 18:17:00,Quick Breakfast - Chipotle,121.5,Dining
+02/22/2025 08:45:17,Monthly Pass - Yellow Cab #8142,1.96,Transportation
+02/22/2025 09:00:00,Verizon Wireless - Family Plan,191.88,Utilities
+02/22/2025 10:45:00,City Water Dept (Service Address),295.99,Utilities
+02/23/2025 16:15:00,CVS Pharmacy Fitness Club - Teeth Cleaning #6986,29.05,Health
+02/23/2025 18:43:00,Dick's Sporting Goods - New Outfit - Pet Center,139.75,Personal
+02/24/2025 08:15:17,Yellow Cab - Round Trip #3448,12.51,Transportation
+02/24/2025 10:00:00,Birthday Gift at PetSmart,143.25,Personal
+02/24/2025 10:37:00,Pacific Gas & Electric - Service Charge - Regional Office,46.32,Utilities
+02/24/2025 14:30:00,Teeth Cleaning - CareNow Clinic,265.99,Health
+02/24/2025 15:00:00,Therapy Session at Health Plus Insurance #8518,27.32,Health
+02/24/2025 18:00:00,Household Items - Aldi,94.29,Groceries
+02/24/2025 18:15:16,Ticketmaster Store #789 - Season Pass #3889,9.11,Entertainment
+02/24/2025 19:00:00,REI Outlet Center - Kitchen Appliances #3041,171.0,Shopping
+02/25/2025 17:15:00,Dairy Products - Target #6352,193.25,Groceries
+02/25/2025 20:40:00,Local Bistro - Business Lunch - Mall,93.04,Dining
+02/26/2025 09:15:00,LabCorp Walk-in Clinic - Annual Checkup,30.7,Health
+02/26/2025 10:00:08,Farm Fresh (Main St),75.03,Groceries
+02/26/2025 11:00:00,Trader Joe's Downtown - Fresh Bread,157.75,Groceries
+02/26/2025 17:15:00,Household Items at Kroger,91.53,Groceries
+02/26/2025 19:30:00,Target - Weekly Shopping,107.95,Groceries
+02/26/2025 22:45:00,Steam Mall Cinema - Premium Plan,9.97,Entertainment
+02/27/2025 09:28:21,Ride to Airport - City Parking #4006,3.86,Transportation
+02/27/2025 15:45:00,Health Plus Insurance - Therapy Session - Dental Center #2975,438.25,Health
+02/27/2025 16:45:00,Nike - Office Supplies - Mall Location,275.25,Shopping
+02/27/2025 17:15:00,Business Lunch - Burger Joint #8529,49.26,Dining
+02/27/2025 20:12:00,Whole Foods Market - Health Foods - Westside #4752,86.43,Groceries
+03/01/2025 09:15:00,Health Foods - Whole Foods Market,85.07,Groceries
+03/01/2025 09:41:45,Gas Fill-up at Amtrak,77.6,Transportation
+03/01/2025 10:15:00,Bliss Spa - Pet Food & Toys - Pet Center #6183,63.53,Personal
+03/01/2025 11:00:00,FitLife Gym - Monthly Membership,48.81,Health
+03/01/2025 13:00:00,Health Plus Insurance - Premium,285.99,Health
+03/01/2025 14:30:00,Property Management Co - Monthly Rent,1849.53,Housing
+03/01/2025 15:00:00,First National Bank - Mortgage Payment,2069.06,Housing
+03/01/2025 15:30:00,City Water Dept - Service Charge,44.42,Utilities
+03/02/2025 10:00:00,CareNow Clinic - Supplements,297.95,Health
+03/02/2025 11:00:00,Home Insurance at Ashley Furniture #6153,701.75,Housing
+03/02/2025 14:30:00,Home & Garden - Garden Makeover,3364.25,Housing
+03/02/2025 18:00:00,Craft Supplies - Hobby Lobby,147.99,Personal
+03/02/2025 21:30:00,AMC Theaters (Arena),133.5,Entertainment
+03/03/2025 09:30:00,Netflix - Premium Plan,15.7,Entertainment
+03/03/2025 18:45:00,Premium Plan - Barnes & Noble #3161,17.04,Entertainment
+03/03/2025 22:00:00,Barnes & Noble - Monthly Subscription,18.32,Entertainment
+03/04/2025 10:00:00,Haircut & Style - Gift Gallery,61.59,Personal
+03/04/2025 11:28:00,ADT Security Field Service - Monthly Bill,405.99,Utilities
+03/04/2025 14:03:00,Heating Solutions - Equipment Rental - Support Center,101.25,Utilities
+03/04/2025 15:15:00,Wellness Therapy (Dental Center),84.06,Health
+03/04/2025 20:00:00,Starbucks (Main Square),101.75,Dining
+03/04/2025 20:15:43,Weekend Brunch at Pizza Palace,34.1,Dining
+03/05/2025 20:30:00,Business Lunch at Chipotle #8472,111.25,Dining
+03/05/2025 20:45:04,Disney+ - New Release,182.25,Entertainment
+03/05/2025 20:45:54,Season Pass - Disney+,31.84,Entertainment
+03/05/2025 21:15:00,Ticketmaster Digital Platform - Annual Membership #3343,59.81,Entertainment
+03/06/2025 15:00:00,Vitamin World - Annual Checkup,468.25,Health
+03/06/2025 21:15:00,Gaming Bundle - HBO Max #7786,249.5,Entertainment
+03/06/2025 21:45:00,Disney+ Cinema 16 - Monthly Subscription,31.72,Entertainment
+03/07/2025 11:15:00,Dr. Smith's Office (Main Branch) #2112,201.95,Health
+03/07/2025 16:00:46,Dick's Sporting Goods - Workout Gear - Gift Shop,123.5,Personal
+03/07/2025 16:21:00,Bright Dental - Urgent Care Visit,29.63,Health
+03/07/2025 16:45:00,Teeth Cleaning at LabCorp,891.95,Health
+03/07/2025 17:45:00,Bus Pass - Fuel & Snacks #6178,4.65,Transportation
+03/08/2025 10:25:00,Fresh Bread - Safeway #6329,98.41,Groceries
+03/08/2025 15:00:00,Comcast Internet - Monthly Plan,79.0,Utilities
+03/08/2025 15:01:00,Software License at Workshop Central,213.5,Education
+03/09/2025 10:30:00,Verizon Wireless - Equipment Rental,270.5,Utilities
+03/09/2025 17:39:00,Costco - Snacks & Beverages - Main St,199.0,Groceries
+03/09/2025 19:45:00,Costco - Dairy Products #9720,67.19,Groceries
+03/10/2025 09:30:00,Bright Dental (Medical Plaza) #7813,29.41,Health
+03/10/2025 14:01:00,Swift Movers Service Call - Mortgage Payment,2966.99,Housing
+03/10/2025 15:15:00,Pacific Gas & Electric - Annual Contract #1483,123.99,Utilities
+03/10/2025 20:09:56,Fresh Bread - Farm Fresh #4475,190.99,Groceries
+03/11/2025 07:15:00,Parking Meter - Metro Transit,92.56,Transportation
+03/11/2025 14:06:00,State University - Software License - Online Platform #5499,1001.95,Education
+03/11/2025 18:02:43,Toll Road - Yellow Cab,115.99,Transportation
+03/12/2025 09:45:43,Wellness Therapy Wellness Center - Annual Checkup #8563,78.74,Health
+03/12/2025 10:00:00,Heating Solutions (Meter Reading) #5122,132.95,Utilities
+03/12/2025 12:30:00,Spotify - Family Plan,15.17,Entertainment
+03/12/2025 18:00:00,Round Trip - Bus Pass,111.95,Transportation
+03/12/2025 18:45:00,Barnes & Noble Cinema 16 - Season Pass #2287,127.75,Entertainment
+03/12/2025 20:32:00,Home Depot (Express Store) #8534,473.99,Shopping
+03/14/2025 07:30:00,Local Bistro (Airport),104.13,Dining
+03/14/2025 10:49:00,Home & Garden Residential - Mortgage Payment #9693,2978.25,Housing
+03/14/2025 13:35:00,Adobe Creative - Study Materials,245.25,Education
+03/15/2025 07:45:00,Parking Meter at Lyft,17.85,Transportation
+03/15/2025 09:30:00,Bus Pass - Parking Meter #3934,4.78,Transportation
+03/15/2025 11:30:00,Pacific Gas & Electric - Monthly Bill,88.52,Utilities
+03/15/2025 15:11:00,Blood Work at Vitamin World,899.95,Health
+03/16/2025 08:15:00,Shell Gas (Shopping Mall),4.46,Transportation
+03/16/2025 09:15:00,Plumbing Repair - CleanPro Services,1617.25,Housing
+03/16/2025 09:45:00,Costco - Snacks & Beverages - Mall Plaza,76.24,Groceries
+03/16/2025 17:30:00,Local Bistro Riverside - Happy Hour #1418,69.78,Dining
+03/16/2025 17:30:00,Monthly Pass - City Parking,95.38,Transportation
+03/16/2025 22:00:00,New Release at Steam,13.98,Entertainment
+03/17/2025 10:45:00,Workout Gear at Hobby Lobby,154.5,Personal
+03/17/2025 11:15:00,Birthday Gift at Gift Gallery,10.49,Personal
+03/17/2025 15:00:00,Online Course at Amazon Books #9082,221.0,Education
+03/17/2025 21:20:17,Annual Membership at Steam #8798,186.0,Entertainment
+03/17/2025 21:22:00,State University - Study Materials,499.95,Education
+03/18/2025 08:30:00,Snacks & Beverages at Whole Foods Market #4122,41.93,Groceries
+03/18/2025 09:00:00,Property Management Co - Moving Services - Residential,1776.5,Housing
+03/18/2025 11:17:00,Wellness Therapy - Blood Work,26.96,Health
+03/18/2025 14:00:00,Macy's (Super Center),300.0,Shopping
+03/18/2025 16:45:00,Walmart (Marketplace),51.28,Shopping
+03/18/2025 19:00:00,Season Pass - Ticketmaster #9852,110.95,Entertainment
+03/19/2025 10:28:00,REI Outlet Center - Sports Equipment #5541,21.46,Shopping
+03/19/2025 11:38:18,School Supplies at State University,30.45,Education
+03/19/2025 15:45:41,Heating Solutions - Service Upgrade - Billing Dept #6280,76.54,Utilities
+03/19/2025 15:54:00,Dry Cleaning - Bliss Spa,128.25,Personal
+03/20/2025 08:00:26,Costco - Fresh Bread,44.86,Groceries
+03/20/2025 11:30:00,Greenwood HOA - HOA Assessment - Tax Office,1996.95,Housing
+03/20/2025 14:48:00,Comcast Internet (Installation Team),258.95,Utilities
+03/20/2025 20:29:10,Electronics at IKEA,129.25,Shopping
+03/20/2025 20:45:00,Study Hub Learning Center - Training Program,1434.25,Education
+03/20/2025 21:45:00,Steam Gaming Center - Annual Membership,123.25,Entertainment
+03/21/2025 10:01:00,Cable One - Installation - Installation Team #5263,47.97,Utilities
+03/21/2025 14:48:00,Home Improvement at Target #1548,275.75,Shopping
+03/21/2025 18:32:00,Safeway - Frozen Foods #7428,65.78,Groceries
+03/21/2025 20:51:31,Meat & Seafood at Target,41.33,Groceries
+03/21/2025 22:15:00,Ticketmaster Digital Platform - New Release,27.45,Entertainment
+03/22/2025 07:00:00,Pizza Palace Main Square - Business Lunch #7154,92.62,Dining
+03/22/2025 10:00:00,Verizon Wireless - Family Plan,192.63,Utilities
+03/22/2025 10:00:00,ADT Security Regional Office - Late Fee Waived,282.95,Utilities
+03/22/2025 11:00:00,Coursera - Textbook Bundle #5594,605.0,Education
+03/22/2025 19:15:00,Ticketmaster - Annual Membership #1647,9.66,Entertainment
+03/23/2025 10:00:38,City Water Dept Main Office - Service Upgrade,413.5,Utilities
+03/23/2025 10:45:00,Training Program at Workshop Central,180.5,Education
+03/23/2025 14:15:00,Workshop Central - Study Materials - Learning Center,1176.0,Education
+03/23/2025 18:30:00,New Release - Barnes & Noble,2.99,Entertainment
+03/23/2025 18:45:00,Birthday Gift - Sephora Beauty,42.24,Personal
+03/24/2025 08:15:00,Local Market - Dairy Products #5348,126.25,Groceries
+03/24/2025 08:15:00,Whole Foods Market - Fresh Bread #4394,145.99,Groceries
+03/24/2025 11:30:00,Annual Contract - Cable One,58.23,Utilities
+03/24/2025 11:30:34,Personal Care Plus - New Outfit,107.99,Personal
+03/24/2025 18:30:00,Local Bistro Airport - Quick Breakfast #7405,23.13,Dining
+03/25/2025 10:30:00,LabCorp - Teeth Cleaning #1866,453.95,Health
+03/25/2025 18:00:00,Gas Fill-up - Shell Gas,29.06,Transportation
+03/26/2025 09:00:30,City Parking Shopping Mall - Fuel & Snacks #3859,66.84,Transportation
+03/26/2025 14:00:00,Duolingo Plus - Online Course,1432.75,Education
+03/26/2025 19:00:24,Pet Food & Toys at Hobby Lobby #2784,15.83,Personal
+03/26/2025 21:14:00,Takeout Order - Pizza Palace,145.0,Dining
+03/27/2025 10:06:00,Wellness Therapy (Health Store) #6266,845.95,Health
+03/27/2025 11:45:00,Garden Makeover at State Farm Insurance #5656,2464.5,Housing
+03/27/2025 15:56:00,Service Charge - Waste Management,85.76,Utilities
+03/27/2025 17:30:00,Snacks & Beverages at Whole Foods Market,39.3,Groceries
+03/27/2025 19:30:00,Sports Equipment at Best Buy,262.95,Shopping
+03/27/2025 20:30:51,Fresh Bread at Costco #9674,133.25,Groceries
+03/28/2025 09:15:00,Safeway - Fresh Bread #1535,36.13,Groceries
+03/28/2025 13:00:00,Subway - Happy Hour,58.21,Dining
+03/28/2025 18:00:00,Barnes & Noble - Season Pass - Streaming,115.0,Entertainment
+03/29/2025 10:00:59,Heating Solutions Main Office - Late Fee Waived,357.0,Utilities
+03/29/2025 11:45:00,H&M Fashion Laundromat - Spa Package #1442,106.0,Personal
+03/30/2025 08:03:00,AutoWash Pro (Main Terminal),16.93,Transportation
+03/30/2025 08:45:00,Aldi - Household Items #7545,27.0,Groceries
+03/30/2025 10:15:00,Birthday Gift - Bliss Spa,98.57,Personal
+03/30/2025 10:15:04,County Tax Office Local Moving - Monthly Rent,1255.75,Housing
+03/30/2025 10:30:00,Insurance Premium at Vitamin World,306.0,Health
+03/30/2025 13:45:16,Corner Café - Quick Breakfast - Drive-Thru,134.25,Dining
+03/30/2025 18:45:00,Movie Tickets - Disney+,51.7,Entertainment
+03/30/2025 22:45:00,Monthly Subscription - Netflix,121.5,Entertainment
+03/31/2025 11:00:00,Teeth Cleaning - LabCorp,391.25,Health
+03/31/2025 19:59:00,Whole Foods Market - Weekly Shopping - North Branch,66.9,Groceries
+04/01/2025 09:00:00,Property Management Co - Monthly Rent,1859.33,Housing
+04/01/2025 09:29:00,Greenwood HOA - HOA Assessment,2935.25,Housing
+04/01/2025 10:00:00,First National Bank - Mortgage Payment,2201.11,Housing
+04/01/2025 10:00:00,City Water Dept - Service Charge,47.82,Utilities
+04/01/2025 10:00:00,FitLife Gym - Monthly Membership,48.17,Health
+04/01/2025 12:30:00,Health Plus Insurance - Premium,275.89,Health
+04/01/2025 14:30:00,Sports Equipment - Best Buy,50.99,Shopping
+04/01/2025 19:45:37,Sports Equipment - Apple Store #1374,20.29,Shopping
+04/03/2025 10:00:00,Netflix - Premium Plan,15.64,Entertainment
+04/03/2025 10:45:00,Cable One (Account #12345),136.25,Utilities
+04/03/2025 11:30:00,Home Depot - Outdoor Gear #5539,58.55,Shopping
+04/03/2025 15:00:00,REI Outlet Center - Garden Supplies,100.72,Shopping
+04/03/2025 15:15:00,Clothing & Accessories - Home Depot #9424,85.23,Shopping
+04/04/2025 10:15:00,Household Items at Farm Fresh #8826,36.97,Groceries
+04/04/2025 11:00:31,CVS Pharmacy (Wellness Center),241.0,Health
+04/04/2025 11:15:00,Property Management Co (Community Center),2055.75,Housing
+04/04/2025 15:00:33,State Farm Insurance - Garden Makeover - Community Center #6010,1776.0,Housing
+04/04/2025 19:21:00,Household Items at Aldi,235.75,Groceries
+04/05/2025 08:45:00,Starbucks - Happy Hour,108.75,Dining
+04/05/2025 11:07:47,First National Bank - Garden Makeover - Service Call #9005,1632.75,Housing
+04/05/2025 11:45:00,Service Charge at Verizon Wireless,187.95,Utilities
+04/05/2025 15:45:05,Books & Media - Home Depot,138.95,Shopping
+04/05/2025 17:45:00,Corner Café - Late Night Snack - Riverside,37.19,Dining
+04/05/2025 20:45:52,Quick Breakfast - Panera Bread,83.99,Dining
+04/06/2025 10:30:49,Haircut & Style at Gift Gallery,216.95,Personal
+04/06/2025 19:30:00,Gift Gallery - Pet Food & Toys - Beauty Counter,157.99,Personal
+04/07/2025 10:30:00,FitLife Gym (Health Store),872.25,Health
+04/07/2025 18:30:09,AutoWash Pro - Car Wash Premium - Airport,37.41,Transportation
+04/07/2025 19:45:00,Bus Pass (Shopping Mall) #6968,121.25,Transportation
+04/07/2025 21:15:00,Steam - Gaming Bundle - Digital Platform #9174,49.67,Entertainment
+04/07/2025 21:45:02,HBO Max - Live Performance - Mall Cinema,163.0,Entertainment
+04/08/2025 11:15:00,H&M Fashion - Haircut & Style - Craft Store,18.38,Personal
+04/08/2025 11:15:00,CareNow Clinic Wellness Center - Teeth Cleaning #1095,68.96,Health
+04/08/2025 14:30:00,Vision Center (Medical Plaza),142.95,Health
+04/08/2025 15:30:00,Comcast Internet - Monthly Plan,80.39,Utilities
+04/08/2025 16:30:00,Personal Care at Bliss Spa,37.38,Personal
+04/08/2025 18:00:58,Happy Hour - Local Bistro #3574,160.99,Dining
+04/08/2025 19:42:00,Haircut & Style - Quick Wash Laundry #9995,101.0,Personal
+04/09/2025 14:00:00,Handy Home Repair - Monthly Rent,1962.0,Housing
+04/09/2025 14:01:00,Garden Makeover at Home & Garden,1081.5,Housing
+04/09/2025 15:45:00,Macy's - Books & Media - Store #1254,327.95,Shopping
+04/09/2025 18:00:00,Costco Downtown - Weekly Shopping,56.25,Groceries
+04/09/2025 19:00:00,Beauty Products - Style Cut Salon,79.75,Personal
+04/09/2025 21:52:00,Weekend Brunch - Chipotle,12.37,Dining
+04/10/2025 08:45:26,Trader Joe's (Mall Plaza),59.27,Groceries
+04/10/2025 14:15:00,Property Management Co - Mortgage Payment - Policy Update #2199,989.25,Housing
+04/10/2025 16:45:00,Personal Care Plus - Spa Package - Laundromat,229.95,Personal
+04/10/2025 17:46:00,Lunch Special - Pizza Palace,75.46,Dining
+04/11/2025 14:45:00,Cable One - Emergency Repair - Customer Service #1396,176.0,Utilities
+04/11/2025 19:30:42,Yellow Cab Garage Level 3 - Car Wash Premium,72.14,Transportation
+04/12/2025 09:45:09,Workshop Central - Study Materials,87.46,Education
+04/12/2025 11:45:00,Snacks & Beverages at Target,254.0,Groceries
+04/12/2025 12:30:00,Spotify - Family Plan,14.56,Entertainment
+04/12/2025 21:39:05,Duolingo Plus - Workshop Fee - Study Group #7734,661.99,Education
+04/12/2025 21:56:00,Digital Content - Apple TV+ #2401,130.5,Entertainment
+04/12/2025 22:56:00,Barnes & Noble Downtown Theater - Digital Content,89.53,Entertainment
+04/13/2025 07:22:00,Monthly Pass - Uber #8979,45.37,Transportation
+04/13/2025 10:15:30,Skillshare (Campus Bookstore),84.5,Education
+04/13/2025 10:45:16,Beauty Products at Quick Wash Laundry,208.75,Personal
+04/13/2025 17:45:00,Shell Gas - Ride to Airport,27.82,Transportation
+04/13/2025 19:00:00,Haircut & Style at Quick Wash Laundry,72.59,Personal
+04/13/2025 19:00:00,AMC Theaters (Gaming Center),197.5,Entertainment
+04/13/2025 19:00:15,Farm Fresh (South Location),276.0,Groceries
+04/13/2025 19:12:00,Lyft - Toll Road - Express Lane,4.2,Transportation
+04/13/2025 19:15:00,Rush Hour Ride - Bus Pass,9.59,Transportation
+04/13/2025 21:00:12,Dinner for Two at McDonald's,27.87,Dining
+04/14/2025 14:45:08,REI - Garden Supplies #7005,46.2,Shopping
+04/14/2025 15:45:52,CareNow Clinic - Eye Exam #9425,132.5,Health
+04/14/2025 16:00:00,Wellness Therapy Main Branch - Eye Exam,76.36,Health
+04/14/2025 16:30:00,Blood Work at FitLife Gym,594.25,Health
+04/14/2025 18:00:50,Uber - Round Trip - Station #42 #5675,109.75,Transportation
+04/15/2025 10:00:37,PetSmart Pet Center - Personal Care,72.2,Personal
+04/15/2025 10:15:39,Gift Gallery Pet Center - Spa Package,41.46,Personal
+04/15/2025 11:00:00,H&M Fashion - Haircut & Style - Day Spa,95.96,Personal
+04/15/2025 13:30:00,Pacific Gas & Electric - Monthly Bill,89.3,Utilities
+04/15/2025 16:30:00,Walmart - Personal Care,46.12,Shopping
+04/16/2025 09:30:00,State Farm Insurance Showroom - Home Insurance,668.25,Housing
+04/16/2025 13:15:00,Textbook Bundle - State University,25.52,Education
+04/16/2025 20:15:11,Gaming Bundle at HBO Max,10.38,Entertainment
+04/17/2025 09:45:00,Online Course - Coursera,211.75,Education
+04/17/2025 15:15:00,Swift Movers (Loan #987654),1794.0,Housing
+04/17/2025 18:00:00,Safeway South Location - Frozen Foods,339.75,Groceries
+04/18/2025 08:30:00,Health Foods at Walmart,101.99,Groceries
+04/18/2025 10:00:00,First National Bank - Garden Makeover - Showroom,1816.99,Housing
+04/18/2025 14:00:12,Sports Equipment - IKEA,18.5,Shopping
+04/18/2025 14:30:00,Emergency Repair at Heating Solutions,215.99,Utilities
+04/18/2025 18:08:00,Spotify - Season Pass #3733,52.19,Entertainment
+04/18/2025 20:00:00,McDonald's (Riverside) #7768,32.38,Dining
+04/19/2025 08:00:00,Round Trip at Bridge Authority,40.55,Transportation
+04/19/2025 14:15:00,Late Fee Waived at Natural Gas Co #7097,94.79,Utilities
+04/19/2025 14:45:00,Ashley Furniture - HOA Assessment,1233.5,Housing
+04/19/2025 15:45:00,Waste Management - Late Fee Waived - Installation Team,147.75,Utilities
+04/19/2025 16:30:00,Health Plus Insurance Health Store - Therapy Session,397.75,Health
+04/19/2025 18:00:00,Frozen Foods at Local Market,336.75,Groceries
+04/20/2025 09:00:00,CareNow Clinic - Eye Exam - Main Branch,249.5,Health
+04/20/2025 11:15:00,Home Insurance at County Tax Office,2364.5,Housing
+04/20/2025 14:00:00,Tuition Payment - Study Hub,1308.75,Education
+04/20/2025 15:30:00,Heating Solutions (Meter Reading),268.75,Utilities
+04/20/2025 19:00:00,Aldi Shopping Center - Bulk Items,15.35,Groceries
+04/21/2025 12:00:00,Chipotle - Coffee & Pastry - Mall,57.53,Dining
+04/21/2025 18:15:21,Quick Wash Laundry (Laundromat),18.56,Personal
+04/22/2025 09:15:00,FitLife Gym Walk-in Clinic - Annual Checkup,244.99,Health
+04/22/2025 13:30:00,Verizon Wireless - Family Plan,177.24,Utilities
+04/22/2025 15:00:00,Greenwood HOA Residential - Monthly Rent,881.25,Housing
+04/22/2025 15:00:46,Tuition Payment - Office Depot #9976,757.99,Education
+04/22/2025 17:50:00,Weekend Brunch - Food Truck,144.5,Dining
+04/22/2025 21:00:09,Training Program at Amazon Books,187.95,Education
+04/23/2025 09:15:00,City Parking Garage Level 3 - Rush Hour Ride,42.88,Transportation
+04/23/2025 10:00:00,Dairy Products at Target,183.5,Groceries
+04/23/2025 11:15:04,Home & Garden (Home Visit),2083.95,Housing
+04/23/2025 16:24:00,Quick Wash Laundry - Spa Package - Sports Store #8336,128.25,Personal
+04/23/2025 19:15:00,Walmart (Store #1254),338.75,Shopping
+04/23/2025 20:30:00,Concert Event - Ticketmaster,137.95,Entertainment
+04/24/2025 10:30:05,Handy Home Repair - Monthly Rent - Community Center,2858.5,Housing
+04/25/2025 10:20:00,Service Upgrade at Cable One,236.25,Utilities
+04/25/2025 10:46:36,Farm Fresh Mall Plaza - Bulk Items,101.99,Groceries
+04/25/2025 11:45:00,Annual Checkup at Vitamin World #4520,242.99,Health
+04/25/2025 15:00:47,Monthly Bill at Cable One,148.5,Utilities
+04/25/2025 19:15:00,HBO Max - Season Pass #2407,56.74,Entertainment
+04/26/2025 09:30:00,FitLife Gym - Urgent Care Visit - Eye Center,506.75,Health
+04/26/2025 11:15:47,Waste Management (Account #12345),135.75,Utilities
+04/26/2025 19:00:00,Netflix - Digital Content - Store #789,10.7,Entertainment
+04/26/2025 20:45:00,Weekend Brunch at Starbucks,13.81,Dining
+04/27/2025 14:30:00,Home Improvement at REI,255.0,Shopping
+04/27/2025 16:45:00,Spa Package at H&M Fashion #1995,224.75,Personal
+04/28/2025 09:45:00,Training Program - Skillshare #2426,27.25,Education
+04/28/2025 10:45:00,Home Insurance - Greenwood HOA #5228,1209.0,Housing
+04/28/2025 13:00:59,Dinner for Two at Burger Joint #4772,14.65,Dining
+04/29/2025 09:00:00,Vision Center (Medical Plaza) #3825,286.95,Health
+04/29/2025 20:45:36,Pizza Palace (Riverside),176.95,Dining
+04/30/2025 11:45:00,Usage Fee at Verizon Wireless #3799,74.95,Utilities
+04/30/2025 14:30:00,Electronics - IKEA,38.41,Shopping
+04/30/2025 14:45:00,Heating Solutions (Support Center),225.25,Utilities
+04/30/2025 15:02:40,Seasonal Adjustment - Solar Energy Inc #9846,235.5,Utilities
+04/30/2025 19:45:27,Uber Highway I-95 - Car Wash Premium,91.3,Transportation
+04/30/2025 21:15:00,McDonald's (Campus),13.93,Dining
+05/01/2025 09:00:00,FitLife Gym - Monthly Membership,49.21,Health
+05/01/2025 09:30:00,First National Bank - Mortgage Payment,2105.18,Housing
+05/01/2025 11:00:00,City Water Dept - Service Charge,44.84,Utilities
+05/01/2025 12:00:00,Property Management Co - Monthly Rent,1808.68,Housing
+05/01/2025 13:00:00,Health Plus Insurance - Premium,276.92,Health
+05/01/2025 15:45:00,Electronics at REI,49.56,Shopping
+05/01/2025 18:45:00,Sephora Beauty (Pet Center),31.25,Personal
+05/01/2025 19:45:00,Corner Café Riverside - Takeout Order #1841,105.95,Dining
+05/02/2025 11:45:00,Verizon Wireless Account #12345 - Usage Fee,93.3,Utilities
+05/02/2025 14:45:00,Personal Care Plus - New Outfit - Pet Center #9410,212.0,Personal
+05/03/2025 07:30:00,Parking Meter at Metro Transit,75.21,Transportation
+05/03/2025 10:30:00,Netflix - Premium Plan,15.62,Entertainment
+05/03/2025 11:30:00,Health Plus Insurance (Medical Plaza) #3300,740.5,Health
+05/03/2025 15:15:47,Cable One Main Office - Installation,353.0,Utilities
+05/04/2025 15:30:42,Study Materials at Office Depot,1277.0,Education
+05/04/2025 20:40:00,HBO Max - Live Performance - Arena #2915,205.99,Entertainment
+05/05/2025 14:00:00,Swift Movers - HOA Assessment - Residential,1463.5,Housing
+05/05/2025 15:43:00,Hobby Lobby - Dry Cleaning #8759,212.0,Personal
+05/06/2025 11:00:00,Trader Joe's - Meat & Seafood,101.25,Groceries
+05/06/2025 14:15:36,Mortgage Payment at Ashley Furniture,1532.95,Housing
+05/06/2025 15:04:20,Usage Fee at Waste Management #3101,250.99,Utilities
+05/06/2025 15:45:00,Home & Garden Residential - Moving Services,2592.25,Housing
+05/06/2025 21:00:22,Burger Joint (Beachside),62.33,Dining
+05/07/2025 11:30:20,Usage Fee - City Water Dept,196.95,Utilities
+05/07/2025 14:45:00,LabCorp - Monthly Membership - Lab Facility #8515,989.5,Health
+05/07/2025 18:45:00,Monthly Subscription - AMC Theaters #1605,27.31,Entertainment
+05/07/2025 22:30:00,Barnes & Noble Downtown Theater - Live Performance,10.91,Entertainment
+05/08/2025 09:00:00,Swift Movers - Moving Services - Apt 4B,2655.99,Housing
+05/08/2025 14:45:04,Monthly Bill - Cable One #8977,292.5,Utilities
+05/08/2025 15:30:00,Comcast Internet - Monthly Plan,83.97,Utilities
+05/08/2025 20:45:00,Tuition Payment - Office Depot,631.75,Education
+05/09/2025 10:15:00,Usage Fee - Pacific Gas & Electric,201.99,Utilities
+05/09/2025 15:33:00,CVS Pharmacy - Blood Work #5008,24.03,Health
+05/09/2025 19:00:00,Walmart Express Store - Home Improvement #4954,51.44,Shopping
+05/10/2025 15:30:00,Bliss Spa - Dry Cleaning - Gift Shop,201.95,Personal
+05/11/2025 11:25:56,Aldi (Eastside),163.95,Groceries
+05/11/2025 15:30:00,Books & Media at Amazon,199.25,Shopping
+05/11/2025 17:28:00,Chipotle - Happy Hour - Riverside,47.94,Dining
+05/11/2025 19:30:00,Target Eastside - Frozen Foods,37.29,Groceries
+05/11/2025 19:48:00,Trader Joe's (Highway 101),36.34,Groceries
+05/11/2025 20:51:25,Home Depot (Retail Park) #5564,138.75,Shopping
+05/12/2025 09:30:00,Spotify - Family Plan,14.79,Entertainment
+05/12/2025 14:45:00,Tuition Payment at Skillshare,563.95,Education
+05/12/2025 17:15:00,Safeway North Branch - Organic Produce,21.65,Groceries
+05/12/2025 20:15:43,Pizza Palace Food Court - Quick Breakfast,168.5,Dining
+05/12/2025 22:15:00,Disney+ (Downtown Theater),129.95,Entertainment
+05/13/2025 14:45:00,Monthly Bill at Cable One,83.41,Utilities
+05/13/2025 18:00:00,Uber - Gas Fill-up - Express Lane,67.95,Transportation
+05/13/2025 18:38:00,Local Market - Household Items - Main St,101.0,Groceries
+05/14/2025 10:00:00,Personal Care at Nike,20.46,Shopping
+05/14/2025 10:00:00,Apple Store - Outdoor Gear - Flagship Store #9508,94.88,Shopping
+05/14/2025 11:36:00,Usage Fee at Pacific Gas & Electric,80.62,Utilities
+05/14/2025 14:30:00,Personal Care Plus - Beauty Products - Pet Center,45.29,Personal
+05/14/2025 14:38:00,CleanPro Services (Loan #987654),2538.95,Housing
+05/14/2025 17:46:00,Safeway South Location - Fresh Bread,112.5,Groceries
+05/15/2025 06:30:42,City Parking Station #42 - Parking Meter,52.42,Transportation
+05/15/2025 08:45:05,Fresh Bread - Whole Foods Market,60.48,Groceries
+05/15/2025 11:30:00,Pacific Gas & Electric - Monthly Bill,87.26,Utilities
+05/15/2025 12:15:00,Panera Bread Mall - Quick Breakfast,27.84,Dining
+05/15/2025 14:30:00,LabCorp (Walk-in Clinic),530.95,Health
+05/15/2025 17:15:00,Late Night Snack - Pizza Palace #4734,70.61,Dining
+05/15/2025 18:15:00,Haircut & Style - Gift Gallery #5179,87.28,Personal
+05/15/2025 19:30:00,Coffee & Pastry - Corner Café,100.99,Dining
+05/15/2025 20:45:00,Dinner for Two - Corner Café,79.59,Dining
+05/16/2025 09:30:00,Farm Fresh - Bulk Items,138.75,Groceries
+05/16/2025 11:30:00,FitLife Gym Online - Therapy Session,252.25,Health
+05/16/2025 11:45:33,Therapy Session at Bright Dental #9969,509.5,Health
+05/16/2025 20:45:00,Workshop Central Student Center - Training Program,1297.0,Education
+05/17/2025 09:45:00,Wellness Therapy Online - Supplements #9623,1122.95,Health
+05/17/2025 20:30:00,Duolingo Plus (Campus Bookstore),104.02,Education
+05/17/2025 21:32:00,City Library - Library Fine - Online Training,543.25,Education
+05/18/2025 08:30:00,Fuel & Snacks - Bridge Authority #4839,55.28,Transportation
+05/18/2025 09:30:52,Language Learning - Workshop Central,885.95,Education
+05/18/2025 10:00:00,Fresh Bread at Local Market,147.25,Groceries
+05/18/2025 15:00:00,Comcast Internet - Annual Contract - Regional Office #8901,284.95,Utilities
+05/18/2025 17:30:00,Whole Foods Market - Organic Produce - Village Square #3792,191.0,Groceries
+05/18/2025 19:15:00,Spotify - Monthly Subscription #2100,214.99,Entertainment
+05/19/2025 14:15:40,Amazon Online Order - Home Improvement,563.0,Shopping
+05/19/2025 14:51:00,Health Plus Insurance (Health Store) #5936,170.5,Health
+05/19/2025 17:45:00,Farm Fresh (South Location),86.56,Groceries
+05/20/2025 10:15:00,Amazon Books Student Center - Library Fine,822.25,Education
+05/20/2025 10:30:00,Sports Equipment - Target,95.31,Shopping
+05/20/2025 21:00:00,City Library (Online Training),479.95,Education
+05/20/2025 22:45:12,Concert Event at GameStop #1825,69.94,Entertainment
+05/21/2025 09:30:00,Amtrak Airport - Toll Road,3.83,Transportation
+05/21/2025 11:00:00,Waste Management - Service Upgrade #8294,293.75,Utilities
+05/21/2025 16:45:34,Sephora Beauty Main St Salon - Pet Food & Toys,142.25,Personal
+05/22/2025 10:15:00,Pet Food & Toys at Bliss Spa,61.57,Personal
+05/22/2025 11:30:00,Verizon Wireless - Family Plan,194.58,Utilities
+05/22/2025 11:45:00,Trader Joe's South Location - Snacks & Beverages #8831,40.8,Groceries
+05/22/2025 13:00:47,Corner Café (Campus),62.25,Dining
+05/22/2025 15:01:06,Quick Wash Laundry - Craft Supplies #1202,92.64,Personal
+05/22/2025 15:41:00,Swift Movers (Residential),1156.95,Housing
+05/22/2025 19:00:00,Toll Road at Uber #2936,18.48,Transportation
+05/22/2025 21:30:00,Late Night Snack at Pizza Palace,12.36,Dining
+05/23/2025 19:30:00,Late Night Snack - Panera Bread,133.5,Dining
+05/24/2025 15:19:00,Amazon Books Student Center - Training Program,199.0,Education
+05/24/2025 15:30:00,Dry Cleaning at Sephora Beauty #8446,131.75,Personal
+05/24/2025 16:30:00,REI Retail Park - Electronics #6123,22.0,Shopping
+05/24/2025 19:00:00,Disney+ (Digital Platform) #4633,10.42,Entertainment
+05/25/2025 08:45:00,Uber (Downtown),101.75,Transportation
+05/25/2025 09:50:24,Software License - Duolingo Plus,81.68,Education
+05/25/2025 10:30:00,First National Bank - Property Tax,1661.95,Housing
+05/25/2025 13:00:00,Starbucks - Takeout Order - Beachside,41.57,Dining
+05/25/2025 13:32:00,Pizza Palace - Business Lunch - Riverside #6010,54.72,Dining
+05/25/2025 15:30:00,Workout Gear at Sephora Beauty,198.75,Personal
+05/25/2025 19:45:49,Spotify - Monthly Subscription,195.0,Entertainment
+05/26/2025 08:45:00,Bridge Authority (Garage Level 3),95.96,Transportation
+05/26/2025 10:30:30,Property Management Co (Service Call),880.0,Housing
+05/26/2025 19:30:14,Chipotle (Downtown),61.49,Dining
+05/26/2025 19:51:00,Apple Store - Clothing & Accessories - Express Store,43.13,Shopping
+05/27/2025 15:00:00,Gift Gallery - Dry Cleaning,79.65,Personal
+05/27/2025 15:05:10,Installation - Verizon Wireless,138.5,Utilities
+05/28/2025 10:15:03,First National Bank (Loan #987654),2240.95,Housing
+05/28/2025 10:15:35,Kroger (North Branch),224.95,Groceries
+05/28/2025 11:15:04,Therapy Session at CareNow Clinic #8880,1038.95,Health
+05/28/2025 16:30:00,Beauty Products at Quick Wash Laundry,89.64,Personal
+05/28/2025 19:15:20,Garden Supplies - Walmart,10.14,Shopping
+05/29/2025 09:15:00,City Library - Textbook Bundle,828.99,Education
+05/29/2025 11:15:00,Home Depot (Express Store),22.95,Shopping
+05/29/2025 11:30:13,ADT Security - Annual Contract #4656,177.99,Utilities
+05/30/2025 14:15:26,Property Tax - First National Bank,3230.75,Housing
+05/30/2025 15:30:00,Cable One (Service Address) #7332,41.18,Utilities
+05/30/2025 18:10:00,Snacks & Beverages - Target,190.25,Groceries
+05/30/2025 19:58:00,Garden Supplies - IKEA,156.0,Shopping
+05/31/2025 07:00:58,Catering at Panera Bread,14.79,Dining
+05/31/2025 15:45:00,REI - Personal Care,66.92,Shopping
+05/31/2025 18:15:07,AutoWash Pro - Round Trip - Highway I-95,30.4,Transportation
+05/31/2025 20:04:02,Spotify - Movie Tickets,226.25,Entertainment
+06/01/2025 10:30:00,First National Bank - Mortgage Payment,2255.88,Housing
+06/01/2025 10:30:00,City Water Dept - Service Charge,46.98,Utilities
+06/01/2025 10:45:46,Wellness Therapy - Teeth Cleaning,26.2,Health
+06/01/2025 11:30:00,Health Plus Insurance - Premium,271.25,Health
+06/01/2025 14:00:00,FitLife Gym - Monthly Membership,47.92,Health
+06/01/2025 14:30:00,Property Management Co - Monthly Rent,1905.71,Housing
+06/01/2025 14:45:20,Urgent Care Visit - LabCorp #7703,25.69,Health
+06/02/2025 07:30:00,Monthly Pass at Bus Pass,3.93,Transportation
+06/02/2025 08:30:00,Catering - Chipotle,110.0,Dining
+06/02/2025 09:58:00,Yellow Cab City Center - Monthly Pass,81.72,Transportation
+06/02/2025 14:15:10,Walmart - Personal Care - Online Order,255.5,Shopping
+06/02/2025 17:15:00,Monthly Pass at Uber,41.22,Transportation
+06/02/2025 18:30:00,Gift Gallery - Dry Cleaning - Sports Store #9517,42.46,Personal
+06/02/2025 21:12:00,Chipotle - Catering - Downtown,71.78,Dining
+06/03/2025 10:00:00,Pet Food & Toys - Quick Wash Laundry,70.66,Personal
+06/03/2025 10:15:00,Study Hub (Registrar Office),1327.25,Education
+06/03/2025 11:00:00,Costco - Meat & Seafood - Shopping Center #8777,268.99,Groceries
+06/03/2025 11:15:00,Office Depot - Online Course #4533,32.95,Education
+06/03/2025 12:30:00,Netflix - Premium Plan,16.2,Entertainment
+06/03/2025 14:45:00,Language Learning - Study Hub,772.75,Education
+06/03/2025 18:00:00,Movie Tickets - Steam,28.34,Entertainment
+06/04/2025 10:30:52,Teeth Cleaning - Dr. Smith's Office #6771,785.5,Health
+06/04/2025 11:45:00,City Water Dept (Billing Dept),192.0,Utilities
+06/04/2025 13:45:40,McDonald's - Dinner for Two,11.52,Dining
+06/04/2025 17:15:00,Takeout Order at Panera Bread #9210,32.87,Dining
+06/04/2025 18:00:00,Dry Cleaning at Style Cut Salon,86.41,Personal
+06/05/2025 19:45:00,H&M Fashion (Gift Shop) #7544,48.27,Personal
+06/06/2025 11:15:00,Vitamin World - Teeth Cleaning - Lab Facility,22.27,Health
+06/06/2025 17:00:00,Burger Joint Financial District - Coffee & Pastry,46.71,Dining
+06/06/2025 20:00:00,Barnes & Noble - Premium Plan - Online,126.75,Entertainment
+06/07/2025 16:00:00,Amazon - Clothing & Accessories - Super Center #2819,130.5,Shopping
+06/07/2025 20:15:00,Concert Event at Spotify #3336,55.02,Entertainment
+06/08/2025 15:30:00,Comcast Internet - Monthly Plan,80.13,Utilities
+06/08/2025 17:00:00,Aldi Downtown - Dairy Products #9129,46.74,Groceries
+06/08/2025 19:45:00,IKEA - Outdoor Gear #1354,41.21,Shopping
+06/09/2025 10:09:00,Target Eastside - Weekly Shopping,49.33,Groceries
+06/10/2025 06:19:00,AutoWash Pro - Car Wash Premium #1714,55.1,Transportation
+06/10/2025 14:45:00,Insurance Premium at Bright Dental,75.11,Health
+06/10/2025 17:45:00,Weekend Trip - Amtrak,91.15,Transportation
+06/10/2025 18:45:00,Rush Hour Ride - Bus Pass,1.59,Transportation
+06/11/2025 09:30:00,Bus Pass - Toll Road - Station #42,40.18,Transportation
+06/11/2025 10:45:16,Costco Downtown - Weekly Shopping,102.25,Groceries
+06/11/2025 11:00:00,Moving Services at State Farm Insurance #7674,3357.75,Housing
+06/11/2025 11:45:00,Moving Services - CleanPro Services,2096.99,Housing
+06/12/2025 13:45:00,Amazon Books (Mobile App) #6499,102.25,Education
+06/12/2025 15:00:00,Spotify - Family Plan,14.55,Entertainment
+06/13/2025 09:15:00,CareNow Clinic - Supplements,79.36,Health
+06/13/2025 10:17:00,Living Room Set - CleanPro Services,2434.25,Housing
+06/13/2025 14:15:00,Ashley Furniture Showroom - Moving Services #2579,836.25,Housing
+06/13/2025 15:15:16,Verizon Wireless - Installation #9589,266.5,Utilities
+06/13/2025 19:15:00,Office Supplies at Nike,22.05,Shopping
+06/14/2025 11:45:50,Plumbing Repair - State Farm Insurance #4271,2973.75,Housing
+06/14/2025 14:30:00,CleanPro Services Local Moving - Monthly Rent #9379,1077.0,Housing
+06/14/2025 17:15:45,Metro Transit - Car Wash Premium - Express Lane #2285,28.48,Transportation
+06/15/2025 09:45:28,Meat & Seafood at Local Market,88.91,Groceries
+06/15/2025 11:30:00,Pacific Gas & Electric - Monthly Bill,90.14,Utilities
+06/15/2025 14:15:07,Home Depot (Marketplace),130.75,Shopping
+06/15/2025 16:00:00,Health Plus Insurance - Supplements - Walk-in Clinic,393.0,Health
+06/15/2025 20:30:00,Spotify (Streaming),14.19,Entertainment
+06/15/2025 20:49:00,REI (Retail Park),128.95,Shopping
+06/16/2025 11:45:34,Home Depot - Garden Supplies,75.62,Shopping
+06/17/2025 11:42:00,Language Learning - Adobe Creative #5718,90.5,Education
+06/17/2025 18:43:00,Bridge Authority Express Lane - Ride to Airport,65.68,Transportation
+06/17/2025 21:19:00,Local Bistro (Main Square) #7219,5.59,Dining
+06/18/2025 09:45:00,Swift Movers Loan #987654 - Home Insurance #4051,1667.75,Housing
+06/18/2025 18:30:00,Toll Road at Yellow Cab #5726,58.27,Transportation
+06/18/2025 21:30:00,Season Pass at Netflix,19.31,Entertainment
+06/19/2025 06:00:00,Car Wash Premium - City Parking,66.07,Transportation
+06/19/2025 09:00:43,Fresh Bread at Local Market,199.5,Groceries
+06/19/2025 15:45:00,Monthly Bill at Natural Gas Co,56.79,Utilities
+06/20/2025 08:00:00,AutoWash Pro (Shopping Mall) #6391,60.52,Transportation
+06/20/2025 09:00:00,Target (Shopping Center),40.42,Groceries
+06/20/2025 10:30:00,Waste Management (Customer Service) #6840,42.89,Utilities
+06/20/2025 16:45:00,Dr. Smith's Office Walk-in Clinic - Prescription Refill #3482,31.28,Health
+06/20/2025 18:30:00,Spotify - Annual Membership - Cinema 16 #7098,23.94,Entertainment
+06/20/2025 22:32:00,Premium Plan - Barnes & Noble #4793,15.11,Entertainment
+06/21/2025 09:15:27,Swift Movers - Plumbing Repair - Home Visit #2374,2417.99,Housing
+06/21/2025 15:30:46,Cable One - Late Fee Waived,306.25,Utilities
+06/21/2025 19:00:00,Walmart - Dairy Products #5271,181.0,Groceries
+06/21/2025 19:15:30,Gas Fill-up - AutoWash Pro,46.8,Transportation
+06/22/2025 09:30:51,Amtrak - Rush Hour Ride #4146,60.28,Transportation
+06/22/2025 11:30:00,Verizon Wireless - Family Plan,194.04,Utilities
+06/22/2025 11:51:00,Health Plus Insurance - Insurance Premium - Main Branch #7333,29.72,Health
+06/22/2025 19:15:00,Lyft - Weekend Trip - Shopping Mall,62.86,Transportation
+06/22/2025 20:00:00,Trader Joe's - Snacks & Beverages - North Branch,50.34,Groceries
+06/22/2025 20:15:00,Whole Foods Market - Snacks & Beverages #7570,60.34,Groceries
+06/23/2025 09:15:47,Software License at Skillshare,177.0,Education
+06/23/2025 13:00:00,Late Night Snack - Local Bistro #9563,44.12,Dining
+06/23/2025 21:30:59,Concert Event - GameStop #8576,30.66,Entertainment
+06/24/2025 08:00:00,Catering at Chipotle #1174,66.24,Dining
+06/24/2025 11:15:00,State Farm Insurance - Monthly Rent #3788,1775.99,Housing
+06/24/2025 11:49:00,Electronics at Target #1710,82.71,Shopping
+06/24/2025 20:30:00,Pizza Palace (Airport),50.06,Dining
+06/25/2025 09:00:19,Office Depot Registrar Office - Library Fine,102.5,Education
+06/25/2025 09:15:00,HOA Assessment - Property Management Co,2061.25,Housing
+06/25/2025 10:15:00,Deep Cleaning at Swift Movers,3084.75,Housing
+06/25/2025 11:22:00,Farm Fresh (North Branch),171.95,Groceries
+06/25/2025 14:00:00,Gift Gallery (Craft Store),86.68,Personal
+06/25/2025 18:00:00,Netflix Gaming Center - Gaming Bundle,18.23,Entertainment
+06/26/2025 08:30:22,Costco Village Square - Weekly Shopping,111.25,Groceries
+06/26/2025 13:30:00,Workshop Central Campus Bookstore - Training Program #2312,304.95,Education
+06/26/2025 19:15:00,HBO Max - Gaming Bundle - Mall Cinema #8818,9.01,Entertainment
+06/26/2025 19:30:00,Barnes & Noble - Gaming Bundle - Cinema 16,64.82,Entertainment
+06/26/2025 20:00:00,Clothing & Accessories at Apple Store,272.99,Shopping
+06/27/2025 11:00:22,Home Depot - Garden Supplies #3304,360.5,Shopping
+06/27/2025 16:15:32,CareNow Clinic (Lab Facility) #6262,128.75,Health
+06/27/2025 17:30:00,Gas Fill-up - Shell Gas,76.67,Transportation
+06/27/2025 18:15:00,Disney+ Gaming Center - Live Performance,182.5,Entertainment
+06/27/2025 19:30:00,Bridge Authority (Downtown),4.53,Transportation
+06/28/2025 10:45:00,Home & Garden - Mortgage Payment,1120.25,Housing
+06/28/2025 14:15:00,Personal Care - Target,143.95,Shopping
+06/28/2025 15:15:00,Textbook Bundle at City Library,1025.95,Education
+06/28/2025 15:18:00,Haircut & Style - Personal Care Plus,107.99,Personal
+06/28/2025 16:30:00,PetSmart Main St Salon - Pet Food & Toys #9246,102.95,Personal
+06/28/2025 21:30:00,Disney+ (Mall Cinema),56.47,Entertainment
+06/29/2025 10:45:20,Safeway Downtown - Frozen Foods,49.0,Groceries
+06/29/2025 14:15:54,Style Cut Salon - Spa Package - Day Spa,215.5,Personal
+06/29/2025 19:00:00,Spotify (Cinema 16),144.95,Entertainment
+06/29/2025 21:24:00,State University Study Group - Textbook Bundle #8617,102.23,Education
+06/30/2025 14:15:00,Wellness Therapy - Monthly Membership,29.79,Health
+06/30/2025 19:15:00,Clothing & Accessories - REI #1952,125.75,Shopping
+07/01/2025 06:15:32,Toll Road - Yellow Cab #3935,11.94,Transportation
+07/01/2025 10:00:00,FitLife Gym - Monthly Membership,51.83,Health
+07/01/2025 11:30:00,Health Plus Insurance - Premium,268.7,Health
+07/01/2025 11:32:27,Late Fee Waived - Comcast Internet #4399,201.5,Utilities
+07/01/2025 14:00:00,Cable One Meter Reading - Emergency Repair,91.68,Utilities
+07/01/2025 14:30:00,City Water Dept - Service Charge,47.55,Utilities
+07/01/2025 14:30:00,Property Management Co - Monthly Rent,1778.22,Housing
+07/01/2025 15:30:00,First National Bank - Mortgage Payment,2211.62,Housing
+07/01/2025 18:00:50,Frozen Foods - Whole Foods Market,171.25,Groceries
+07/01/2025 18:15:00,Personal Care - Bliss Spa #5493,114.5,Personal
+07/01/2025 21:30:31,Concert Event at Ticketmaster #1902,13.94,Entertainment
+07/02/2025 11:15:00,First National Bank - Home Insurance #9346,1356.95,Housing
+07/02/2025 11:45:00,State University (Registrar Office) #5945,248.0,Education
+07/02/2025 15:00:22,Service Upgrade at Verizon Wireless #9839,58.7,Utilities
+07/02/2025 16:30:00,Sports Equipment at Apple Store,340.0,Shopping
+07/02/2025 16:45:29,Best Buy - Electronics,102.95,Shopping
+07/02/2025 20:00:00,Tuition Payment at State University,456.95,Education
+07/03/2025 15:30:00,Netflix - Premium Plan,16.52,Entertainment
+07/03/2025 19:54:00,Spotify Digital Platform - Digital Content #4623,204.95,Entertainment
+07/04/2025 11:15:00,Costco - Organic Produce - Highway 101 #5959,198.75,Groceries
+07/04/2025 15:15:00,Greenwood HOA Residential - Property Tax,688.0,Housing
+07/04/2025 15:30:00,Beauty Products at Gift Gallery,18.87,Personal
+07/04/2025 19:00:31,Fuel & Snacks at Bus Pass #2160,36.32,Transportation
+07/04/2025 19:15:00,GameStop Digital Platform - Premium Plan,56.14,Entertainment
+07/04/2025 20:15:00,Disney+ - Movie Tickets - Arena,31.02,Entertainment
+07/05/2025 10:15:18,Natural Gas Co - Equipment Rental - Meter Reading #3599,96.23,Utilities
+07/05/2025 18:15:00,Walmart - Weekly Shopping - Mall Plaza,125.99,Groceries
+07/05/2025 20:30:42,McDonald's Financial District - Catering,74.16,Dining
+07/05/2025 20:45:00,Amazon Books - Online Course,1422.75,Education
+07/06/2025 08:45:00,Farm Fresh - Weekly Shopping - Mall Plaza,124.99,Groceries
+07/06/2025 13:45:00,McDonald's - Takeout Order,89.39,Dining
+07/06/2025 14:00:06,Cable One - Installation - Field Service #7746,371.0,Utilities
+07/06/2025 14:15:00,Quick Wash Laundry - Pet Food & Toys - Sports Store #2087,46.36,Personal
+07/06/2025 18:15:00,PetSmart Fashion District - Pet Food & Toys,50.93,Personal
+07/06/2025 21:15:00,Local Bistro - Catering - Airport,46.11,Dining
+07/06/2025 22:17:00,Netflix (Store #789) #8275,53.07,Entertainment
+07/07/2025 10:15:00,Dick's Sporting Goods Laundromat - Beauty Products,41.25,Personal
+07/07/2025 11:30:00,Apple Store Online Order - Outdoor Gear #1149,75.48,Shopping
+07/07/2025 19:15:00,REI - Books & Media,50.94,Shopping
+07/08/2025 11:30:00,Comcast Internet - Monthly Plan,83.82,Utilities
+07/08/2025 14:45:00,Textbook Bundle at State University,184.99,Education
+07/08/2025 20:30:00,GameStop - Digital Content - Online,17.67,Entertainment
+07/09/2025 07:45:00,Bridge Authority - Ride to Airport,27.11,Transportation
+07/09/2025 10:15:00,CVS Pharmacy - Insurance Premium,140.99,Health
+07/09/2025 10:52:48,Natural Gas Co - Monthly Bill - Regional Office,191.0,Utilities
+07/09/2025 11:28:00,State University - School Supplies - Main Library,172.25,Education
+07/09/2025 16:45:00,Hobby Lobby Day Spa - Dry Cleaning,36.67,Personal
+07/10/2025 16:15:00,Personal Care Plus Fashion District - Pet Food & Toys,80.04,Personal
+07/10/2025 19:30:00,Nike - Clothing & Accessories - Retail Park #4695,308.75,Shopping
+07/10/2025 19:30:00,AutoWash Pro - Monthly Pass #1584,18.45,Transportation
+07/11/2025 14:00:00,CleanPro Services - HOA Assessment,2311.0,Housing
+07/11/2025 18:44:00,Haircut & Style - Quick Wash Laundry,123.0,Personal
+07/12/2025 13:45:00,Food Truck (Main Square),59.43,Dining
+07/12/2025 14:30:00,Spotify - Family Plan,15.19,Entertainment
+07/12/2025 14:45:58,Style Cut Salon Laundromat - Haircut & Style,103.75,Personal
+07/12/2025 16:30:00,Dick's Sporting Goods Fashion District - Pet Food & Toys,125.0,Personal
+07/12/2025 18:09:12,Dairy Products - Whole Foods Market #3705,40.87,Groceries
+07/12/2025 21:00:00,Monthly Subscription - Ticketmaster,104.99,Entertainment
+07/13/2025 14:00:32,Solar Energy Inc (Installation Team),223.99,Utilities
+07/13/2025 15:45:00,Office Depot Registrar Office - Tuition Payment #7548,1259.99,Education
+07/13/2025 17:45:23,Walmart - Snacks & Beverages - Main St #2851,102.81,Groceries
+07/13/2025 18:26:00,Safeway - Snacks & Beverages,301.0,Groceries
+07/14/2025 09:30:00,Fuel & Snacks at Uber,25.51,Transportation
+07/14/2025 10:15:37,Best Buy - Clothing & Accessories - Online Order,387.75,Shopping
+07/14/2025 11:00:00,Household Items at Local Market,34.27,Groceries
+07/14/2025 13:30:42,State University - Workshop Fee - Learning Center #3919,33.93,Education
+07/14/2025 14:30:56,Duolingo Plus Main Library - Online Course,524.99,Education
+07/15/2025 09:00:00,Property Management Co - Home Insurance,1083.25,Housing
+07/15/2025 11:45:09,Sephora Beauty (Beauty Counter),141.95,Personal
+07/15/2025 14:00:00,Pacific Gas & Electric - Monthly Bill,90.23,Utilities
+07/15/2025 14:15:00,Walmart - Home Improvement - Outlet Center,309.95,Shopping
+07/15/2025 14:30:00,Office Depot Digital Download - Software License,27.65,Education
+07/15/2025 17:45:00,Happy Hour at Corner Café,23.88,Dining
+07/15/2025 18:15:00,Local Market - Fresh Bread #9988,121.75,Groceries
+07/15/2025 20:15:00,Office Depot - Language Learning,177.5,Education
+07/16/2025 11:30:00,PetSmart Beauty Counter - Birthday Gift,61.17,Personal
+07/16/2025 15:00:44,Late Fee Waived at Pacific Gas & Electric,177.99,Utilities
+07/16/2025 18:00:43,Netflix Streaming - Live Performance,120.0,Entertainment
+07/16/2025 20:30:00,Amazon - Books & Media,170.75,Shopping
+07/17/2025 10:30:52,Equipment Rental at Waste Management,361.99,Utilities
+07/17/2025 10:45:00,County Tax Office Apt 4B - Deep Cleaning,1014.0,Housing
+07/17/2025 10:45:19,Personal Care - Amazon,19.58,Shopping
+07/17/2025 19:47:00,City Parking Business District - Round Trip,4.73,Transportation
+07/18/2025 08:00:16,Target (Downtown),91.82,Groceries
+07/18/2025 09:08:00,Blood Work - Vision Center,1094.95,Health
+07/18/2025 15:30:00,Craft Supplies at Personal Care Plus #7757,139.95,Personal
+07/18/2025 15:30:00,IKEA - Books & Media,515.5,Shopping
+07/19/2025 07:15:49,Weekend Trip at Uber,68.16,Transportation
+07/19/2025 10:30:27,Workshop Central - Workshop Fee - Digital Download,192.0,Education
+07/19/2025 14:30:00,Workshop Central (Student Center),109.95,Education
+07/19/2025 17:00:00,Bulk Items - Safeway,169.25,Groceries
+07/20/2025 09:00:00,Bright Dental (Wellness Center),358.75,Health
+07/20/2025 11:30:00,Study Materials - Skillshare,210.95,Education
+07/20/2025 14:59:56,Pet Food & Toys - Bliss Spa,210.95,Personal
+07/21/2025 10:00:00,Annual Contract at ADT Security #7031,143.25,Utilities
+07/21/2025 10:00:00,Gift Gallery - Haircut & Style #1642,108.0,Personal
+07/21/2025 14:30:00,Target (Flagship Store) #6366,134.0,Shopping
+07/21/2025 18:15:00,Hobby Lobby Main St Salon - Haircut & Style,89.11,Personal
+07/21/2025 18:36:00,H&M Fashion (Fashion District),146.0,Personal
+07/21/2025 19:40:00,Panera Bread (Drive-Thru),40.75,Dining
+07/21/2025 20:15:00,Amazon Books (Student Center),1024.0,Education
+07/22/2025 10:00:51,Natural Gas Co Meter Reading - Equipment Rental,55.18,Utilities
+07/22/2025 11:00:00,Verizon Wireless - Family Plan,189.17,Utilities
+07/22/2025 20:45:46,Burger Joint Riverside - Late Night Snack,172.5,Dining
+07/22/2025 21:45:32,Workshop Central (Student Center),181.5,Education
+07/23/2025 17:00:12,Trader Joe's Mall Plaza - Snacks & Beverages #5225,230.95,Groceries
+07/23/2025 18:45:00,Corner Café - Coffee & Pastry,101.0,Dining
+07/23/2025 19:11:00,Uber Airport - Fuel & Snacks,58.56,Transportation
+07/24/2025 09:15:00,Farm Fresh Shopping Center - Dairy Products,174.99,Groceries
+07/24/2025 11:17:00,Dr. Smith's Office - Blood Work - Health Store,795.5,Health
+07/24/2025 14:30:13,Health Plus Insurance Online - Blood Work #1978,24.28,Health
+07/24/2025 18:30:48,Dick's Sporting Goods Personal Care - Workout Gear,15.82,Personal
+07/25/2025 10:54:34,Monthly Rent - Swift Movers #6861,1903.25,Housing
+07/25/2025 16:00:59,Pet Food & Toys at Dick's Sporting Goods,82.51,Personal
+07/25/2025 17:45:00,Lyft (City Center),3.93,Transportation
+07/25/2025 20:00:00,GameStop Gaming Center - Premium Plan #7218,10.6,Entertainment
+07/26/2025 15:30:00,Property Management Co (Apt 4B) #5335,3423.5,Housing
+07/27/2025 14:30:00,Clothing & Accessories - Best Buy,101.95,Shopping
+07/27/2025 18:44:00,Organic Produce - Walmart #6725,97.79,Groceries
+07/27/2025 19:15:03,Electronics at IKEA,89.05,Shopping
+07/28/2025 10:15:10,State Farm Insurance - Home Insurance,1665.99,Housing
+07/28/2025 10:30:00,Birthday Gift - Dick's Sporting Goods,98.54,Personal
+07/28/2025 19:23:00,Target - Personal Care - Super Center #7336,396.99,Shopping
+07/29/2025 09:45:00,Deep Cleaning at State Farm Insurance #6354,3231.0,Housing
+07/29/2025 11:03:00,H&M Fashion - Craft Supplies,144.99,Personal
+07/29/2025 11:30:00,County Tax Office (Community Center),1250.5,Housing
+07/29/2025 14:00:00,Heating Solutions - Late Fee Waived,250.99,Utilities
+07/29/2025 14:45:04,Gift Gallery Gift Shop - Haircut & Style,17.83,Personal
+07/29/2025 21:15:00,Season Pass - Barnes & Noble #8614,14.85,Entertainment
+07/30/2025 08:30:00,Weekend Trip - Bridge Authority,85.39,Transportation
+07/30/2025 11:15:00,Workshop Central Digital Download - Language Learning,31.78,Education
+07/30/2025 13:45:00,Subway (Main Square),71.55,Dining
+07/30/2025 14:15:00,Eye Exam at Dr. Smith's Office,339.99,Health
+07/30/2025 15:10:00,County Tax Office - Plumbing Repair - Community Center,1553.25,Housing
+07/30/2025 19:15:00,Sports Equipment at Target,141.99,Shopping
+07/31/2025 17:00:07,Trader Joe's (North Branch),164.0,Groceries
+07/31/2025 18:30:00,Style Cut Salon - Haircut & Style #8625,95.85,Personal
+08/01/2025 09:00:00,First National Bank - Mortgage Payment,2203.72,Housing
+08/01/2025 09:30:00,FitLife Gym - Monthly Membership,48.78,Health
+08/01/2025 10:00:00,City Water Dept - Service Charge,46.94,Utilities
+08/01/2025 11:15:00,Equipment Rental - Comcast Internet,227.0,Utilities
+08/01/2025 13:00:00,Property Management Co - Monthly Rent,1819.58,Housing
+08/01/2025 15:00:00,Health Plus Insurance - Premium,279.24,Health
+08/01/2025 19:15:00,Target Online Order - Home Improvement,48.07,Shopping
+08/01/2025 22:30:00,Steam - Movie Tickets #2343,30.27,Entertainment
+08/02/2025 08:30:00,Food Truck (Drive-Thru) #7878,48.3,Dining
+08/02/2025 14:00:00,Comcast Internet - Emergency Repair,93.9,Utilities
+08/03/2025 14:00:00,Netflix - Premium Plan,16.16,Entertainment
+08/03/2025 15:20:28,Solar Energy Inc Service Address - Service Upgrade,117.5,Utilities
+08/03/2025 20:45:00,Skillshare (Registrar Office),200.75,Education
+08/03/2025 21:00:00,Takeout Order - Burger Joint,36.66,Dining
+08/04/2025 15:15:04,Comcast Internet - Service Charge,202.95,Utilities
+08/04/2025 15:15:32,Amazon Books - Study Materials #5743,80.79,Education
+08/04/2025 17:34:00,Local Bistro - Coffee & Pastry - Main Square,41.21,Dining
+08/04/2025 21:45:00,Burger Joint Mall - Business Lunch,76.18,Dining
+08/05/2025 16:53:00,Target (Outlet Center) #2836,523.99,Shopping
+08/05/2025 19:31:00,Ticketmaster - Gaming Bundle #2345,14.94,Entertainment
+08/05/2025 19:45:00,Sports Equipment at Macy's #8122,259.95,Shopping
+08/05/2025 20:15:00,Local Market (Village Square) #9997,119.75,Groceries
+08/06/2025 10:00:00,Style Cut Salon (Laundromat),52.38,Personal
+08/06/2025 15:15:00,City Library Mobile App - Software License,100.95,Education
+08/06/2025 15:30:00,Haircut & Style - Dick's Sporting Goods,100.0,Personal
+08/06/2025 17:30:00,Starbucks - Quick Breakfast - Beachside,162.75,Dining
+08/06/2025 18:30:00,Walmart (Westside) #7860,84.22,Groceries
+08/06/2025 21:00:00,Monthly Subscription at HBO Max,15.51,Entertainment
+08/07/2025 11:15:00,Waste Management - Emergency Repair #2899,279.99,Utilities
+08/07/2025 14:00:00,Urgent Care Visit at Health Plus Insurance #6799,496.75,Health
+08/07/2025 18:23:45,GameStop Bookstore Café - Season Pass,27.79,Entertainment
+08/08/2025 09:30:00,Home & Garden - Monthly Rent #1898,1591.25,Housing
+08/08/2025 12:00:00,Comcast Internet - Monthly Plan,82.98,Utilities
+08/08/2025 19:00:52,Movie Tickets at Spotify,194.5,Entertainment
+08/09/2025 14:45:00,Emergency Repair at Pacific Gas & Electric,36.05,Utilities
+08/09/2025 15:15:00,Sports Equipment - Amazon,54.28,Shopping
+08/09/2025 15:15:00,Equipment Rental - Waste Management,440.0,Utilities
+08/09/2025 17:15:12,Meat & Seafood at Whole Foods Market,140.95,Groceries
+08/09/2025 18:45:11,Panera Bread - Lunch Special - Mall,132.0,Dining
+08/09/2025 19:00:00,Style Cut Salon - Dry Cleaning,17.13,Personal
+08/09/2025 20:15:48,Aldi - Bulk Items,158.75,Groceries
+08/10/2025 09:00:00,Health Plus Insurance (Dental Center),68.56,Health
+08/10/2025 09:45:53,Trader Joe's - Frozen Foods - Village Square,124.75,Groceries
+08/10/2025 20:45:28,Frozen Foods at Aldi #9767,48.22,Groceries
+08/11/2025 10:30:00,Wellness Therapy - Therapy Session,264.25,Health
+08/11/2025 16:15:00,Bliss Spa - Spa Package - Main St Salon,96.48,Personal
+08/11/2025 17:00:00,Fuel & Snacks - AutoWash Pro,102.99,Transportation
+08/11/2025 18:51:00,Ride to Airport - Bridge Authority #1244,51.2,Transportation
+08/11/2025 21:30:00,Season Pass at Barnes & Noble,16.53,Entertainment
+08/12/2025 09:29:46,Workshop Fee at Coursera,584.99,Education
+08/12/2025 10:30:00,PetSmart - Dry Cleaning - Pet Center,86.03,Personal
+08/12/2025 10:32:00,Craft Supplies - Dick's Sporting Goods,29.17,Personal
+08/12/2025 13:00:00,City Library (Online Platform),31.68,Education
+08/12/2025 15:00:00,Spotify - Family Plan,15.31,Entertainment
+08/12/2025 17:45:00,Uber Business District - Round Trip #3124,82.37,Transportation
+08/12/2025 18:15:00,Lunch Special at McDonald's,7.29,Dining
+08/12/2025 18:30:49,Aldi (North Branch),121.0,Groceries
+08/13/2025 07:15:00,Metro Transit (Station #42) #5204,11.05,Transportation
+08/13/2025 09:30:00,CleanPro Services - Home Insurance - Residential,1323.25,Housing
+08/13/2025 14:00:00,Health Plus Insurance (Walk-in Clinic) #2033,888.25,Health
+08/13/2025 15:30:00,Pacific Gas & Electric - Installation - Customer Service #8360,213.5,Utilities
+08/14/2025 10:30:00,Costco - Frozen Foods #4777,126.5,Groceries
+08/14/2025 10:45:50,Kitchen Appliances - Walmart #6499,281.75,Shopping
+08/14/2025 14:15:00,PetSmart (Main St Salon),213.0,Personal
+08/14/2025 14:45:00,Sephora Beauty - New Outfit,42.74,Personal
+08/14/2025 14:45:14,Beauty Products at Gift Gallery,18.83,Personal
+08/15/2025 09:19:09,Swift Movers - Plumbing Repair #6809,2471.5,Housing
+08/15/2025 10:30:55,Property Management Co Home Visit - Mortgage Payment,2307.0,Housing
+08/15/2025 11:00:00,Pacific Gas & Electric - Monthly Bill,93.32,Utilities
+08/15/2025 19:15:00,Ride to Airport at AutoWash Pro #2429,68.19,Transportation
+08/15/2025 20:45:25,Annual Membership - Spotify,229.75,Entertainment
+08/16/2025 09:15:00,Greenwood HOA (Home Visit),1693.95,Housing
+08/16/2025 18:30:00,Personal Care at Quick Wash Laundry,111.0,Personal
+08/17/2025 20:45:00,Coursera (Mobile App),337.5,Education
+08/17/2025 21:16:43,Workshop Fee at Coursera,568.99,Education
+08/18/2025 09:50:00,CleanPro Services (Tax Office),1887.5,Housing
+08/18/2025 11:00:20,Swift Movers - Living Room Set,2579.99,Housing
+08/18/2025 18:04:00,AutoWash Pro - Round Trip - Shopping Mall,18.16,Transportation
+08/18/2025 19:15:00,Sephora Beauty Day Spa - Dry Cleaning,152.75,Personal
+08/18/2025 19:55:00,Subway (Mall) #1438,23.51,Dining
+08/18/2025 20:45:00,Skillshare Digital Download - Tuition Payment,542.0,Education
+08/19/2025 10:15:00,Pacific Gas & Electric Regional Office - Seasonal Adjustment,55.03,Utilities
+08/19/2025 10:30:00,Waste Management - Installation,263.0,Utilities
+08/19/2025 11:30:00,Skillshare (Digital Download),783.99,Education
+08/19/2025 15:30:00,Personal Care Plus - New Outfit - Beauty Counter,231.0,Personal
+08/19/2025 15:53:00,Amazon - Home Improvement,650.99,Shopping
+08/19/2025 19:00:00,AutoWash Pro Station #42 - Monthly Pass,18.35,Transportation
+08/20/2025 06:00:33,Amtrak (Garage Level 3),4.5,Transportation
+08/20/2025 14:15:00,Tuition Payment at Workshop Central,431.5,Education
+08/20/2025 14:20:19,Heating Solutions - Installation,55.77,Utilities
+08/20/2025 17:15:00,Target Mall Plaza - Household Items #1216,107.25,Groceries
+08/21/2025 18:45:00,Lyft City Center - Weekend Trip,117.0,Transportation
+08/21/2025 21:15:00,Chipotle (Riverside),24.57,Dining
+08/22/2025 10:30:00,Verizon Wireless - Family Plan,192.04,Utilities

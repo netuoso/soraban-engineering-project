@@ -231,19 +231,20 @@ const Dashboard = () => {
           title="Flagged Transactions"
           count={stats.flagged_count}
           loading={statsLoading}
-          linkTo="/transactions?status=invalid"
+          linkTo="/transactions?status=invalid&exclude_anomalies=true"
           buttonText="Review All"
           buttonClass="btn-warning"
+          description="Manually flagged or rule-based invalid transactions"
         />
 
         <DashboardCard
           title="Transactions with Anomalies"
           count={stats.anomaly_count}
           loading={statsLoading}
-          linkTo="/transactions?status=invalid"
+          linkTo="/transactions?has_anomalies=true"
           buttonText="Review All"
           buttonClass="btn-danger"
-          description="Includes duplicates, unusual amounts, and missing metadata"
+          description="System-detected duplicates, unusual amounts, and missing metadata"
         />
       </div>
 
@@ -263,7 +264,7 @@ const Dashboard = () => {
         title="Recent Flagged Transactions"
         transactions={flaggedTransactions}
         loading={flaggedLoading}
-        viewAllLink="/transactions?status=invalid"
+        viewAllLink="/transactions?status=invalid&exclude_anomalies=true"
         showCategory={true}
       />
 
@@ -271,7 +272,7 @@ const Dashboard = () => {
         title="Recent Transactions with Anomalies"
         transactions={anomalyTransactions}
         loading={anomaliesLoading}
-        viewAllLink="/transactions?status=invalid"
+        viewAllLink="/transactions?has_anomalies=true"
         showAnomalies={true}
       />
 

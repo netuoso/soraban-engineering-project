@@ -1,6 +1,7 @@
 # Soraban Bookkeeping System - Application Architecture & Features
 
 ## Table of Contents
+0. [Demonstration Video](#demonstration-video)
 1. [Application Overview](#application-overview)
 2. [Architecture Design](#architecture-design)
 3. [Performance Optimizations](#performance-optimizations)
@@ -12,6 +13,9 @@
 9. [System Workflows](#system-workflows)
 10. [Technical Achievements](#technical-achievements)
 11. [Screenshots](#screenshots)
+
+## Demonstration Video
+![Demonstration Video](Recordings/Soraban%20Engineering%20Project%20-%20Technical%20Demonstration%20-%20Simple.mp4)
 
 ## Application Overview
 

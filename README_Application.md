@@ -15,7 +15,10 @@
 11. [Screenshots](#screenshots)
 
 ## Demonstration Video
-![Demonstration Video](Recordings/Soraban%20Engineering%20Project%20-%20Technical%20Demonstration%20-%20Simple.mp4)
+
+- ![Demonstration GIF](Recordings/Soraban%20Engineering%20Project%20-%20Technical%20Demonstration%20-%20Simple.gif)
+
+- [Demonstration Video](Recordings/Soraban%20Engineering%20Project%20-%20Technical%20Demonstration%20-%20Simple.mp4)
 
 ## Application Overview
 

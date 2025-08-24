@@ -113,15 +113,24 @@ class Api::V1::TransactionsController < Api::V1::BaseController
 
   def bulk_update
     @transactions = current_user.transactions.where(id: params[:ids])
-    update_params = {}
-    update_params[:status] = params[:status] if params[:status].present?
-    update_params[:category_id] = params[:category_id] if params[:category_id].present?
     
-    if @transactions.update_all(update_params)
+    # Use individual updates to trigger model callbacks for anomaly handling
+    updated_count = 0
+    @transactions.find_each do |transaction|
+      update_params = {}
+      update_params[:status] = params[:status] if params[:status].present?
+      update_params[:category_id] = params[:category_id] if params[:category_id].present?
+      
+      if transaction.update(update_params)
+        updated_count += 1
+      end
+    end
+    
+    if updated_count > 0
       # Explicitly invalidate cache after bulk update
       invalidate_transaction_cache
       
-      Rails.logger.info "Bulk updated #{@transactions.count} transactions for user #{current_user.id}"
+      Rails.logger.info "Bulk updated #{updated_count} transactions for user #{current_user.id}"
       head :no_content
     else
       render json: { error: 'Failed to update transactions' }, status: :unprocessable_entity

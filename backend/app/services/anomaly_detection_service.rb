@@ -59,6 +59,8 @@ class AnomalyDetectionService
     # Check each transaction against historical patterns
     @transactions.each do |transaction|
       next unless transaction.amount.present?
+      # Skip if user has already validated this transaction
+      next if transaction.user_validated?
       
       amount = transaction.amount.abs
       if (amount - mean).abs > 2 * std_dev && std_dev > 0
@@ -89,6 +91,8 @@ class AnomalyDetectionService
     # Mark transactions as anomalous if they're more than 2 standard deviations from the mean
     @transactions.each do |transaction|
       next unless transaction.amount.present?
+      # Skip if user has already validated this transaction
+      next if transaction.user_validated?
       
       amount = transaction.amount.abs
       if (amount - mean).abs > 2 * std_dev && std_dev > 0
@@ -107,6 +111,9 @@ class AnomalyDetectionService
                 .select { |_, group| group.size > 1 }
                 .each do |_, group|
       group.each do |transaction|
+        # Skip if user has already validated this transaction
+        next if transaction.user_validated?
+        
         @anomalies << {
           transaction: transaction,
           type: :duplicate,
@@ -118,6 +125,8 @@ class AnomalyDetectionService
     # Also check against existing transactions in the database
     @transactions.each do |transaction|
       next unless transaction.date.present? && transaction.amount.present? && transaction.description.present?
+      # Skip if user has already validated this transaction
+      next if transaction.user_validated?
       
       existing_similar = @user.transactions
                               .where.not(id: transaction.id)
@@ -143,6 +152,9 @@ class AnomalyDetectionService
     
     transaction_groups.select { |_, group| group.size > 1 }.each do |_, group|
       group.each do |transaction|
+        # Skip if user has already validated this transaction
+        next if transaction.user_validated?
+        
         @anomalies << {
           transaction: transaction,
           type: :duplicate,
@@ -170,6 +182,8 @@ class AnomalyDetectionService
 
     @transactions.each do |transaction|
       next unless transaction.date.present? && transaction.amount.present? && transaction.description.present?
+      # Skip if user has already validated this transaction
+      next if transaction.user_validated?
       
       key = [transaction.date.to_date, transaction.amount, transaction.description.downcase]
       if existing_lookup[key]&.any?
@@ -184,6 +198,9 @@ class AnomalyDetectionService
 
   def detect_incomplete_metadata
     @transactions.each do |transaction|
+      # Skip if user has already validated this transaction
+      next if transaction.user_validated?
+      
       missing_fields = []
       
       missing_fields << 'description' if transaction.description.blank?

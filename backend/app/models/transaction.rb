@@ -7,6 +7,7 @@ class Transaction < ApplicationRecord
   validates :status, presence: true
 
   before_validation :apply_rules
+  before_validation :handle_anomaly_clearing
   before_validation :set_final_status
   after_commit :enqueue_anomaly_detection, on: [:create, :update], unless: :skip_anomaly_detection?
 
@@ -36,6 +37,24 @@ class Transaction < ApplicationRecord
     self.notes = nil if notes.empty?
   end
 
+  def clear_specific_anomaly(type)
+    return unless notes.present?
+    self.notes = notes.gsub(/\[ANOMALY:#{type}\][^\n]*\n?/, '').strip
+    self.notes = nil if notes.empty?
+  end
+
+  def add_user_validation_note
+    # Clear all existing anomalies first
+    clear_anomaly_flags
+    # Add note to prevent future anomaly detection
+    user_note = "[USER_VALIDATED] Transaction explicitly marked as valid by user"
+    self.notes = notes.present? ? "#{notes}\n#{user_note}" : user_note
+  end
+
+  def user_validated?
+    notes.present? && notes.include?('[USER_VALIDATED]')
+  end
+
   private
 
   def apply_rules
@@ -43,6 +62,21 @@ class Transaction < ApplicationRecord
     
     # Apply rules regardless of existing category (rules may update status too)
     RuleApplicationService.apply_rules(self)
+  end
+
+  def handle_anomaly_clearing
+    # If category was added and we had a missing metadata anomaly, clear it
+    if category_id_changed? && category_id.present? && has_anomaly?('incomplete_metadata')
+      # Check if this was specifically about missing category
+      if notes.present? && notes.include?('Missing required fields: category')
+        clear_specific_anomaly('incomplete_metadata')
+      end
+    end
+
+    # If user explicitly marks transaction as valid, clear all anomalies and add user validation note
+    if status_changed? && status == 'valid' && status_was == 'invalid' && notes.present? && notes.include?('[ANOMALY:')
+      add_user_validation_note
+    end
   end
 
   def set_final_status

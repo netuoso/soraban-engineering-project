@@ -7,6 +7,13 @@ echo "🛑 Stopping Soraban Development Environment..."
 # Stop and remove containers
 docker-compose down
 
+# Remove Rails server.pid file if it exists (prevents server start issues)
+PID_FILE="../backend/tmp/pids/server.pid"
+if [ -f "$PID_FILE" ]; then
+	echo "🧹 Removing Rails server.pid file..."
+	rm -f "$PID_FILE"
+fi
+
 echo "✅ All services stopped"
 echo ""
 echo "🔧 Other useful commands:"

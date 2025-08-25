@@ -1,0 +1,78 @@
+.modal-backdrop {
+  display: none;
+}
+
+.modal {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.transaction-form .input-group-text {
+  min-width: 100px;
+}
+
+/* DatePicker customizations */
+.react-datepicker-wrapper {
+  display: block;
+}
+
+.react-datepicker__input-container .form-control {
+  background-color: #fff;
+}
+
+/* Table customizations */
+.table th {
+  background-color: #f8f9fa;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Anomaly highlighting */
+.transaction-row-invalid {
+  background-color: #f8d7da !important;
+  border-left: 4px solid #dc3545;
+}
+
+.transaction-row-duplicate {
+  background-color: #fff3cd !important;
+  border-left: 4px solid #ffc107;
+}
+
+.transaction-row-amount-anomaly {
+  background-color: #d1ecf1 !important;
+  border-left: 4px solid #17a2b8;
+}
+
+.transaction-row-incomplete {
+  background-color: #e2e3e5 !important;
+  border-left: 4px solid #6c757d;
+}
+
+/* Ensure hover states work with anomaly styles */
+.transaction-row-invalid:hover {
+  background-color: #f5c6cb !important;
+}
+
+.transaction-row-duplicate:hover {
+  background-color: #ffeaa7 !important;
+}
+
+.transaction-row-amount-anomaly:hover {
+  background-color: #bee5eb !important;
+}
+
+.transaction-row-incomplete:hover {
+  background-color: #d6d8db !important;
+}
+
+/* Add a subtle animation for newly detected anomalies */
+@keyframes anomaly-highlight {
+  0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+}
+
+.transaction-row-invalid {
+  animation: anomaly-highlight 2s ease-out;
+}

@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2025-08-20 16:27:11
+  amount: 9.99
+  description: MyString
+  status: MyString
+  category: one
+  user: one
+
+two:
+  date: 2025-08-20 16:27:11
+  amount: 9.99
+  description: MyString
+  status: MyString
+  category: two
+  user: two

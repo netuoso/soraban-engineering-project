@@ -71,7 +71,11 @@ const TransactionForm = ({ onSuccess, onCancel }) => {
       };
 
       await createTransaction(transaction);
-      onSuccess();
+      
+      // Wait for the success callback to complete (in case it does async operations)
+      if (onSuccess) {
+        await onSuccess();
+      }
     } catch (err) {
       setError(err.message);
     } finally {

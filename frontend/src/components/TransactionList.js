@@ -115,10 +115,10 @@ const TransactionList = () => {
   };
 
   // Optimized data fetching functions
-  const fetchTransactions = useCallback(async (showLoading = true) => {
+  const fetchTransactions = useCallback(async (showLoading = true, bustCache = false) => {
     try {
       if (showLoading) setTransactionsLoading(true);
-      const response = await getTransactions(filters);
+      const response = await getTransactions(filters, bustCache);
       setData(response.data || []);
       setPagination({
         currentPage: response.meta?.current_page || 1,
@@ -545,7 +545,7 @@ const TransactionList = () => {
       
       // Refresh data to ensure UI is in sync with backend
       await Promise.all([
-        fetchTransactions(), 
+        fetchTransactions(false, true), // Use cache busting
         fetchCategoryTotals()
       ]);
       
@@ -573,7 +573,7 @@ const TransactionList = () => {
       
       // Refresh data to ensure UI is in sync with backend
       await Promise.all([
-        fetchTransactions(), 
+        fetchTransactions(false, true), // Use cache busting
         fetchCategoryTotals()
       ]);
       
@@ -597,7 +597,7 @@ const TransactionList = () => {
       
       // Refresh data to ensure UI is in sync with backend
       await Promise.all([
-        fetchTransactions(), 
+        fetchTransactions(false, true), // Use cache busting
         fetchCategoryTotals()
       ]);
       
@@ -622,7 +622,7 @@ const TransactionList = () => {
       
       // Refresh data to ensure UI is in sync with backend
       await Promise.all([
-        fetchTransactions(), 
+        fetchTransactions(false, true), // Use cache busting
         fetchCategoryTotals()
       ]);
       
@@ -647,7 +647,7 @@ const TransactionList = () => {
       
       // Refresh data to ensure UI is in sync with backend
       await Promise.all([
-        fetchTransactions(), 
+        fetchTransactions(false, true), // Use cache busting
         fetchCategoryTotals()
       ]);
       
@@ -764,12 +764,19 @@ const TransactionList = () => {
         <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
           <div className="modal-dialog">
             <TransactionForm
-              onSuccess={() => {
+              onSuccess={async () => {
+                // Close modal first to provide immediate feedback
                 setShowTransactionForm(false);
-                fetchTransactions();
-                fetchCategories();
-                fetchStatuses();
-                fetchCategoryTotals(); // Refresh category totals for pie chart
+                
+                // Force immediate refresh of transactions with cache busting
+                await fetchTransactions(false, true);
+                
+                // Then refresh other data in parallel
+                await Promise.all([
+                  fetchCategories(),
+                  fetchStatuses(),
+                  fetchCategoryTotals()
+                ]);
               }}
               onCancel={() => setShowTransactionForm(false)}
             />

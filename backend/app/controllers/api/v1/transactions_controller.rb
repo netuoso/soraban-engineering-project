@@ -4,35 +4,24 @@ class Api::V1::TransactionsController < Api::V1::BaseController
   before_action :set_transaction, only: [:show, :update, :destroy, :categorize]
 
   def index
-    # Create cache key based on current filters and user's transaction updates
-    cache_key = "user_#{current_user.id}_transactions_#{cache_key_suffix}"
-    
-    # Cache for 1 minute for frequently accessed data
-    cached_result = Rails.cache.fetch(cache_key, expires_in: 1.minute) do
-      # Get basic transaction data with minimal includes
-      @transactions = current_user.transactions
-                                .includes(:category, :user_status)
-                                .order(date: :desc)
-                                .page(params[:page] || 1)
-                                .per(params[:per_page] || 20)
-
-      # Apply filters
-      apply_filters
-
-      # Serialize data
-      {
-        data: @transactions.map { |t| serialize_transaction_light(t) },
-        meta: {
-          total_pages: @transactions.total_pages,
-          total_count: @transactions.total_count,
-          current_page: @transactions.current_page
-        }
-      }
+    # Bypass cache if _bust parameter is present
+    if params[:_bust].present?
+      Rails.logger.debug "Cache busting requested for user #{current_user.id}"
+      result = fetch_transactions_data
+      render json: result
+    else
+      # Create cache key based on current filters and user's transaction updates
+      cache_key = "user_#{current_user.id}_transactions_#{cache_key_suffix}"
+      
+      # Cache for 1 minute for frequently accessed data
+      cached_result = Rails.cache.fetch(cache_key, expires_in: 1.minute) do
+        fetch_transactions_data
+      end
+      
+      # Set cache headers
+      expires_in 30.seconds, public: false
+      render json: cached_result
     end
-
-    # Set cache headers
-    expires_in 30.seconds, public: false
-    render json: cached_result
   end
 
   def category_totals
@@ -140,9 +129,33 @@ class Api::V1::TransactionsController < Api::V1::BaseController
 
   private
 
+  def fetch_transactions_data
+    # Get basic transaction data with minimal includes
+    @transactions = current_user.transactions
+                              .includes(:category, :user_status)
+                              .order(date: :desc)
+                              .page(params[:page] || 1)
+                              .per(params[:per_page] || 20)
+
+    # Apply filters
+    apply_filters
+
+    # Serialize data
+    {
+      data: @transactions.map { |t| serialize_transaction_light(t) },
+      meta: {
+        total_pages: @transactions.total_pages,
+        total_count: @transactions.total_count,
+        current_page: @transactions.current_page
+      }
+    }
+  end
+
   def invalidate_transaction_cache
+    # Delete all cache patterns for this user
     Rails.cache.delete_matched("user_#{current_user.id}_transactions_*")
     Rails.cache.delete_matched("user_#{current_user.id}_category_totals_*")
+    
     Rails.logger.debug "Invalidated transaction and category totals cache for user #{current_user.id}"
   end
 

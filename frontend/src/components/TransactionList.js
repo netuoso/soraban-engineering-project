@@ -21,6 +21,7 @@ import {
 import { getCategories } from '../services/categories';
 import TransactionForm from './TransactionForm';
 import BulkCategorySelect from './BulkCategorySelect';
+import BulkStatusSelect from './BulkStatusSelect';
 import CategorySelect from './CategorySelect';
 import { EditableText, EditableNumber } from './EditableFields';
 import { TableSkeleton, FiltersSkeleton, ChartSkeleton } from './LoadingSkeletons';
@@ -64,6 +65,7 @@ const TransactionList = () => {
   
   const [showTransactionForm, setShowTransactionForm] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [showStatusModal, setShowStatusModal] = useState(false);
   const [selectedRows, setSelectedRows] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
   const [editingCell, setEditingCell] = useState({ rowId: null, field: null });
@@ -303,17 +305,21 @@ const TransactionList = () => {
     {
       id: 'status',
       header: 'Status',
-      accessorKey: 'attributes.status',
+      accessorKey: 'attributes.status_name',
       cell: info => {
-        const status = info.getValue();
+        const statusName = info.getValue();
         const transaction = info.row.original;
         const anomalyTypes = getAnomalyTypes(transaction);
         
         return (
           <div className="d-flex flex-column align-items-start gap-1">
-            <span className={`badge bg-${status === 'valid' ? 'success' : 'danger'}`}>
-              {status}
-            </span>
+            {statusName ? (
+              <span className={`badge bg-secondary`}>
+                {statusName}
+              </span>
+            ) : (
+              <span className="badge bg-light text-dark">No Status</span>
+            )}
             {anomalyTypes.length > 0 && (
               <div className="d-flex flex-wrap gap-1">
                 {anomalyTypes.map((type, index) => (
@@ -549,7 +555,7 @@ const TransactionList = () => {
     }
   };
 
-  const handleBulkCategoryUpdate = async (categoryId) => {
+    const handleBulkCategoryUpdate = async (categoryId) => {
     try {
       setIsProcessing(true);
       const selectedIds = Object.keys(selectedRows).map(index => data[index].id);
@@ -559,6 +565,31 @@ const TransactionList = () => {
       
       // Close modal and clear selections immediately
       setShowCategoryModal(false);
+      setSelectedRows({});
+      
+      // Refresh data to ensure UI is in sync with backend
+      await Promise.all([
+        fetchTransactions(), 
+        fetchCategoryTotals()
+      ]);
+      
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleBulkStatusSelect = async (statusId) => {
+    try {
+      setIsProcessing(true);
+      const selectedIds = Object.keys(selectedRows).map(index => data[index].id);
+      
+      // Perform bulk status update with status_id
+      await bulkUpdateTransactions(selectedIds, { status_id: statusId });
+      
+      // Close modal and clear selections immediately
+      setShowStatusModal(false);
       setSelectedRows({});
       
       // Refresh data to ensure UI is in sync with backend
@@ -649,6 +680,32 @@ const TransactionList = () => {
         </div>
       )}
 
+      {/* Status Modal */}
+      {showStatusModal && (
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Set Status for Selected Transactions</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowStatusModal(false)}
+                  disabled={isProcessing}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <BulkStatusSelect
+                  onSelect={handleBulkStatusSelect}
+                  onCancel={() => setShowStatusModal(false)}
+                  disabled={isProcessing}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Transaction Form Modal */}
       {showTransactionForm && (
         <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
@@ -716,6 +773,14 @@ const TransactionList = () => {
             >
               <i className="fas fa-tag me-1"></i>
               Set Category
+            </button>
+            <button
+              className="btn btn-secondary btn-sm me-2"
+              onClick={() => setShowStatusModal(true)}
+              disabled={isProcessing}
+            >
+              <i className="fas fa-flag me-1"></i>
+              Set Status
             </button>
             <button
               className="btn btn-danger btn-sm"

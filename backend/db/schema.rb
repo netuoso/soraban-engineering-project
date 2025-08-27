@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_22_184523) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_27_213343) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -65,6 +65,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_22_184523) do
     t.index ["user_id"], name: "index_rules_on_user_id"
   end
 
+  create_table "statuses", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "name"], name: "index_statuses_on_user_id_and_name", unique: true
+    t.index ["user_id"], name: "index_statuses_on_user_id"
+  end
+
   create_table "transactions", force: :cascade do |t|
     t.datetime "date"
     t.decimal "amount"
@@ -75,8 +84,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_22_184523) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "notes"
+    t.bigint "status_id"
     t.index ["category_id"], name: "index_transactions_on_category_id"
     t.index ["description"], name: "index_transactions_on_description"
+    t.index ["status_id"], name: "index_transactions_on_status_id"
     t.index ["user_id", "category_id"], name: "index_transactions_on_user_id_and_category_id"
     t.index ["user_id", "created_at"], name: "index_transactions_for_historical_analysis"
     t.index ["user_id", "date", "amount", "description"], name: "index_transactions_for_duplicate_detection"
@@ -103,6 +114,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_22_184523) do
   add_foreign_key "categories", "users"
   add_foreign_key "rules", "categories"
   add_foreign_key "rules", "users"
+  add_foreign_key "statuses", "users"
   add_foreign_key "transactions", "categories"
+  add_foreign_key "transactions", "statuses"
   add_foreign_key "transactions", "users"
 end

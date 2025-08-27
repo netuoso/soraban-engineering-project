@@ -6,6 +6,7 @@ class User < ApplicationRecord
          :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 
   has_many :categories, dependent: :destroy
+  has_many :statuses, dependent: :destroy
   has_many :transactions, dependent: :destroy
   has_many :rules, dependent: :destroy
   has_many :bulk_imports, dependent: :destroy

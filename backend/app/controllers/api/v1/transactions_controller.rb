@@ -11,7 +11,7 @@ class Api::V1::TransactionsController < Api::V1::BaseController
     cached_result = Rails.cache.fetch(cache_key, expires_in: 1.minute) do
       # Get basic transaction data with minimal includes
       @transactions = current_user.transactions
-                                .includes(:category)
+                                .includes(:category, :status)
                                 .order(date: :desc)
                                 .page(params[:page] || 1)
                                 .per(params[:per_page] || 20)
@@ -165,17 +165,28 @@ class Api::V1::TransactionsController < Api::V1::BaseController
         notes: transaction.notes,
         formatted_datetime: transaction.date.iso8601,
         category_name: transaction.category&.name,
+        status_name: transaction.status&.name,
         created_at: transaction.created_at,
         updated_at: transaction.updated_at
       },
-      relationships: transaction.category ? {
-        category: {
-          data: {
-            id: transaction.category.id.to_s,
-            type: 'category'
+      relationships: {}.tap do |rels|
+        if transaction.category
+          rels[:category] = {
+            data: {
+              id: transaction.category.id.to_s,
+              type: 'category'
+            }
           }
-        }
-      } : {}
+        end
+        if transaction.status
+          rels[:status] = {
+            data: {
+              id: transaction.status.id.to_s,
+              type: 'status'
+            }
+          }
+        end
+      end
     }
   end
 
@@ -220,6 +231,6 @@ class Api::V1::TransactionsController < Api::V1::BaseController
   end
 
   def transaction_params
-    params.require(:transaction).permit(:date, :amount, :description, :category_id, :notes)
+    params.require(:transaction).permit(:date, :amount, :description, :category_id, :status_id, :notes)
   end
 end

@@ -19,8 +19,10 @@ import {
   updateTransaction
 } from '../services/transactions';
 import { getCategories } from '../services/categories';
+import { getStatuses } from '../services/statuses';
 import TransactionForm from './TransactionForm';
 import BulkCategorySelect from './BulkCategorySelect';
+import BulkStatusSelect from './BulkStatusSelect';
 import CategorySelect from './CategorySelect';
 import { EditableText, EditableNumber } from './EditableFields';
 import { TableSkeleton, FiltersSkeleton, ChartSkeleton } from './LoadingSkeletons';
@@ -33,6 +35,7 @@ const TransactionList = () => {
   // Separate loading states for progressive loading
   const [transactionsLoading, setTransactionsLoading] = useState(true);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [statusesLoading, setStatusesLoading] = useState(true);
   const [categoryTotalsLoading, setCategoryTotalsLoading] = useState(true);
   
   // Data states
@@ -40,6 +43,7 @@ const TransactionList = () => {
   const [sorting, setSorting] = useState([]);
   const [categoryTotals, setCategoryTotals] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [statuses, setStatuses] = useState([]);
   const [error, setError] = useState(null);
   
   // Get URL search params
@@ -48,6 +52,7 @@ const TransactionList = () => {
     startDate: null,
     endDate: null,
     status: searchParams.get('status') || '',
+    status_id: searchParams.get('status_id') || '',
     search: searchParams.get('search') || '',
     category: searchParams.has('category') ? searchParams.get('category') : undefined,
     page: parseInt(searchParams.get('page')) || 1,
@@ -64,6 +69,7 @@ const TransactionList = () => {
   
   const [showTransactionForm, setShowTransactionForm] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [showStatusModal, setShowStatusModal] = useState(false);
   const [selectedRows, setSelectedRows] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
   const [editingCell, setEditingCell] = useState({ rowId: null, field: null });
@@ -109,10 +115,10 @@ const TransactionList = () => {
   };
 
   // Optimized data fetching functions
-  const fetchTransactions = useCallback(async (showLoading = true) => {
+  const fetchTransactions = useCallback(async (showLoading = true, bustCache = false) => {
     try {
       if (showLoading) setTransactionsLoading(true);
-      const response = await getTransactions(filters);
+      const response = await getTransactions(filters, bustCache);
       setData(response.data || []);
       setPagination({
         currentPage: response.meta?.current_page || 1,
@@ -140,6 +146,17 @@ const TransactionList = () => {
     }
   }, []);
 
+  const fetchStatuses = useCallback(async () => {
+    try {
+      const response = await getStatuses();
+      setStatuses(response.data || []);
+      setStatusesLoading(false);
+    } catch (err) {
+      console.error('Statuses fetch error:', err);
+      setStatusesLoading(false);
+    }
+  }, []);
+
   const fetchCategoryTotals = useCallback(async () => {
     try {
       const response = await getCategoryTotals();
@@ -160,8 +177,9 @@ const TransactionList = () => {
     // Start all requests in parallel
     fetchTransactions();
     fetchCategories();
+    fetchStatuses();
     fetchCategoryTotals();
-  }, [fetchTransactions, fetchCategories, fetchCategoryTotals]);
+  }, [fetchTransactions, fetchCategories, fetchStatuses, fetchCategoryTotals]);
 
   // Function to clear all filters and refresh data
   const clearAllFilters = useCallback(async () => {
@@ -169,6 +187,7 @@ const TransactionList = () => {
       startDate: null,
       endDate: null,
       status: '',
+      status_id: '',
       search: '',
       category: undefined,
       page: 1,
@@ -303,17 +322,44 @@ const TransactionList = () => {
     {
       id: 'status',
       header: 'Status',
-      accessorKey: 'attributes.status',
+      accessorKey: 'attributes.status_name',
       cell: info => {
-        const status = info.getValue();
+        const customStatusName = info.getValue();
         const transaction = info.row.original;
+        const systemStatus = transaction.attributes?.status;
         const anomalyTypes = getAnomalyTypes(transaction);
+        
+        // Helper function to get system status badge styling
+        const getSystemStatusBadge = (status) => {
+          switch (status) {
+            case 'valid':
+              return { class: 'bg-success', text: 'Valid' };
+            case 'invalid':
+              return { class: 'bg-danger', text: 'Invalid' };
+            case 'custom':
+              return { class: 'bg-info', text: 'Custom' };
+            default:
+              return { class: 'bg-secondary', text: status || 'Unknown' };
+          }
+        };
+        
+        const systemBadge = getSystemStatusBadge(systemStatus);
         
         return (
           <div className="d-flex flex-column align-items-start gap-1">
-            <span className={`badge bg-${status === 'valid' ? 'success' : 'danger'}`}>
-              {status}
+            {/* System Status - Always displayed */}
+            <span className={`badge ${systemBadge.class}`}>
+              {systemBadge.text}
             </span>
+            
+            {/* Custom Status - Show when present */}
+            {customStatusName && (
+              <span className="badge bg-secondary">
+                {customStatusName}
+              </span>
+            )}
+            
+            {/* Anomaly badges */}
             {anomalyTypes.length > 0 && (
               <div className="d-flex flex-wrap gap-1">
                 {anomalyTypes.map((type, index) => (
@@ -418,21 +464,34 @@ const TransactionList = () => {
         ...newFilters,
         has_anomalies: true,
         exclude_anomalies: false,
-        status: ''
+        status: '',
+        status_id: ''
       };
     } else if (value === 'flagged_only') {
       newFilters = {
         ...newFilters,
         exclude_anomalies: true,
         has_anomalies: false,
-        status: 'invalid'
+        status: 'invalid',
+        status_id: ''
+      };
+    } else if (value.startsWith('status_')) {
+      // Custom status filter
+      const statusId = value.replace('status_', '');
+      newFilters = {
+        ...newFilters,
+        has_anomalies: false,
+        exclude_anomalies: false,
+        status: value, // Keep the full value for UI state only
+        status_id: statusId // Send the ID to backend
       };
     } else {
       newFilters = {
         ...newFilters,
         has_anomalies: false,
         exclude_anomalies: false,
-        status: value
+        status: value,
+        status_id: '' // Clear status_id when using system status
       };
     }
     
@@ -486,7 +545,7 @@ const TransactionList = () => {
       
       // Refresh data to ensure UI is in sync with backend
       await Promise.all([
-        fetchTransactions(), 
+        fetchTransactions(false, true), // Use cache busting
         fetchCategoryTotals()
       ]);
       
@@ -514,7 +573,7 @@ const TransactionList = () => {
       
       // Refresh data to ensure UI is in sync with backend
       await Promise.all([
-        fetchTransactions(), 
+        fetchTransactions(false, true), // Use cache busting
         fetchCategoryTotals()
       ]);
       
@@ -538,7 +597,7 @@ const TransactionList = () => {
       
       // Refresh data to ensure UI is in sync with backend
       await Promise.all([
-        fetchTransactions(), 
+        fetchTransactions(false, true), // Use cache busting
         fetchCategoryTotals()
       ]);
       
@@ -549,7 +608,7 @@ const TransactionList = () => {
     }
   };
 
-  const handleBulkCategoryUpdate = async (categoryId) => {
+    const handleBulkCategoryUpdate = async (categoryId) => {
     try {
       setIsProcessing(true);
       const selectedIds = Object.keys(selectedRows).map(index => data[index].id);
@@ -563,7 +622,32 @@ const TransactionList = () => {
       
       // Refresh data to ensure UI is in sync with backend
       await Promise.all([
-        fetchTransactions(), 
+        fetchTransactions(false, true), // Use cache busting
+        fetchCategoryTotals()
+      ]);
+      
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleBulkStatusSelect = async (statusId) => {
+    try {
+      setIsProcessing(true);
+      const selectedIds = Object.keys(selectedRows).map(index => data[index].id);
+      
+      // Perform bulk status update with status_id
+      await bulkUpdateTransactions(selectedIds, { status_id: statusId });
+      
+      // Close modal and clear selections immediately
+      setShowStatusModal(false);
+      setSelectedRows({});
+      
+      // Refresh data to ensure UI is in sync with backend
+      await Promise.all([
+        fetchTransactions(false, true), // Use cache busting
         fetchCategoryTotals()
       ]);
       
@@ -649,16 +733,50 @@ const TransactionList = () => {
         </div>
       )}
 
+      {/* Status Modal */}
+      {showStatusModal && (
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Set Status for Selected Transactions</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowStatusModal(false)}
+                  disabled={isProcessing}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <BulkStatusSelect
+                  onSelect={handleBulkStatusSelect}
+                  onCancel={() => setShowStatusModal(false)}
+                  disabled={isProcessing}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Transaction Form Modal */}
       {showTransactionForm && (
         <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
           <div className="modal-dialog">
             <TransactionForm
-              onSuccess={() => {
+              onSuccess={async () => {
+                // Close modal first to provide immediate feedback
                 setShowTransactionForm(false);
-                fetchTransactions();
-                fetchCategories();
-                fetchCategoryTotals(); // Refresh category totals for pie chart
+                
+                // Force immediate refresh of transactions with cache busting
+                await fetchTransactions(false, true);
+                
+                // Then refresh other data in parallel
+                await Promise.all([
+                  fetchCategories(),
+                  fetchStatuses(),
+                  fetchCategoryTotals()
+                ]);
               }}
               onCancel={() => setShowTransactionForm(false)}
             />
@@ -718,6 +836,14 @@ const TransactionList = () => {
               Set Category
             </button>
             <button
+              className="btn btn-secondary btn-sm me-2"
+              onClick={() => setShowStatusModal(true)}
+              disabled={isProcessing}
+            >
+              <i className="fas fa-flag me-1"></i>
+              Set Status
+            </button>
+            <button
               className="btn btn-danger btn-sm"
               onClick={handleBulkDelete}
               disabled={isProcessing}
@@ -730,7 +856,7 @@ const TransactionList = () => {
       )}
 
       {/* Filters */}
-      {categoriesLoading ? (
+      {(categoriesLoading || statusesLoading) ? (
         <FiltersSkeleton />
       ) : (
         <div className="card mb-4">
@@ -738,7 +864,7 @@ const TransactionList = () => {
             <div className="row g-3">
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h6 className="mb-0">Filters</h6>
-                {(filters.startDate || filters.endDate || filters.status || filters.search || filters.category || filters.exclude_anomalies || filters.has_anomalies) && (
+                {(filters.startDate || filters.endDate || filters.status || filters.status_id || filters.search || filters.category || filters.exclude_anomalies || filters.has_anomalies) && (
                   <button
                     className="btn btn-outline-secondary btn-sm"
                     onClick={clearAllFilters}
@@ -778,11 +904,25 @@ const TransactionList = () => {
                   onChange={e => handleStatusFilterChange(e.target.value)}
                 >
                   <option value="">All</option>
-                  <option value="valid">Valid</option>
-                  <option value="invalid">Invalid (All)</option>
-                  <option value="flagged_only">Flagged (Manual/Rules)</option>
-                  <option value="anomalies">Anomalies (System Detected)</option>
-                  <option value="high_value">High Value</option>
+                  <optgroup label="System Status">
+                    <option value="valid">Valid</option>
+                    <option value="invalid">Invalid (All)</option>
+                    <option value="flagged_only">Flagged (Manual/Rules)</option>
+                    <option value="anomalies">Anomalies (System Detected)</option>
+                    <option value="high_value">High Value</option>
+                  </optgroup>
+                  {statuses.length > 0 && (
+                    <optgroup label="Custom Status">
+                      {statuses.map(status => (
+                        <option 
+                          key={`status_${status.id}`} 
+                          value={`status_${status.id}`}
+                        >
+                          {status.attributes?.name || 'Unnamed Status'}
+                        </option>
+                      ))}
+                    </optgroup>
+                  )}
                 </select>
               </div>
               <div className="col-md-3">

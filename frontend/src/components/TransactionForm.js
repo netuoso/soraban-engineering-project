@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import { createTransaction } from '../services/transactions';
 import { getCategories } from '../services/categories';
+import { getStatuses } from '../services/statuses';
 import CategorySelect from './CategorySelect';
+import StatusSelect from './StatusSelect';
 
 const TransactionForm = ({ onSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -10,27 +12,35 @@ const TransactionForm = ({ onSuccess, onCancel }) => {
     description: '',
     amount: '',
     category_id: '',
+    status_id: '',
     notes: ''
   });
   const [categories, setCategories] = useState([]);
+  const [statuses, setStatuses] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [statusesLoading, setStatusesLoading] = useState(true);
 
-  // Fetch categories when component mounts
+  // Fetch categories and statuses when component mounts
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchData = async () => {
       try {
-        const response = await getCategories();
-        setCategories(response?.data || []);
+        const [categoriesResponse, statusesResponse] = await Promise.all([
+          getCategories(),
+          getStatuses()
+        ]);
+        setCategories(categoriesResponse?.data || []);
+        setStatuses(statusesResponse?.data || []);
       } catch (err) {
         setError(err.message);
       } finally {
         setCategoriesLoading(false);
+        setStatusesLoading(false);
       }
     };
 
-    fetchCategories();
+    fetchData();
   }, []);
 
   const handleChange = (e) => {
@@ -61,7 +71,11 @@ const TransactionForm = ({ onSuccess, onCancel }) => {
       };
 
       await createTransaction(transaction);
-      onSuccess();
+      
+      // Wait for the success callback to complete (in case it does async operations)
+      if (onSuccess) {
+        await onSuccess();
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -140,6 +154,23 @@ const TransactionForm = ({ onSuccess, onCancel }) => {
             />
             {categoriesLoading && (
               <div className="text-muted small mt-1">Loading categories...</div>
+            )}
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Status</label>
+            <StatusSelect
+              value={formData.status_id}
+              onChange={(value) => handleChange({ target: { name: 'status_id', value } })}
+              onError={(errorMessage) => setError(errorMessage)}
+              statuses={statuses}
+              onStatusCreated={(newStatus) => {
+                setStatuses(prev => [...prev, newStatus]);
+              }}
+              disabled={statusesLoading}
+            />
+            {statusesLoading && (
+              <div className="text-muted small mt-1">Loading statuses...</div>
             )}
           </div>
 

@@ -20,7 +20,7 @@ class AnomalyDetectionJob < ApplicationJob
     end
 
     # Update status based on anomalies and validation rules
-    transaction.send(:set_status)
+    transaction.send(:set_final_status)
     
     # Skip anomaly detection callback when saving to prevent infinite loop
     transaction.skip_anomaly_detection = true
@@ -43,7 +43,7 @@ class AnomalyDetectionJob < ApplicationJob
 
     # Update statuses and save
     transactions.each do |transaction|
-      transaction.send(:set_status)
+      transaction.send(:set_final_status)
       transaction.skip_anomaly_detection = true
       transaction.save!(validate: false)
     end

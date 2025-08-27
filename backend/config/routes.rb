@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       end
       
       resources :categories
+      resources :statuses
       resources :rules
       
       # Bulk import routes

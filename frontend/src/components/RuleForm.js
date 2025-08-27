@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { getCategories } from '../services/categories';
+import { getStatuses } from '../services/statuses';
 import CategorySelect from './CategorySelect';
+import StatusSelect from './StatusSelect';
 
 const RuleForm = ({ rule, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -9,18 +11,24 @@ const RuleForm = ({ rule, onSubmit, onCancel }) => {
     action_type: 'set_category',
     action_value: '',
     category_id: '',
+    status_id: '',
     order: ''
   });
   const [categories, setCategories] = useState([]);
+  const [statuses, setStatuses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch categories on component mount
+  // Fetch categories and statuses on component mount
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchData = async () => {
       try {
-        const response = await getCategories();
-        setCategories(response?.data || []);
+        const [categoriesResponse, statusesResponse] = await Promise.all([
+          getCategories(),
+          getStatuses()
+        ]);
+        setCategories(categoriesResponse?.data || []);
+        setStatuses(statusesResponse?.data || []);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -28,7 +36,7 @@ const RuleForm = ({ rule, onSubmit, onCancel }) => {
       }
     };
 
-    fetchCategories();
+    fetchData();
   }, []);
 
   // Set initial form data if editing a rule
@@ -40,6 +48,7 @@ const RuleForm = ({ rule, onSubmit, onCancel }) => {
         action_type: rule.attributes.action_type,
         action_value: rule.attributes.action_value,
         category_id: rule.relationships?.category?.data?.id || '',
+        status_id: rule.relationships?.status?.data?.id || '',
         order: rule.attributes.order || ''
       });
     }
@@ -50,6 +59,14 @@ const RuleForm = ({ rule, onSubmit, onCancel }) => {
       ...prev,
       category_id: categoryId,
       action_value: categoryId
+    }));
+  };
+
+  const handleStatusChange = (statusId) => {
+    setFormData(prev => ({
+      ...prev,
+      status_id: statusId,
+      action_value: statusId
     }));
   };
 
@@ -134,16 +151,15 @@ const RuleForm = ({ rule, onSubmit, onCancel }) => {
             }}
           />
         ) : (
-          <select
-            className="form-select"
-            value={formData.action_value}
-            onChange={(e) => setFormData(prev => ({ ...prev, action_value: e.target.value }))}
-          >
-            <option value="">Select a status...</option>
-            <option value="valid">Valid</option>
-            <option value="invalid">Invalid</option>
-            <option value="high_value">High Value</option>
-          </select>
+          <StatusSelect
+            value={formData.status_id}
+            onChange={handleStatusChange}
+            statuses={statuses}
+            onStatusCreated={(newStatus) => {
+              setStatuses(prev => [...prev, newStatus]);
+              handleStatusChange(newStatus.id);
+            }}
+          />
         )}
       </div>
 

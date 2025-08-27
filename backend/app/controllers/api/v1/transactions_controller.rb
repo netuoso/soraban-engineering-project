@@ -4,35 +4,24 @@ class Api::V1::TransactionsController < Api::V1::BaseController
   before_action :set_transaction, only: [:show, :update, :destroy, :categorize]
 
   def index
-    # Create cache key based on current filters and user's transaction updates
-    cache_key = "user_#{current_user.id}_transactions_#{cache_key_suffix}"
-    
-    # Cache for 1 minute for frequently accessed data
-    cached_result = Rails.cache.fetch(cache_key, expires_in: 1.minute) do
-      # Get basic transaction data with minimal includes
-      @transactions = current_user.transactions
-                                .includes(:category)
-                                .order(date: :desc)
-                                .page(params[:page] || 1)
-                                .per(params[:per_page] || 20)
-
-      # Apply filters
-      apply_filters
-
-      # Serialize data
-      {
-        data: @transactions.map { |t| serialize_transaction_light(t) },
-        meta: {
-          total_pages: @transactions.total_pages,
-          total_count: @transactions.total_count,
-          current_page: @transactions.current_page
-        }
-      }
+    # Bypass cache if _bust parameter is present
+    if params[:_bust].present?
+      Rails.logger.debug "Cache busting requested for user #{current_user.id}"
+      result = fetch_transactions_data
+      render json: result
+    else
+      # Create cache key based on current filters and user's transaction updates
+      cache_key = "user_#{current_user.id}_transactions_#{cache_key_suffix}"
+      
+      # Cache for 1 minute for frequently accessed data
+      cached_result = Rails.cache.fetch(cache_key, expires_in: 1.minute) do
+        fetch_transactions_data
+      end
+      
+      # Set cache headers
+      expires_in 30.seconds, public: false
+      render json: cached_result
     end
-
-    # Set cache headers
-    expires_in 30.seconds, public: false
-    render json: cached_result
   end
 
   def category_totals
@@ -120,6 +109,7 @@ class Api::V1::TransactionsController < Api::V1::BaseController
       update_params = {}
       update_params[:status] = params[:status] if params[:status].present?
       update_params[:category_id] = params[:category_id] if params[:category_id].present?
+      update_params[:status_id] = params[:status_id] if params[:status_id].present?
       
       if transaction.update(update_params)
         updated_count += 1
@@ -139,9 +129,33 @@ class Api::V1::TransactionsController < Api::V1::BaseController
 
   private
 
+  def fetch_transactions_data
+    # Get basic transaction data with minimal includes
+    @transactions = current_user.transactions
+                              .includes(:category, :user_status)
+                              .order(date: :desc)
+                              .page(params[:page] || 1)
+                              .per(params[:per_page] || 20)
+
+    # Apply filters
+    apply_filters
+
+    # Serialize data
+    {
+      data: @transactions.map { |t| serialize_transaction_light(t) },
+      meta: {
+        total_pages: @transactions.total_pages,
+        total_count: @transactions.total_count,
+        current_page: @transactions.current_page
+      }
+    }
+  end
+
   def invalidate_transaction_cache
+    # Delete all cache patterns for this user
     Rails.cache.delete_matched("user_#{current_user.id}_transactions_*")
     Rails.cache.delete_matched("user_#{current_user.id}_category_totals_*")
+    
     Rails.logger.debug "Invalidated transaction and category totals cache for user #{current_user.id}"
   end
 
@@ -165,23 +179,41 @@ class Api::V1::TransactionsController < Api::V1::BaseController
         notes: transaction.notes,
         formatted_datetime: transaction.date.iso8601,
         category_name: transaction.category&.name,
+        status_name: transaction.user_status&.name,
         created_at: transaction.created_at,
         updated_at: transaction.updated_at
       },
-      relationships: transaction.category ? {
-        category: {
-          data: {
-            id: transaction.category.id.to_s,
-            type: 'category'
+      relationships: {}.tap do |rels|
+        if transaction.category
+          rels[:category] = {
+            data: {
+              id: transaction.category.id.to_s,
+              type: 'category'
+            }
           }
-        }
-      } : {}
+        end
+        if transaction.user_status
+          rels[:status] = {
+            data: {
+              id: transaction.user_status.id.to_s,
+              type: 'status'
+            }
+          }
+        end
+      end
     }
   end
 
   def apply_filters
+    # Log the filter parameters for debugging
+    Rails.logger.info "Transaction filter params: status=#{params[:status]}, status_id=#{params[:status_id]}"
+    
     if params[:status].present?
       @transactions = @transactions.where(status: params[:status])
+    end
+
+    if params[:status_id].present?
+      @transactions = @transactions.where(status_id: params[:status_id])
     end
 
     # Handle special anomaly filtering
@@ -220,6 +252,6 @@ class Api::V1::TransactionsController < Api::V1::BaseController
   end
 
   def transaction_params
-    params.require(:transaction).permit(:date, :amount, :description, :category_id, :notes)
+    params.require(:transaction).permit(:date, :amount, :description, :category_id, :status_id, :notes)
   end
 end

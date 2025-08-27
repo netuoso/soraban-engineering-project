@@ -1,9 +1,27 @@
 import api from './api';
 
-export const getTransactions = async (filters = {}) => {
+export const getTransactions = async (filters = {}, bustCache = false) => {
   try {
     // Transform camelCase to snake_case for backend compatibility
     const transformedParams = { ...filters };
+    
+    // Add cache busting parameter if requested
+    if (bustCache) {
+      transformedParams._bust = Date.now();
+    }
+    
+    // Handle custom status filtering - only send status_id if it's a custom status
+    if (transformedParams.status && transformedParams.status.startsWith('status_')) {
+      // For custom statuses, only send status_id, not the prefixed status
+      console.log('Custom status filter detected:', transformedParams.status, 'sending status_id:', transformedParams.status_id);
+      delete transformedParams.status;
+    } else if (transformedParams.status_id) {
+      // If we have status_id but status doesn't start with 'status_', clear status_id
+      console.log('System status filter detected:', transformedParams.status, 'clearing status_id');
+      delete transformedParams.status_id;
+    }
+    
+    console.log('Final transaction filter params:', transformedParams);
     
     // Handle parameter name transformations
     if (transformedParams.perPage) {

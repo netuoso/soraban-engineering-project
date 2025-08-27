@@ -11,7 +11,7 @@ class Api::V1::TransactionsController < Api::V1::BaseController
     cached_result = Rails.cache.fetch(cache_key, expires_in: 1.minute) do
       # Get basic transaction data with minimal includes
       @transactions = current_user.transactions
-                                .includes(:category, :status)
+                                .includes(:category, :user_status)
                                 .order(date: :desc)
                                 .page(params[:page] || 1)
                                 .per(params[:per_page] || 20)
@@ -120,6 +120,7 @@ class Api::V1::TransactionsController < Api::V1::BaseController
       update_params = {}
       update_params[:status] = params[:status] if params[:status].present?
       update_params[:category_id] = params[:category_id] if params[:category_id].present?
+      update_params[:status_id] = params[:status_id] if params[:status_id].present?
       
       if transaction.update(update_params)
         updated_count += 1
@@ -165,7 +166,7 @@ class Api::V1::TransactionsController < Api::V1::BaseController
         notes: transaction.notes,
         formatted_datetime: transaction.date.iso8601,
         category_name: transaction.category&.name,
-        status_name: transaction.status&.name,
+        status_name: transaction.user_status&.name,
         created_at: transaction.created_at,
         updated_at: transaction.updated_at
       },
@@ -178,10 +179,10 @@ class Api::V1::TransactionsController < Api::V1::BaseController
             }
           }
         end
-        if transaction.status
+        if transaction.user_status
           rels[:status] = {
             data: {
-              id: transaction.status.id.to_s,
+              id: transaction.user_status.id.to_s,
               type: 'status'
             }
           }
@@ -191,8 +192,15 @@ class Api::V1::TransactionsController < Api::V1::BaseController
   end
 
   def apply_filters
+    # Log the filter parameters for debugging
+    Rails.logger.info "Transaction filter params: status=#{params[:status]}, status_id=#{params[:status_id]}"
+    
     if params[:status].present?
       @transactions = @transactions.where(status: params[:status])
+    end
+
+    if params[:status_id].present?
+      @transactions = @transactions.where(status_id: params[:status_id])
     end
 
     # Handle special anomaly filtering

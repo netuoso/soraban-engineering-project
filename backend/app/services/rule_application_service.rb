@@ -55,6 +55,16 @@ class RuleApplicationService
   
   def self.apply_status_rule(transaction, rule)
     # Status can be overridden by rules (last matching rule wins for status)
-    transaction.status = rule.action_value
+    if rule.action_value.present?
+      # Check if action_value is a status ID (numeric) or a legacy string status
+      if rule.action_value.match?(/^\d+$/)
+        # It's a status ID - set the foreign key and mark status as custom
+        transaction.status_id = rule.action_value.to_i
+        transaction.status = 'custom' # Non-default status to prevent override
+      else
+        # It's a legacy string status - set the status field
+        transaction.status = rule.action_value
+      end
+    end
   end
 end
